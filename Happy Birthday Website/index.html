@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎂 สุขสันต์วันเกิด! 🎂</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="lang-selector">
+        <select id="lang-select">
+            <option value="th">🇹🇭 ไทย</option>
+            <option value="vi">🇻🇳 Tiếng Việt</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ja">🇯🇵 日本語</option>
+            <option value="es">🇪🇸 Español</option>
+        </select>
+    </div>
+
+    <!-- Particles / Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Floating balloons -->
+    <div class="balloons-container" id="balloons"></div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-content">
+                <div class="sparkle-wrapper">
+                    <span class="sparkle">✨</span>
+                    <h1 class="hero-title">Happy Birthday!</h1>
+                    <span class="sparkle">✨</span>
+                </div>
+                <p class="hero-subtitle">สุขสันต์วันเกิดเพื่อนรัก!</p>
+                <div class="cake-emoji">🎂</div>
+                <button class="scroll-btn" onclick="document.getElementById('wish').scrollIntoView({behavior:'smooth'})">
+                    <span>ดูคำอวยพร</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12l7 7 7-7"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Wish Section -->
+        <section class="wish-section" id="wish">
+            <div class="container">
+                <div class="wish-card glass-card" data-animate>
+                    <div class="wish-icon">💝</div>
+                    <h2 class="wish-title">คำอวยพรสำหรับเธอ</h2>
+                    <div class="divider">
+                        <span>🌟</span>
+                    </div>
+                    <p class="wish-text">
+                        ขอให้เธอมีวันเกิดที่แสนสุขและเต็มไปด้วยความสนุกสนาน! 
+                        หวังว่าทุกความฝันของเธอจะเป็นจริง 
+                        ขอให้เธอมีสุขภาพแข็งแรง มีความสุข และประสบความสำเร็จในชีวิต! 🎉
+                    </p>
+                    <p class="wish-text">
+                        ขอบคุณที่เป็นเพื่อนที่ยอดเยี่ยม 
+                        ทุกช่วงเวลาที่อยู่ด้วยกันคือความทรงจำอันล้ำค่า 
+                        ขอให้ปีใหม่ของเธอเต็มไปด้วยความรักและโชคดี! 💖
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo / Memory Section -->
+        <section class="memory-section" id="memories">
+            <div class="container">
+                <h2 class="section-title" data-animate>🎁 สิ่งที่ยอดเยี่ยมเกี่ยวกับเธอ</h2>
+                <div class="cards-grid">
+                    <div class="memory-card glass-card" data-animate>
+                        <div class="card-icon">😊</div>
+                        <h3>ร่าเริงเสมอ</h3>
+                        <p>รอยยิ้มของเธอทำให้ทุกวันสดใสขึ้น</p>
+                    </div>
+                    <div class="memory-card glass-card" data-animate>
+                        <div class="card-icon">💪</div>
+                        <h3>เข้มแข็ง</h3>
+                        <p>เธอแกร่งเสมอเมื่อเผชิญกับทุกอุปสรรค</p>
+                    </div>
+                    <div class="memory-card glass-card" data-animate>
+                        <div class="card-icon">🌈</div>
+                        <h3>ใจดี</h3>
+                        <p>หัวใจที่อบอุ่นของเธอแผ่ขยายความรัก</p>
+                    </div>
+                    <div class="memory-card glass-card" data-animate>
+                        <div class="card-icon">⭐</div>
+                        <h3>มีพรสวรรค์</h3>
+                        <p>เธอเก่งและมีความสามารถมากกว่าที่เธอคิด</p>
+                    </div>
+                    <div class="memory-card glass-card" data-animate>
+                        <div class="card-icon">🤝</div>
+                        <h3>น่าเชื่อถือ</h3>
+                        <p>อยู่เคียงข้างเสมอเมื่อเพื่อนต้องการ</p>
+                    </div>
+                    <div class="memory-card glass-card" data-animate>
+                        <div class="card-icon">🎯</div>
+                        <h3>มุ่งมั่น</h3>
+                        <p>ไม่มีอะไรหยุดเธอจากการบรรลุเป้าหมายได้</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Countdown / Age Section -->
+        <section class="countdown-section" id="countdown">
+            <div class="container">
+                <div class="countdown-card glass-card" data-animate>
+                    <h2 class="section-title">🎊 ปาร์ตี้วันเกิด 🎊</h2>
+                    <div class="party-emojis">
+                        <span class="bounce-emoji" style="--delay: 0s">🎈</span>
+                        <span class="bounce-emoji" style="--delay: 0.2s">🎉</span>
+                        <span class="bounce-emoji" style="--delay: 0.4s">🎂</span>
+                        <span class="bounce-emoji" style="--delay: 0.6s">🎁</span>
+                        <span class="bounce-emoji" style="--delay: 0.8s">🎊</span>
+                        <span class="bounce-emoji" style="--delay: 1.0s">🥳</span>
+                        <span class="bounce-emoji" style="--delay: 1.2s">🎶</span>
+                        <span class="bounce-emoji" style="--delay: 1.4s">💃</span>
+                    </div>
+                    <p class="party-message">วันนี้เป็นวันพิเศษของเธอ! 🌟</p>
+                    <button class="blow-candle-btn" id="blowCandleBtn">
+                        🕯️ มาเป่าเทียนกันเถอะ! 🕯️
+                    </button>
+                    <div class="candles-container" id="candlesContainer" style="display:none;">
+                        <div class="candles">
+                            <div class="candle" style="--h: 60px"><div class="flame" id="flame1">🔥</div></div>
+                            <div class="candle" style="--h: 75px"><div class="flame" id="flame2">🔥</div></div>
+                            <div class="candle" style="--h: 55px"><div class="flame" id="flame3">🔥</div></div>
+                            <div class="candle" style="--h: 70px"><div class="flame" id="flame4">🔥</div></div>
+                            <div class="candle" style="--h: 65px"><div class="flame" id="flame5">🔥</div></div>
+                        </div>
+                        <p class="blow-instruction">กดที่เปลวเทียนเพื่อเป่า! 🌬️</p>
+                        <div class="birthday-wish-reveal" id="wishReveal" style="display: none;">
+                            <h3>🎉 คำอธิษฐานถูกส่งไปแล้ว! 🎉</h3>
+                            <p>ขอให้ทุกสิ่งดีๆ เกิดขึ้นกับเธอ!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Music Section -->
+        <section class="music-section" id="music">
+            <div class="container">
+                <div class="music-card glass-card" data-animate>
+                    <h2 class="section-title">🎵 เพลงสำหรับเธอ 🎵</h2>
+                    <div class="music-visualizer" id="musicVisualizer">
+                        <div class="bar" style="--i:1"></div>
+                        <div class="bar" style="--i:2"></div>
+                        <div class="bar" style="--i:3"></div>
+                        <div class="bar" style="--i:4"></div>
+                        <div class="bar" style="--i:5"></div>
+                        <div class="bar" style="--i:6"></div>
+                        <div class="bar" style="--i:7"></div>
+                        <div class="bar" style="--i:8"></div>
+                        <div class="bar" style="--i:9"></div>
+                        <div class="bar" style="--i:10"></div>
+                    </div>
+                    <button class="music-btn" id="musicBtn">
+                        <span class="music-icon">▶️</span>
+                        <span>เล่นเพลง Happy Birthday</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p class="footer-text">
+                    สร้างด้วย 💖 พิเศษสำหรับเธอ
+                </p>
+                <div class="footer-emojis">
+                    🎂 🎈 🎉 🎁 🌟 💝 🎊 🥳
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
