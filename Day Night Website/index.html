@@ -40,6 +40,16 @@
     </div>
     <div class="horizon-glow" id="horizonGlow"></div>
 
+    <!-- ========== WEATHER WIDGET ========== -->
+    <div class="weather-widget" id="weatherWidget">
+        <div class="weather-icon" id="weatherIcon">☀️</div>
+        <div class="weather-info">
+            <div class="weather-temp" id="weatherTemp">--°C</div>
+            <div class="weather-desc" id="weatherDesc">Loading...</div>
+            <div class="weather-city" id="weatherCity">--</div>
+        </div>
+    </div>
+
     <!-- ========== LAYERED MOUNTAINS (SHARP PEAKS) ========== -->
     <svg class="land-layer l1" viewBox="0 0 1440 280" preserveAspectRatio="none">
         <defs><linearGradient id="g-l1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" class="stop-p1"/><stop offset="100%" class="stop-b1"/></linearGradient></defs>
@@ -68,6 +78,17 @@
         <div class="clock-greeting" id="greeting">Good Afternoon</div>
         <div class="clock-time" id="clockTime">15:01:05</div>
         <div class="clock-date" id="clockDate">Thursday, August 27, 2026</div>
+
+        <!-- 12h / 24h Toggle -->
+        <div class="time-format-toggle" id="timeFormatToggle">
+            <span class="fmt-label">24H</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="fmt12h">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="fmt-label">12H</span>
+        </div>
+
         <div class="clock-location" id="clockLocation">
             <span class="loc-icon">📍</span>
             <span class="loc-text" id="locText">Detecting Location...</span>
@@ -77,6 +98,48 @@
             <select id="gmtSelect"></select>
         </div>
     </div>
+
+    <!-- ========== SETTINGS BUTTON & DRAWER ========== -->
+    <button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙️</button>
+    <div class="settings-overlay" id="settingsOverlay"></div>
+    <div class="settings-drawer" id="settingsDrawer">
+        <div class="settings-header">
+            <h3>⚙️ Settings</h3>
+            <button class="settings-close" id="settingsClose">✕</button>
+        </div>
+        <div class="settings-body">
+            <!-- Fireflies -->
+            <div class="settings-item">
+                <span class="settings-label">✨ Fireflies Effect</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="setFireflies" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <!-- Temperature Unit -->
+            <div class="settings-item">
+                <span class="settings-label">🌡️ Temperature Unit</span>
+                <div class="settings-radio-group">
+                    <label class="settings-radio"><input type="radio" name="tempUnit" value="C" checked> °C</label>
+                    <label class="settings-radio"><input type="radio" name="tempUnit" value="F"> °F</label>
+                </div>
+            </div>
+            <!-- Time Format -->
+            <div class="settings-item">
+                <span class="settings-label">🕐 Time Format</span>
+                <div class="settings-radio-group">
+                    <label class="settings-radio"><input type="radio" name="timeFormat" value="24" checked> 24H</label>
+                    <label class="settings-radio"><input type="radio" name="timeFormat" value="12"> 12H</label>
+                </div>
+            </div>
+            <!-- Timezone -->
+            <div class="settings-item settings-item-col">
+                <span class="settings-label">🌍 Timezone</span>
+                <select id="setTimezone" class="settings-select"></select>
+            </div>
+        </div>
+    </div>
+
 </div>
 <script src="script.js"></script>
 </body>

@@ -22,8 +22,8 @@
     /* Clock UI */
     --text-primary: #fff; --text-secondary: rgba(255,255,255,.7);
     --clock-glow: rgba(255,255,255,.12);
-    --glow-contrast: rgba(255,255,255,.7); /* Dynamic contrast glow */
-    --select-bg: rgba(255,255,255,0.15); /* Dynamic daytime brightness */
+    --glow-contrast: rgba(255,255,255,.7);
+    --select-bg: rgba(255,255,255,0.15);
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,7 +37,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 .sky-radial { background: var(--sky-radial); z-index: 1; }
 .sky-haze { background: var(--sky-haze-color); z-index: 2; }
 
-/* Seasonal Tint (Autumn/Winter skies) */
+/* Seasonal Tint */
 .season-tint {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     z-index: 2; pointer-events: none; transition: background 2s ease, opacity 2s ease;
@@ -61,7 +61,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 .shooting-star::after { content: ''; position: absolute; top: 50%; left: 100%; width: 70px; height: 1.5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.8)); transform: translateY(-50%); }
 @keyframes shoot { 0% { transform: translate(0,0) rotate(-30deg); opacity: 1; } 100% { transform: translate(-280px,250px) rotate(-30deg); opacity: 0; } }
 
-/* Seasonal Canvas (Leaves/Snow) */
+/* Seasonal Canvas */
 .season-canvas { height: 100%; z-index: 8; transition: opacity 1s ease; }
 
 /* Celestial (Sun/Moon) */
@@ -90,7 +90,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 /* Horizon Glow */
 .horizon-glow { position: absolute; bottom: 38%; left: 0; width: 100%; height: 180px; background: linear-gradient(to top, var(--horizon-color), transparent); opacity: var(--horizon-opacity); transition: opacity 2s ease; z-index: 7; pointer-events: none; }
 
-/* ========== LAYERED MOUNTAINS (SHARP) ========== */
+/* ========== LAYERED MOUNTAINS ========== */
 .land-layer { position: absolute; bottom: 8.5%; left: 0; width: 100%; pointer-events: none; }
 .stop-p1 { stop-color: var(--l1-peak); transition: stop-color 2s ease; }
 .stop-b1 { stop-color: var(--l1-body); transition: stop-color 2s ease; }
@@ -111,6 +111,24 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 
 .ground-base { position: absolute; bottom: 0; left: 0; width: 100%; height: 8.5%; z-index: 15; background: var(--gnd-color); transition: background 2s ease; pointer-events: none; }
 
+/* ========== WEATHER WIDGET ========== */
+.weather-widget {
+    position: absolute; top: 20px; left: 20px; z-index: 30;
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(10, 5, 25, 0.3);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    padding: 12px 18px; border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+    color: var(--text-primary);
+    transition: all 1s ease;
+}
+.weather-icon { font-size: 2.2rem; line-height: 1; }
+.weather-info { display: flex; flex-direction: column; gap: 2px; }
+.weather-temp { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px; }
+.weather-desc { font-size: .78rem; font-weight: 500; color: var(--text-secondary); text-transform: capitalize; }
+.weather-city { font-size: .68rem; font-weight: 400; color: var(--text-secondary); opacity: .7; }
+
 /* ========== CLOCK & TIMEZONE UI ========== */
 .clock-panel {
     position: absolute; top: 35%; left: 50%; transform: translateX(-50%);
@@ -120,36 +138,59 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
     padding: 24px 40px; border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-    /* Giữ khung luôn cố định, không bị chớp hay thay đổi kích thước khi số nhảy */
     min-width: 540px; max-width: 95vw;
 }
 .clock-greeting { font-size: clamp(.85rem, 2vw, 1.1rem); font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; }
 
 .clock-time { 
-    /* Dùng font-variant-numeric để cố định chiều rộng từng chữ số, ngăn việc chữ số làm khung co giãn */
     font-family: 'Orbitron', sans-serif; 
     font-variant-numeric: tabular-nums; 
-    font-size: clamp(3.5rem, 8vw, 6rem); 
+    font-size: clamp(2.2rem, 8vw, 6rem); 
     font-weight: 700; letter-spacing: 2px; 
     text-shadow: 0 0 35px var(--clock-glow), 0 4px 15px rgba(0,0,0,0.5); 
     margin-bottom: 5px; 
 }
+.clock-time .ampm { font-size: 0.35em; font-weight: 500; letter-spacing: 1px; vertical-align: super; margin-left: 6px; opacity: .7; }
 
-.clock-date { font-size: clamp(.85rem, 2.2vw, 1.1rem); font-weight: 400; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 15px; }
+.clock-date { font-size: clamp(.75rem, 2.2vw, 1.1rem); font-weight: 400; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 10px; }
+
+/* 12h/24h Toggle */
+.time-format-toggle {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-bottom: 12px;
+}
+.fmt-label { font-size: .75rem; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-transform: uppercase; }
+
+/* Toggle Switch (shared by all toggles) */
+.toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; cursor: pointer; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+    position: absolute; inset: 0; border-radius: 22px;
+    background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.25);
+    transition: all .3s ease;
+}
+.toggle-slider::before {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: rgba(255,255,255,0.8);
+    transition: transform .3s ease, background .3s ease;
+}
+.toggle-switch input:checked + .toggle-slider { background: rgba(100,200,255,0.35); border-color: rgba(100,200,255,0.5); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); background: #64c8ff; }
 
 /* Location & Time Selector */
 .clock-location { 
     display: inline-flex; align-items: center; justify-content: center; gap: 6px; 
     font-size: 1rem; font-weight: 700; color: var(--text-primary); 
     background: rgba(255,255,255,0.05); padding: 8px 18px; border-radius: 30px; 
-    margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1);
     text-shadow: 0 0 10px var(--glow-contrast);
     box-shadow: 0 0 10px var(--glow-contrast);
     transition: all 1s ease;
 }
 .loc-icon { font-size: 1.2rem; }
 
-.tz-selector { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 5px; }
+.tz-selector { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
 .tz-selector label {
     font-size: 1.15rem; font-weight: 800; color: var(--text-primary);
     text-transform: uppercase; letter-spacing: 2px;
@@ -163,13 +204,152 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
     font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.95rem; 
     cursor: pointer; outline: none; 
     box-shadow: 0 0 15px var(--glow-contrast), inset 0 0 10px var(--glow-contrast);
-    transition: all 1s ease; max-width: 250px; text-overflow: ellipsis;
+    transition: all 1s ease; max-width: 280px; text-overflow: ellipsis;
 }
 .tz-selector select:hover { background: rgba(255,255,255,0.4); }
 .tz-selector select option { background: #1a1a2e; color: #fff; text-shadow: none; font-weight: 500; }
 
-@media(max-width: 600px) {
-    .clock-panel { top: 32%; padding: 16px 20px; width: 90%; min-width: auto; }
-    .sun-wrap { width: 90px; height: 90px; } .sun-body { inset: 16px; } .sun-inner { inset: 26px; } .sun-outer { inset: 3px; } .sun-flare { inset: -30px; }
-    .moon-wrap { width: 75px; height: 75px; } .moon-body { inset: 12px; } .moon-halo { inset: -18px; }
+/* ========== SETTINGS BUTTON & DRAWER ========== */
+.settings-btn {
+    position: absolute; top: 20px; right: 20px; z-index: 30;
+    width: 44px; height: 44px; border: none; border-radius: 50%; cursor: pointer;
+    background: rgba(10, 5, 25, 0.3);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    font-size: 1.3rem; line-height: 1;
+    transition: all .3s ease;
+    display: flex; align-items: center; justify-content: center;
+}
+.settings-btn:hover { background: rgba(255,255,255,0.15); transform: rotate(45deg); }
+
+.settings-overlay {
+    position: fixed; inset: 0; z-index: 40;
+    background: rgba(0,0,0,0.4);
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease;
+}
+.settings-overlay.open { opacity: 1; pointer-events: auto; }
+
+.settings-drawer {
+    position: fixed; top: 0; right: 0; z-index: 50;
+    width: 320px; max-width: 90vw; height: 100%;
+    background: rgba(10, 8, 30, 0.85);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border-left: 1px solid rgba(255,255,255,0.08);
+    box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+    transform: translateX(100%);
+    transition: transform .35s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column;
+    color: #fff; font-family: 'Quicksand', sans-serif;
+}
+.settings-drawer.open { transform: translateX(0); }
+
+.settings-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.settings-header h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; }
+.settings-close {
+    background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer;
+    font-size: 1.2rem; width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+}
+.settings-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+.settings-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 22px; overflow-y: auto; flex: 1; }
+
+.settings-item {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+}
+.settings-item-col { flex-direction: column; align-items: stretch; gap: 8px; }
+
+.settings-label { font-size: .92rem; font-weight: 600; }
+
+.settings-radio-group { display: flex; gap: 16px; }
+.settings-radio {
+    display: flex; align-items: center; gap: 5px;
+    font-size: .85rem; font-weight: 600; cursor: pointer; color: rgba(255,255,255,0.75);
+}
+.settings-radio input[type="radio"] {
+    appearance: none; width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3); cursor: pointer;
+    transition: all .2s ease; position: relative;
+}
+.settings-radio input[type="radio"]:checked { border-color: #64c8ff; }
+.settings-radio input[type="radio"]:checked::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 6px; height: 6px; border-radius: 50%; background: #64c8ff;
+}
+
+.settings-select {
+    appearance: none; background: rgba(255,255,255,0.08);
+    color: #fff; border: 1.5px solid rgba(255,255,255,0.15);
+    padding: 8px 12px; border-radius: 10px;
+    font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: .85rem;
+    cursor: pointer; outline: none; width: 100%;
+    transition: all .2s ease;
+}
+.settings-select:hover { background: rgba(255,255,255,0.15); }
+.settings-select option { background: #1a1a2e; color: #fff; }
+
+/* ========== RESPONSIVE: TABLET (≤ 768px) ========== */
+@media (max-width: 768px) {
+    .clock-panel { top: 46%; padding: 20px 28px; min-width: auto; width: 88%; }
+    .clock-time { font-size: clamp(2.4rem, 10vw, 3.8rem); }
+    .clock-greeting { font-size: .85rem; letter-spacing: 3px; margin-bottom: 6px; }
+    .clock-date { font-size: .85rem; margin-bottom: 10px; }
+    .clock-location { font-size: .85rem; padding: 6px 14px; margin-bottom: 10px; }
+    .tz-selector label { font-size: 1rem; }
+    .tz-selector select { font-size: .85rem; padding: 6px 12px; max-width: 220px; }
+    .sun-wrap { width: 100px; height: 100px; } .sun-body { inset: 20px; } .sun-inner { inset: 30px; } .sun-outer { inset: 4px; } .sun-flare { inset: -35px; }
+    .moon-wrap { width: 85px; height: 85px; } .moon-body { inset: 14px; } .moon-halo { inset: -22px; }
+    .weather-widget { top: 14px; left: 14px; padding: 10px 14px; gap: 10px; }
+    .weather-icon { font-size: 1.8rem; }
+    .weather-temp { font-size: 1.1rem; }
+    .settings-btn { top: 14px; right: 14px; width: 38px; height: 38px; font-size: 1.1rem; }
+}
+
+/* ========== RESPONSIVE: MOBILE (≤ 480px) ========== */
+@media (max-width: 480px) {
+    .clock-panel { top: 52%; padding: 14px 16px; width: 92%; border-radius: 16px; }
+    .clock-time { font-size: clamp(1.8rem, 12vw, 2.8rem); letter-spacing: 1px; margin-bottom: 2px; }
+    .clock-greeting { font-size: .72rem; letter-spacing: 2px; margin-bottom: 4px; }
+    .clock-date { font-size: .72rem; letter-spacing: 1px; margin-bottom: 8px; }
+    .clock-location { font-size: .75rem; padding: 5px 10px; margin-bottom: 8px; gap: 4px; }
+    .loc-icon { font-size: 1rem; }
+    .tz-selector { gap: 6px; }
+    .tz-selector label { font-size: .85rem; letter-spacing: 1px; }
+    .tz-selector select { font-size: .78rem; padding: 5px 10px; max-width: 180px; border-width: 1.5px; }
+    .sun-wrap { width: 70px; height: 70px; } .sun-body { inset: 12px; } .sun-inner { inset: 20px; } .sun-outer { inset: 2px; } .sun-flare { inset: -20px; }
+    .moon-wrap { width: 58px; height: 58px; } .moon-body { inset: 10px; } .moon-halo { inset: -15px; }
+    .horizon-glow { height: 100px; }
+    .weather-widget { top: 10px; left: 10px; padding: 8px 10px; gap: 8px; border-radius: 12px; }
+    .weather-icon { font-size: 1.5rem; }
+    .weather-temp { font-size: .95rem; }
+    .weather-desc { font-size: .68rem; }
+    .weather-city { font-size: .6rem; }
+    .settings-btn { top: 10px; right: 10px; width: 34px; height: 34px; font-size: 1rem; }
+    .time-format-toggle { gap: 6px; margin-bottom: 8px; }
+    .fmt-label { font-size: .65rem; }
+}
+
+/* ========== RESPONSIVE: SMALL MOBILE (≤ 360px) ========== */
+@media (max-width: 360px) {
+    .clock-panel { top: 54%; padding: 10px 12px; }
+    .clock-time { font-size: 1.6rem; }
+    .clock-greeting { font-size: .65rem; }
+    .clock-date { font-size: .65rem; }
+    .tz-selector select { max-width: 150px; font-size: .72rem; }
+}
+
+/* ========== RESPONSIVE: LANDSCAPE MOBILE ========== */
+@media (max-height: 500px) {
+    .clock-panel { top: 20%; padding: 10px 24px; }
+    .clock-time { font-size: clamp(1.6rem, 6vw, 2.5rem); margin-bottom: 2px; }
+    .clock-greeting { margin-bottom: 2px; font-size: .7rem; }
+    .clock-date { margin-bottom: 6px; font-size: .7rem; }
+    .clock-location { margin-bottom: 6px; padding: 4px 10px; font-size: .75rem; }
 }

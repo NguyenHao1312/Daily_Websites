@@ -1,5 +1,5 @@
 /* =================================================
-   Day & Night Cycle — Dynamic Seasons & Leaves
+   Day & Night Cycle — Weather, Settings & Seasons
    ================================================= */
 (() => {
 "use strict";
@@ -12,23 +12,55 @@ const greetEl = document.getElementById('greeting');
 const locText = document.getElementById('locText'), gmtSelect = document.getElementById('gmtSelect');
 const seasonTint = document.getElementById('seasonTint');
 
+/* ══════════════════════════════════════════
+   MODULE 3: SETTINGS & LOCAL STORAGE
+   ══════════════════════════════════════════ */
+const SETTINGS_KEY = 'daynight_settings';
+const DEFAULTS = { timezone: null, is12h: false, showFireflies: true, tempUnit: 'C' };
+let settings = { ...DEFAULTS };
+
+function loadSettings() {
+    try {
+        const raw = localStorage.getItem(SETTINGS_KEY);
+        if (raw) { const parsed = JSON.parse(raw); settings = { ...DEFAULTS, ...parsed }; }
+    } catch(e) { settings = { ...DEFAULTS }; }
+}
+
+function saveSettings() {
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch(e) {}
+}
+
 /* ── STATE ── */
 let currentOffset = -(new Date().getTimezoneOffset() / 60);
 let currentSeason = '';
+let weatherLat = null, weatherLon = null;
+let lastWeatherFetch = 0;
 
-/* ── SEASONAL LOGIC ── */
+/* ── MOUSE TRACKING (for firefly attraction) ── */
+let mouseX = -1, mouseY = -1, mouseActive = false;
+document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; mouseActive = true; });
+document.addEventListener('mouseleave', () => { mouseActive = false; });
+document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    if (t) { mouseX = t.clientX; mouseY = t.clientY; mouseActive = true; }
+}, { passive: true });
+document.addEventListener('touchend', () => { mouseActive = false; });
+
+/* ══════════════════════════════════════════
+   SEASONAL LOGIC
+   ══════════════════════════════════════════ */
 function getSeason(month) {
     if (month >= 2 && month <= 4) return 'Spring';
     if (month >= 5 && month <= 7) return 'Summer';
     if (month >= 8 && month <= 10) return 'Autumn';
-    return 'Winter'; // 11, 0, 1
+    return 'Winter';
 }
 
 function getSeasonColors(season) {
-    if (season === 'Spring') return ['#4CAF50', '#81C784', '#A5D6A7']; // Xanh mơn mởn
-    if (season === 'Summer') return ['#D4E157', '#FFEE58', '#FFCA28']; // Xanh pha vàng nhẹ
-    if (season === 'Autumn') return ['#FF9800', '#F57C00', '#E65100', '#8D6E63']; // Vàng đậm, cam đỏ
-    if (season === 'Winter') return ['#FFFFFF', '#E0F7FA', '#F1F8E9']; // Trắng tuyết
+    if (season === 'Spring') return ['#4CAF50', '#81C784', '#A5D6A7'];
+    if (season === 'Summer') return ['#D4E157', '#FFEE58', '#FFCA28'];
+    if (season === 'Autumn') return ['#FF9800', '#F57C00', '#E65100', '#8D6E63'];
+    if (season === 'Winter') return ['#FFFFFF', '#E0F7FA', '#F1F8E9'];
     return ['#FFFFFF'];
 }
 
@@ -41,22 +73,19 @@ function initSeasonParticles(season) {
     sCtx2.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
     seasonParts = [];
     const colors = getSeasonColors(season);
-    
-    // Tăng số lượng hạt lên một chút khi đã giảm kích thước
-    const count = season === 'Winter' ? 90 : 55; 
-    
+    const count = season === 'Winter' ? 90 : 55;
     for (let i = 0; i < count; i++) {
         seasonParts.push({
             x: Math.random() * sCvs2.offsetWidth,
             y: Math.random() * sCvs2.offsetHeight,
-            vx: (Math.random() - 0.5) * 2,             // Gió tạt ngang ngẫu nhiên hơn
-            vy: 0.5 + Math.random() * 2.5,             // Tốc độ rơi từ chậm đến nhanh
-            size: season === 'Winter' ? (1.5 + Math.random() * 2) : (2 + Math.random() * 3), // Scale nhỏ lại đáng kể
+            vx: (Math.random() - 0.5) * 2,
+            vy: 0.5 + Math.random() * 2.5,
+            size: season === 'Winter' ? (1.5 + Math.random() * 2) : (2 + Math.random() * 3),
             angle: Math.random() * Math.PI * 2,
-            spin: (Math.random() - 0.5) * 0.1,         // Độ xoay liên tục
+            spin: (Math.random() - 0.5) * 0.1,
             swayOffset: Math.random() * Math.PI * 2,
-            swaySpeed: 0.0005 + Math.random() * 0.002, // Tần số lượn sóng
-            swayAmp: 0.2 + Math.random() * 1.5,        // Biên độ lượn sóng (Có lá lượn mạnh, lá lượn nhẹ)
+            swaySpeed: 0.0005 + Math.random() * 0.002,
+            swayAmp: 0.2 + Math.random() * 1.5,
             c: colors[Math.floor(Math.random() * colors.length)]
         });
     }
@@ -65,97 +94,231 @@ function initSeasonParticles(season) {
 function drawSeasonParticles(t, dayFade) {
     const w = sCvs2.offsetWidth, h = sCvs2.offsetHeight;
     sCtx2.clearRect(0, 0, w, h);
-    
-    // Tự động ngắt hiệu ứng lá rơi vào ban đêm (mờ dần theo độ tối của bầu trời)
-    if (dayFade < 0.02) return; 
+    if (dayFade < 0.02) return;
     sCtx2.globalAlpha = Math.min(1, dayFade * 2);
-
     seasonParts.forEach(p => {
         p.y += p.vy;
-        
-        // Dao động lướt lượn ngang
         p.x += Math.sin(t * p.swaySpeed + p.swayOffset) * p.swayAmp + p.vx;
-        
-        // Độ xoay lật (spin) + một chút lắc lư theo nhịp sóng (cosine)
         p.angle += p.spin + Math.cos(t * p.swaySpeed + p.swayOffset) * 0.03;
-        
-        // Reset khi bay khỏi khung hình
         if (p.y > h + 30) { p.y = -30; p.x = Math.random() * w; }
         if (p.x > w + 30) p.x = -30;
         if (p.x < -30) p.x = w + 30;
-        
         sCtx2.save();
         sCtx2.translate(p.x, p.y);
         sCtx2.rotate(p.angle);
-        
         if (currentSeason === 'Winter') {
-            // Hạt tuyết
-            sCtx2.beginPath();
-            sCtx2.arc(0, 0, p.size * 0.7, 0, Math.PI * 2);
-            sCtx2.fillStyle = p.c;
-            sCtx2.fill();
+            sCtx2.beginPath(); sCtx2.arc(0, 0, p.size * 0.7, 0, Math.PI * 2);
+            sCtx2.fillStyle = p.c; sCtx2.fill();
         } else {
-            // Vẽ lá rụng chi tiết với hệ trục thu nhỏ (scale ratio 0.2)
             sCtx2.scale(p.size * 0.2, p.size * 0.2);
-            
-            // Viền thân lá uốn lượn
             sCtx2.beginPath();
             sCtx2.moveTo(0, 15);
             sCtx2.bezierCurveTo(-15, 5, -10, -10, 0, -15);
             sCtx2.bezierCurveTo(10, -10, 15, 5, 0, 15);
-            sCtx2.fillStyle = p.c;
-            sCtx2.fill();
-            
-            // Hệ thống gân lá (Xương lá)
+            sCtx2.fillStyle = p.c; sCtx2.fill();
             sCtx2.beginPath();
-            sCtx2.moveTo(0, 15); sCtx2.lineTo(0, -12); // Gân chính
-            sCtx2.moveTo(0, 7);  sCtx2.lineTo(-6, 1);  // Nhánh phụ trái 1
-            sCtx2.moveTo(0, 6);  sCtx2.lineTo(6, 0);   // Nhánh phụ phải 1
-            sCtx2.moveTo(0, -1); sCtx2.lineTo(-5, -6); // Nhánh phụ trái 2
-            sCtx2.moveTo(0, -2); sCtx2.lineTo(5, -7);  // Nhánh phụ phải 2
-            sCtx2.moveTo(0, 15); sCtx2.lineTo(0, 19);  // Cuống lá
-            
-            sCtx2.strokeStyle = 'rgba(0,0,0,0.2)'; 
-            sCtx2.lineWidth = 1;
-            sCtx2.stroke();
+            sCtx2.moveTo(0, 15); sCtx2.lineTo(0, -12);
+            sCtx2.moveTo(0, 7);  sCtx2.lineTo(-6, 1);
+            sCtx2.moveTo(0, 6);  sCtx2.lineTo(6, 0);
+            sCtx2.moveTo(0, -1); sCtx2.lineTo(-5, -6);
+            sCtx2.moveTo(0, -2); sCtx2.lineTo(5, -7);
+            sCtx2.moveTo(0, 15); sCtx2.lineTo(0, 19);
+            sCtx2.strokeStyle = 'rgba(0,0,0,0.2)'; sCtx2.lineWidth = 1; sCtx2.stroke();
         }
-        
         sCtx2.restore();
     });
 }
 
-/* ── REGIONAL TIMEZONES ── */
+/* ══════════════════════════════════════════
+   MODULE 1: WEATHER WIDGET (Open-Meteo API)
+   ══════════════════════════════════════════ */
+const weatherIcon = document.getElementById('weatherIcon');
+const weatherTemp = document.getElementById('weatherTemp');
+const weatherDesc = document.getElementById('weatherDesc');
+const weatherCity = document.getElementById('weatherCity');
+
+// WMO Weather Code → Emoji + Description
+function wmoToWeather(code, isDay) {
+    if (code === 0) return { icon: isDay ? '☀️' : '🌙', desc: 'Clear Sky' };
+    if (code <= 3) return { icon: isDay ? '⛅' : '☁️', desc: ['Mainly Clear','Partly Cloudy','Overcast'][code-1] };
+    if (code <= 48) return { icon: '🌫️', desc: 'Foggy' };
+    if (code <= 57) return { icon: '🌦️', desc: 'Drizzle' };
+    if (code <= 67) return { icon: '🌧️', desc: 'Rain' };
+    if (code <= 77) return { icon: '🌨️', desc: 'Snow' };
+    if (code <= 82) return { icon: '🌦️', desc: 'Rain Showers' };
+    if (code <= 86) return { icon: '🌨️', desc: 'Snow Showers' };
+    if (code <= 99) return { icon: '⛈️', desc: 'Thunderstorm' };
+    return { icon: '🌡️', desc: 'Unknown' };
+}
+
+async function fetchWeather(lat, lon) {
+    try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,is_day`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.current) {
+            const tempC = data.current.temperature_2m;
+            const code = data.current.weather_code;
+            const isDay = data.current.is_day === 1;
+            const w = wmoToWeather(code, isDay);
+            weatherIcon.textContent = w.icon;
+            weatherDesc.textContent = w.desc;
+            updateTempDisplay(tempC);
+        }
+    } catch(e) {
+        weatherDesc.textContent = 'Unavailable';
+    }
+}
+
+function updateTempDisplay(tempC) {
+    if (tempC == null) return;
+    window._lastTempC = tempC;
+    if (settings.tempUnit === 'F') {
+        weatherTemp.textContent = `${Math.round(tempC * 9/5 + 32)}°F`;
+    } else {
+        weatherTemp.textContent = `${Math.round(tempC)}°C`;
+    }
+}
+
+function initWeather() {
+    // Try GPS first
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                weatherLat = pos.coords.latitude;
+                weatherLon = pos.coords.longitude;
+                weatherCity.textContent = `GPS Location`;
+                fetchWeather(weatherLat, weatherLon);
+            },
+            () => { fallbackWeatherLocation(); },
+            { timeout: 8000 }
+        );
+    } else {
+        fallbackWeatherLocation();
+    }
+}
+
+async function fallbackWeatherLocation() {
+    // Try GeoJS for coordinates
+    try {
+        const r = await fetch('https://get.geojs.io/v1/ip/geo.json');
+        const d = await r.json();
+        if (d.latitude && d.longitude) {
+            weatherLat = parseFloat(d.latitude);
+            weatherLon = parseFloat(d.longitude);
+            weatherCity.textContent = d.city ? `${d.city}, ${d.country}` : (d.country || 'IP Location');
+            fetchWeather(weatherLat, weatherLon);
+            return;
+        }
+    } catch(e) {}
+    
+    // Hard fallback: Ha Noi
+    weatherLat = 21.03; weatherLon = 105.85;
+    weatherCity.textContent = 'Ha Noi (Default)';
+    fetchWeather(weatherLat, weatherLon);
+}
+
+function autoRefreshWeather() {
+    // Refresh every 10 minutes
+    setInterval(() => {
+        if (weatherLat != null && weatherLon != null) {
+            fetchWeather(weatherLat, weatherLon);
+        }
+    }, 600000);
+}
+
+/* ══════════════════════════════════════════
+   REGIONAL TIMEZONES (EXPANDED)
+   ══════════════════════════════════════════ */
 const tzData = [
     { group: "Asia", zones: [
         { name: "Ha Noi, Ho Chi Minh", tz: "Asia/Ho_Chi_Minh" },
         { name: "Bangkok, Jakarta", tz: "Asia/Bangkok" },
         { name: "Singapore, Kuala Lumpur", tz: "Asia/Singapore" },
         { name: "Beijing, Shanghai", tz: "Asia/Shanghai" },
+        { name: "Hong Kong", tz: "Asia/Hong_Kong" },
+        { name: "Taipei", tz: "Asia/Taipei" },
         { name: "Tokyo, Osaka", tz: "Asia/Tokyo" },
         { name: "Seoul", tz: "Asia/Seoul" },
-        { name: "Dubai", tz: "Asia/Dubai" },
-        { name: "Mumbai, New Delhi", tz: "Asia/Kolkata" }
+        { name: "Manila", tz: "Asia/Manila" },
+        { name: "Yangon", tz: "Asia/Yangon" },
+        { name: "Phnom Penh", tz: "Asia/Phnom_Penh" },
+        { name: "Dubai, Abu Dhabi", tz: "Asia/Dubai" },
+        { name: "Riyadh", tz: "Asia/Riyadh" },
+        { name: "Doha", tz: "Asia/Qatar" },
+        { name: "Tehran", tz: "Asia/Tehran" },
+        { name: "Mumbai, New Delhi", tz: "Asia/Kolkata" },
+        { name: "Dhaka", tz: "Asia/Dhaka" },
+        { name: "Karachi, Islamabad", tz: "Asia/Karachi" },
+        { name: "Colombo", tz: "Asia/Colombo" },
+        { name: "Almaty", tz: "Asia/Almaty" },
+        { name: "Tashkent", tz: "Asia/Tashkent" },
+        { name: "Kathmandu", tz: "Asia/Kathmandu" },
+        { name: "Jerusalem, Tel Aviv", tz: "Asia/Jerusalem" },
+        { name: "Tbilisi", tz: "Asia/Tbilisi" },
+        { name: "Ulaanbaatar", tz: "Asia/Ulaanbaatar" }
     ]},
     { group: "Europe", zones: [
         { name: "London, Dublin", tz: "Europe/London" },
-        { name: "Paris, Berlin, Rome", tz: "Europe/Paris" },
-        { name: "Athens, Istanbul", tz: "Europe/Athens" },
-        { name: "Moscow", tz: "Europe/Moscow" }
+        { name: "Paris, Brussels", tz: "Europe/Paris" },
+        { name: "Berlin, Frankfurt", tz: "Europe/Berlin" },
+        { name: "Rome, Milan", tz: "Europe/Rome" },
+        { name: "Madrid, Barcelona", tz: "Europe/Madrid" },
+        { name: "Amsterdam", tz: "Europe/Amsterdam" },
+        { name: "Zurich, Geneva", tz: "Europe/Zurich" },
+        { name: "Vienna", tz: "Europe/Vienna" },
+        { name: "Stockholm", tz: "Europe/Stockholm" },
+        { name: "Oslo", tz: "Europe/Oslo" },
+        { name: "Copenhagen", tz: "Europe/Copenhagen" },
+        { name: "Helsinki", tz: "Europe/Helsinki" },
+        { name: "Warsaw", tz: "Europe/Warsaw" },
+        { name: "Prague", tz: "Europe/Prague" },
+        { name: "Budapest", tz: "Europe/Budapest" },
+        { name: "Bucharest", tz: "Europe/Bucharest" },
+        { name: "Athens", tz: "Europe/Athens" },
+        { name: "Istanbul", tz: "Europe/Istanbul" },
+        { name: "Lisbon", tz: "Europe/Lisbon" },
+        { name: "Moscow", tz: "Europe/Moscow" },
+        { name: "Kyiv", tz: "Europe/Kyiv" }
     ]},
-    { group: "America", zones: [
+    { group: "Americas", zones: [
         { name: "New York, Toronto", tz: "America/New_York" },
-        { name: "Chicago", tz: "America/Chicago" },
+        { name: "Chicago, Houston", tz: "America/Chicago" },
         { name: "Denver", tz: "America/Denver" },
-        { name: "Los Angeles", tz: "America/Los_Angeles" },
-        { name: "Sao Paulo", tz: "America/Sao_Paulo" }
+        { name: "Los Angeles, Vancouver", tz: "America/Los_Angeles" },
+        { name: "Anchorage", tz: "America/Anchorage" },
+        { name: "Honolulu", tz: "Pacific/Honolulu" },
+        { name: "Mexico City", tz: "America/Mexico_City" },
+        { name: "Bogota", tz: "America/Bogota" },
+        { name: "Lima", tz: "America/Lima" },
+        { name: "Santiago", tz: "America/Santiago" },
+        { name: "Buenos Aires", tz: "America/Argentina/Buenos_Aires" },
+        { name: "Sao Paulo", tz: "America/Sao_Paulo" },
+        { name: "Caracas", tz: "America/Caracas" },
+        { name: "Havana", tz: "America/Havana" },
+        { name: "Panama", tz: "America/Panama" },
+        { name: "Santo Domingo", tz: "America/Santo_Domingo" }
     ]},
     { group: "Australia & Pacific", zones: [
         { name: "Sydney, Melbourne", tz: "Australia/Sydney" },
-        { name: "Auckland", tz: "Pacific/Auckland" }
+        { name: "Perth", tz: "Australia/Perth" },
+        { name: "Brisbane", tz: "Australia/Brisbane" },
+        { name: "Adelaide", tz: "Australia/Adelaide" },
+        { name: "Auckland", tz: "Pacific/Auckland" },
+        { name: "Fiji", tz: "Pacific/Fiji" },
+        { name: "Samoa", tz: "Pacific/Apia" },
+        { name: "Papua New Guinea", tz: "Pacific/Port_Moresby" }
     ]},
     { group: "Africa", zones: [
         { name: "Cairo", tz: "Africa/Cairo" },
-        { name: "Johannesburg", tz: "Africa/Johannesburg" }
+        { name: "Lagos", tz: "Africa/Lagos" },
+        { name: "Johannesburg, Cape Town", tz: "Africa/Johannesburg" },
+        { name: "Nairobi, Addis Ababa", tz: "Africa/Nairobi" },
+        { name: "Casablanca", tz: "Africa/Casablanca" },
+        { name: "Accra", tz: "Africa/Accra" },
+        { name: "Algiers, Tunis", tz: "Africa/Algiers" },
+        { name: "Dar es Salaam", tz: "Africa/Dar_es_Salaam" },
+        { name: "Kinshasa", tz: "Africa/Kinshasa" }
     ]}
 ];
 
@@ -168,85 +331,142 @@ function getOffset(timeZone) {
     } catch(e) { return 0; }
 }
 
-function initGMTSelector() {
-    gmtSelect.innerHTML = '';
+function fmtOffset(off) {
+    const sign = off >= 0 ? '+' : '-';
+    const hrs = Math.floor(Math.abs(off));
+    const mins = Math.round((Math.abs(off) % 1) * 60);
+    const minStr = mins === 0 ? '' : `:${mins.toString().padStart(2, '0')}`;
+    return `GMT${sign}${hrs}${minStr}`;
+}
+
+function populateTimezoneSelect(selectEl) {
+    selectEl.innerHTML = '';
     tzData.forEach(g => {
         const optgroup = document.createElement('optgroup');
         optgroup.label = g.group;
         g.zones.forEach(z => {
             const off = getOffset(z.tz);
-            const sign = off >= 0 ? '+' : '';
-            const hrs = Math.floor(Math.abs(off));
-            const mins = (Math.abs(off) % 1) * 60;
-            const minStr = mins === 0 ? '' : `:${mins.toString().padStart(2, '0')}`;
-            
             const opt = document.createElement('option');
             opt.value = off;
             opt.dataset.tz = z.tz;
-            opt.textContent = `${z.name} - GMT${sign}${hrs}${minStr}`;
+            opt.textContent = `${z.name} - ${fmtOffset(off)}`;
             optgroup.appendChild(opt);
         });
-        gmtSelect.appendChild(optgroup);
+        selectEl.appendChild(optgroup);
+    });
+}
+
+function initGMTSelector() {
+    populateTimezoneSelect(gmtSelect);
+    const setTzSelect = document.getElementById('setTimezone');
+    populateTimezoneSelect(setTzSelect);
+
+    // Sync both selectors
+    gmtSelect.addEventListener('change', (e) => {
+        currentOffset = parseFloat(e.target.value);
+        settings.timezone = e.target.options[e.target.selectedIndex]?.dataset.tz || null;
+        saveSettings();
+        // Sync settings selector
+        syncTzSelectors(gmtSelect, setTzSelect);
     });
 
-    gmtSelect.value = currentOffset;
-    gmtSelect.addEventListener('change', (e) => { currentOffset = parseFloat(e.target.value); });
+    setTzSelect.addEventListener('change', (e) => {
+        currentOffset = parseFloat(e.target.value);
+        settings.timezone = e.target.options[e.target.selectedIndex]?.dataset.tz || null;
+        saveSettings();
+        syncTzSelectors(setTzSelect, gmtSelect);
+    });
+}
+
+function syncTzSelectors(source, target) {
+    target.value = source.value;
+}
+
+function selectTimezone(tz, country) {
+    const off = getOffset(tz);
+    currentOffset = off;
+    
+    let opt = Array.from(gmtSelect.options).find(o => o.dataset.tz === tz) || 
+              Array.from(gmtSelect.options).find(o => parseFloat(o.value) === off);
+    
+    if (opt) {
+        gmtSelect.value = opt.value;
+    } else {
+        const customGroup = document.createElement('optgroup');
+        customGroup.label = "📍 Your Location";
+        const customOpt = document.createElement('option');
+        customOpt.value = off;
+        customOpt.dataset.tz = tz;
+        const cityName = tz.split('/').pop().replace(/_/g, ' ');
+        customOpt.textContent = `${cityName} - ${fmtOffset(off)}`;
+        customGroup.appendChild(customOpt);
+        gmtSelect.insertBefore(customGroup, gmtSelect.firstChild);
+        gmtSelect.value = off;
+
+        // Also add to settings selector
+        const setTzSelect = document.getElementById('setTimezone');
+        const cg2 = customGroup.cloneNode(true);
+        setTzSelect.insertBefore(cg2, setTzSelect.firstChild);
+    }
+
+    // Sync both selects
+    const setTzSelect = document.getElementById('setTimezone');
+    setTzSelect.value = gmtSelect.value;
 }
 
 async function detectLocation() {
     locText.textContent = "Detecting Location...";
     let detectedTz = null, detectedCountry = null;
 
+    // If settings has a saved timezone, use that instead
+    if (settings.timezone) {
+        const off = getOffset(settings.timezone);
+        currentOffset = off;
+        const cityName = settings.timezone.split('/').pop().replace(/_/g, ' ');
+        locText.textContent = `Saved / ${cityName}`;
+        selectTimezone(settings.timezone, cityName);
+        return;
+    }
+
+    // Step 1: Try IPAPI (Very accurate for Vietnam)
     try {
-        const r1 = await fetch('https://get.geojs.io/v1/ip/geo.json');
-        const d1 = await r1.json();
-        if (d1.timezone) { detectedCountry = d1.country; detectedTz = d1.timezone; }
+        const r0 = await fetch('https://ipapi.co/json/');
+        const d0 = await r0.json();
+        if (d0.country_name) { detectedCountry = d0.country_name; detectedTz = d0.timezone; }
     } catch(e) {}
 
+    // Step 2: Fallback to GeoJS
+    if (!detectedTz) {
+        try {
+            const r1 = await fetch('https://get.geojs.io/v1/ip/geo.json');
+            const d1 = await r1.json();
+            if (d1.timezone) { detectedCountry = d1.country; detectedTz = d1.timezone; }
+        } catch(e) {}
+    }
+
+    // Step 3: Fallback to IPWhoIs
     if (!detectedTz) {
         try {
             const r2 = await fetch('https://ipwho.is/');
             const d2 = await r2.json();
-            if (d2.success) { detectedCountry = d2.country; detectedTz = d2.timezone.id; }
+            if (d2.success) { detectedCountry = d2.country; detectedTz = d2.timezone?.id; }
         } catch(e) {}
     }
 
     if (detectedTz) {
         locText.textContent = `Country / ${detectedCountry}`;
-        const off = getOffset(detectedTz);
-        currentOffset = off;
-        
-        let opt = Array.from(gmtSelect.options).find(o => o.dataset.tz === detectedTz) || 
-                  Array.from(gmtSelect.options).find(o => parseFloat(o.value) === off);
-        
-        if (opt) {
-            gmtSelect.value = opt.value;
-        } else {
-            const sign = off >= 0 ? '+' : '';
-            const hrs = Math.floor(Math.abs(off));
-            const mins = (Math.abs(off) % 1) * 60;
-            const minStr = mins === 0 ? '' : `:${mins.toString().padStart(2, '0')}`;
-
-            const customGroup = document.createElement('optgroup');
-            customGroup.label = "Detected Location";
-            const customOpt = document.createElement('option');
-            customOpt.value = off;
-            customOpt.dataset.tz = detectedTz;
-            customOpt.textContent = `Country / ${detectedCountry} - GMT${sign}${hrs}${minStr}`;
-            customGroup.appendChild(customOpt);
-            gmtSelect.insertBefore(customGroup, gmtSelect.firstChild);
-            gmtSelect.value = off;
-        }
+        selectTimezone(detectedTz, detectedCountry);
     } else {
-        const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        locText.textContent = tzName ? `Location / ${tzName.split('/')[1]?.replace('_',' ') || tzName}` : "Local Time";
+        locText.textContent = "Local Time";
         currentOffset = -(new Date().getTimezoneOffset() / 60);
         let opt = Array.from(gmtSelect.options).find(o => parseFloat(o.value) === currentOffset);
         if(opt) gmtSelect.value = opt.value;
     }
 }
 
-/* ── PALETTE ── */
+/* ══════════════════════════════════════════
+   PALETTE
+   ══════════════════════════════════════════ */
 const P = [
 {h:0, skyT:[15,12,60], skyM:[28,18,80], skyB:[45,30,105], rad:'radial-gradient(ellipse at 50% 100%,rgba(60,40,120,.25) 0%,transparent 65%)', haze:'rgba(40,25,80,.06)', l1:[[45,40,95], [20,16,60]], l2:[[35,30,80], [16,13,50]], l3:[[28,24,65], [12,10,40]], l4:[[22,18,50], [8,7,30]], l5:[[15,12,35], [5,4,22]], gnd:[6,5,22], star:1, rayC:'rgba(100,80,180,0)', rayOp:0, hor:[70,45,125], horOp:.12, tP:[255,255,255], tS:[200,200,230,.7], glow:[200,200,255,.15], greet:'Good Night'},
 {h:4.5, skyT:[45,25,90], skyM:[85,50,105], skyB:[140,80,115], rad:'radial-gradient(ellipse at 50% 95%,rgba(180,100,100,.2) 0%,transparent 60%)', haze:'rgba(120,60,80,.06)', l1:[[110,70,110], [50,30,75]], l2:[[90,55,90], [40,25,60]], l3:[[70,40,70], [30,20,48]], l4:[[50,30,55], [22,14,35]], l5:[[35,20,40], [15,10,25]], gnd:[15,10,25], star:.3, rayC:'rgba(200,120,80,.08)', rayOp:.2, hor:[170,85,100], horOp:.4, tP:[235,230,245], tS:[195,185,215,.75], glow:[180,150,200,.18], greet:'Early Morning'},
@@ -290,28 +510,167 @@ function drawStars(t) { const w=sCvs.offsetWidth,h=sCvs.offsetHeight; sCtx.clear
 
 const pCvs = document.getElementById('particlesCanvas'), pCtx = pCvs.getContext('2d');
 let parts = [];
-function initParts() { pCvs.width=pCvs.offsetWidth*devicePixelRatio; pCvs.height=pCvs.offsetHeight*devicePixelRatio; pCtx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); parts=[]; for(let i=0;i<40;i++) parts.push({x:Math.random()*pCvs.offsetWidth,y:pCvs.offsetHeight*.35+Math.random()*pCvs.offsetHeight*.55,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.2,r:1.2+Math.random()*1.8,ph:Math.random()*Math.PI*2}) }
-function drawParts(t,sOp) { const w=pCvs.offsetWidth,h=pCvs.offsetHeight; pCtx.clearRect(0,0,w,h); const isN=sOp>.3,bOp=isN?Math.min(1,sOp):.15; if(!isN&&sOp<.05) return; for(const p of parts){ p.x+=p.vx; p.y+=p.vy; if(p.x<0)p.x=w; if(p.x>w)p.x=0; if(p.y<h*.3)p.y=h*.85; if(p.y>h)p.y=h*.35; const gl=.3+.7*(.5+.5*Math.sin(t*.0018+p.ph)),a=gl*bOp; if(isN){ const g=pCtx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*7); g.addColorStop(0,`rgba(190,255,100,${a*.4})`); g.addColorStop(1,'rgba(190,255,100,0)'); pCtx.fillStyle=g; pCtx.fillRect(p.x-p.r*7,p.y-p.r*7,p.r*14,p.r*14); pCtx.beginPath(); pCtx.arc(p.x,p.y,p.r*.7,0,Math.PI*2); pCtx.fillStyle=`rgba(220,255,140,${a})`; pCtx.fill() }else{ pCtx.beginPath(); pCtx.arc(p.x,p.y,p.r*.5,0,Math.PI*2); pCtx.fillStyle=`rgba(255,255,255,${a*.3})`; pCtx.fill() } } }
+function initParts() {
+    pCvs.width=pCvs.offsetWidth*devicePixelRatio; pCvs.height=pCvs.offsetHeight*devicePixelRatio; 
+    pCtx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); 
+    parts=[]; 
+    for(let i=0;i<45;i++) {
+        parts.push({
+            x: Math.random()*pCvs.offsetWidth,
+            y: Math.random()*pCvs.offsetHeight, // Allow full screen height
+            vx: 0, vy: 0,
+            bx: (Math.random()-.5)*0.4, // Base wandering X
+            by: (Math.random()-.5)*0.3, // Base wandering Y
+            r: 1.2+Math.random()*1.8,
+            ph: Math.random()*Math.PI*2,
+            orbit: Math.random()*Math.PI*2, // Angle for orbiting mouse
+            orbitSpeed: 0.02 + Math.random()*0.05
+        });
+    }
+}
+
+function drawParts(t,sOp) {
+    const w=pCvs.offsetWidth,h=pCvs.offsetHeight; pCtx.clearRect(0,0,w,h);
+    if (!settings.showFireflies) return;
+    const isN=sOp>.3, bOp=isN?Math.min(1,sOp):.15;
+    if(!isN&&sOp<.05) return;
+    
+    for(const p of parts){
+        let tx = p.bx, ty = p.by; // Target velocity is base wandering by default
+        
+        // Firefly smooth cursor attraction & orbiting at night
+        if (isN && mouseActive && mouseX > 0) {
+            const dx = mouseX - p.x, dy = mouseY - p.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            
+            if (dist < 350) {
+                // Smooth, slow pull towards cursor
+                const pull = (1 - dist/350) * 0.5;
+                tx += dx * 0.005 * pull;
+                ty += dy * 0.005 * pull;
+                
+                // When close, orbit around instead of hitting dead center
+                if (dist < 120) {
+                    p.orbit += p.orbitSpeed;
+                    tx += Math.cos(p.orbit) * 1.5;
+                    ty += Math.sin(p.orbit) * 1.5;
+                }
+            }
+        }
+        
+        // Easing current velocity towards target velocity
+        p.vx += (tx - p.vx) * 0.05;
+        p.vy += (ty - p.vy) * 0.05;
+        
+        p.x += p.vx; 
+        p.y += p.vy;
+        
+        // Screen wrapping (full height allowed)
+        if(p.x < -20) p.x = w+20; 
+        if(p.x > w+20) p.x = -20;
+        if(p.y < -20) p.y = h+20; 
+        if(p.y > h+20) p.y = -20;
+        
+        // Drawing logic
+        const gl=.3+.7*(.5+.5*Math.sin(t*.0018+p.ph)),a=gl*bOp;
+        if(isN){
+            const g=pCtx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*7);
+            g.addColorStop(0,`rgba(190,255,100,${a*.4})`);
+            g.addColorStop(1,'rgba(190,255,100,0)');
+            pCtx.fillStyle=g;
+            pCtx.fillRect(p.x-p.r*7,p.y-p.r*7,p.r*14,p.r*14);
+            pCtx.beginPath(); pCtx.arc(p.x,p.y,p.r*.7,0,Math.PI*2);
+            pCtx.fillStyle=`rgba(220,255,140,${a})`; pCtx.fill();
+        } else {
+            pCtx.beginPath(); pCtx.arc(p.x,p.y,p.r*.5,0,Math.PI*2);
+            pCtx.fillStyle=`rgba(255,255,255,${a*.3})`; pCtx.fill();
+        }
+    }
+}
 
 let lastSh = 0;
 function maybeShoot(t,sOp) { if(sOp<.3) return; if(t-lastSh<5000+Math.random()*10000) return; lastSh=t; const el=document.createElement('div'); el.className='shooting-star'; el.style.top=Math.random()*35+'%'; el.style.left=30+Math.random()*55+'%'; document.getElementById('shootingStars').appendChild(el); setTimeout(()=>el.remove(),1200) }
 
-/* ── Celestial ── */
+/* ── Celestial (Responsive Orbit) ── */
 function posCel(hf) {
-    const vw = innerWidth, vh = innerHeight, gY = vh * .6, r = Math.min(vw*.44, vh*.48), cx = vw/2, cy = gY;
+    const vw = innerWidth, vh = innerHeight;
+    const isMobile = vw <= 480;
+    const isTablet = vw <= 768;
+    // Push the orbit center (gY) slightly higher to clear the newly enlarged clock panel
+    const gY = isMobile ? vh * 0.48 : (isTablet ? vh * 0.52 : vh * 0.6);
+    const r  = isMobile ? Math.min(vw * 0.42, vh * 0.35) : (isTablet ? Math.min(vw * 0.42, vh * 0.40) : Math.min(vw * 0.44, vh * 0.48));
+    const cx = vw / 2, cy = gY;
+    const sunOff = isMobile ? 35 : 65;
+    const moonOff = isMobile ? 29 : 55;
     
     if (hf >= 5.5 && hf <= 18.5) {
         const p = (hf-5.5)/13, a = Math.PI*(1-p);
-        sunW.style.left = (cx+r*Math.cos(a)-65)+'px'; sunW.style.top = (cy-r*Math.sin(a)-65)+'px';
+        sunW.style.left = (cx+r*Math.cos(a)-sunOff)+'px'; sunW.style.top = (cy-r*Math.sin(a)-sunOff)+'px';
         sunW.style.opacity = '1'; sunW.style.transform = `scale(${.65+.35*Math.sin(p*Math.PI)})`;
     } else { sunW.style.opacity = '0'; }
     
     let mp; if(hf>=18) mp=(hf-18)/12; else if(hf<=6) mp=(hf+6)/12; else mp=-1;
     if (mp >= 0 && mp <= 1) {
         const a = Math.PI*(1-mp);
-        moonW.style.left = (cx+r*Math.cos(a)-55)+'px'; moonW.style.top = (cy-r*Math.sin(a)-55)+'px';
+        moonW.style.left = (cx+r*Math.cos(a)-moonOff)+'px'; moonW.style.top = (cy-r*Math.sin(a)-moonOff)+'px';
         moonW.style.opacity = '1'; moonW.style.transform = `scale(${.65+.35*Math.sin(mp*Math.PI)})`;
     } else { moonW.style.opacity = '0'; }
+}
+
+/* ══════════════════════════════════════════
+   MODULE 3: SETTINGS UI (DRAWER)
+   ══════════════════════════════════════════ */
+function initSettingsUI() {
+    const btn = document.getElementById('settingsBtn');
+    const overlay = document.getElementById('settingsOverlay');
+    const drawer = document.getElementById('settingsDrawer');
+    const closeBtn = document.getElementById('settingsClose');
+
+    function openDrawer() { drawer.classList.add('open'); overlay.classList.add('open'); }
+    function closeDrawer() { drawer.classList.remove('open'); overlay.classList.remove('open'); }
+    btn.addEventListener('click', openDrawer);
+    overlay.addEventListener('click', closeDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+
+    // --- Fireflies toggle ---
+    const firefliesCheck = document.getElementById('setFireflies');
+    firefliesCheck.checked = settings.showFireflies;
+    firefliesCheck.addEventListener('change', () => {
+        settings.showFireflies = firefliesCheck.checked;
+        saveSettings();
+    });
+
+    // --- Temperature Unit ---
+    document.querySelectorAll('input[name="tempUnit"]').forEach(r => {
+        if (r.value === settings.tempUnit) r.checked = true;
+        r.addEventListener('change', () => {
+            settings.tempUnit = r.value;
+            saveSettings();
+            if (window._lastTempC != null) updateTempDisplay(window._lastTempC);
+        });
+    });
+
+    // --- Time Format ---
+    const fmt12hCheckbox = document.getElementById('fmt12h');
+    fmt12hCheckbox.checked = settings.is12h;
+    document.querySelectorAll('input[name="timeFormat"]').forEach(r => {
+        if ((r.value === '12') === settings.is12h) r.checked = true;
+        r.addEventListener('change', () => {
+            settings.is12h = (r.value === '12');
+            fmt12hCheckbox.checked = settings.is12h;
+            saveSettings();
+        });
+    });
+
+    // Clock panel 12h toggle (sync with settings)
+    fmt12hCheckbox.addEventListener('change', () => {
+        settings.is12h = fmt12hCheckbox.checked;
+        // Sync settings radio
+        document.querySelectorAll('input[name="timeFormat"]').forEach(r => {
+            r.checked = (r.value === '12') === settings.is12h;
+        });
+        saveSettings();
+    });
 }
 
 /* ── MAIN LOOP ── */
@@ -320,7 +679,6 @@ function update(ts) {
     const utcTime = d.getTime() + (d.getTimezoneOffset() * 60000);
     const targetDate = new Date(utcTime + (3600000 * currentOffset));
     
-    // Check Season globally
     const season = getSeason(targetDate.getMonth());
     if (currentSeason !== season) {
         currentSeason = season;
@@ -329,22 +687,19 @@ function update(ts) {
     
     const hf = targetDate.getHours() + targetDate.getMinutes()/60 + targetDate.getSeconds()/3600;
     const c = getC(hf);
-    
-    // Calculate daylight intensity (1 at noon, 0 at night)
     const dayFade = Math.max(0, Math.min(1, 1 - Math.abs(hf - 12) / 5.5)); 
 
-    // OVERRIDE: Seasonal Sky Tint
+    // Seasonal tint
     let tintC = 'transparent', tintO = 0;
     if (currentSeason === 'Autumn') { tintC = '#FFB300'; tintO = 0.15; }
     if (currentSeason === 'Winter') { tintC = '#FFFFFF'; tintO = 0.2; }
     seasonTint.style.background = tintC;
     seasonTint.style.opacity = tintO * dayFade;
 
-    // OVERRIDE: Winter Mountain Peaks (Snow coverage)
+    // Winter snow peaks
     if (currentSeason === 'Winter') {
         const blendS = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
-        const snowDay = [240, 248, 255];
-        const snowNight = [40, 50, 80];
+        const snowDay = [240, 248, 255], snowNight = [40, 50, 80];
         const snowC = blendS(snowNight, snowDay, dayFade);
         c.l1[0] = blendS(c.l1[0], snowC, 0.85);
         c.l2[0] = blendS(c.l2[0], snowC, 0.88);
@@ -359,46 +714,72 @@ function update(ts) {
 
     const s = root.style;
     s.setProperty('--star-opacity', c.star);
-    
     s.setProperty('--ray-color', c.rayC); s.setProperty('--ray-opacity', c.rayOp);
     s.setProperty('--horizon-color', rgb(c.hor)); s.setProperty('--horizon-opacity', c.horOp);
-    
     s.setProperty('--l1-peak', rgb(c.l1[0])); s.setProperty('--l1-body', rgb(c.l1[1]));
     s.setProperty('--l2-peak', rgb(c.l2[0])); s.setProperty('--l2-body', rgb(c.l2[1]));
     s.setProperty('--l3-peak', rgb(c.l3[0])); s.setProperty('--l3-body', rgb(c.l3[1]));
     s.setProperty('--l4-peak', rgb(c.l4[0])); s.setProperty('--l4-body', rgb(c.l4[1]));
     s.setProperty('--l5-peak', rgb(c.l5[0])); s.setProperty('--l5-body', rgb(c.l5[1]));
     s.setProperty('--gnd-color', rgb(c.gnd));
-    
     s.setProperty('--text-primary', rgb(c.tP)); s.setProperty('--text-secondary', `rgba(${c.tS[0]},${c.tS[1]},${c.tS[2]},${c.tS[3]})`); s.setProperty('--clock-glow', `rgba(${c.glow[0]},${c.glow[1]},${c.glow[2]},${c.glow[3]})`);
-
-    // Dynamic UI Contrast and Brightness
     s.setProperty('--glow-contrast', `rgba(${c.tP[0]}, ${c.tP[1]}, ${c.tP[2]}, 0.6)`);
-    s.setProperty('--select-bg', `rgba(255,255,255,${0.15 + dayFade * 0.2})`); // Brighter during day
+    s.setProperty('--select-bg', `rgba(255,255,255,${0.15 + dayFade * 0.2})`);
 
     posCel(hf);
 
-    const hh = String(targetDate.getHours()).padStart(2,'0');
+    // ── MODULE 2: TIME FORMAT (12h / 24h) ──
+    const hours24 = targetDate.getHours();
     const mm = String(targetDate.getMinutes()).padStart(2,'0');
     const ss = String(targetDate.getSeconds()).padStart(2,'0');
-    clockTime.textContent = `${hh}:${mm}:${ss}`;
+    
+    if (settings.is12h) {
+        const period = hours24 >= 12 ? 'PM' : 'AM';
+        const h12 = hours24 % 12 || 12;
+        clockTime.innerHTML = `${String(h12).padStart(2,'0')}:${mm}:${ss}<span class="ampm">${period}</span>`;
+    } else {
+        clockTime.textContent = `${String(hours24).padStart(2,'0')}:${mm}:${ss}`;
+    }
+
     clockDate.textContent = targetDate.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
     greetEl.textContent = c.greet;
 
     drawStars(ts); drawParts(ts, c.star); maybeShoot(ts, c.star);
-    drawSeasonParticles(ts, dayFade); // Render Detailed Leaves or Snow
+    drawSeasonParticles(ts, dayFade);
 
     requestAnimationFrame(update);
 }
 
+/* ══════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════ */
 function init() {
+    // 1. Load saved settings FIRST
+    loadSettings();
+    
+    // 2. Init timezone selectors
     initGMTSelector();
+    
+    // 3. Detect location (or use saved timezone)
     detectLocation();
+    
+    // 4. Init canvases
     initStars(); initParts();
+    
+    // 5. Init Settings UI (bind events)
+    initSettingsUI();
+    
+    // 6. Init Weather
+    initWeather();
+    autoRefreshWeather();
+    
+    // 7. Resize handler
     window.addEventListener('resize', () => { 
         initStars(); initParts(); 
         if(currentSeason) initSeasonParticles(currentSeason); 
     });
+    
+    // 8. Start render loop
     requestAnimationFrame(update);
 }
 
