@@ -1,0 +1,175 @@
+/* =================================================
+   Day & Night Cycle — Dynamic Glow & Seasons
+   ================================================= */
+
+:root {
+    --sky-top: #1b1464; --sky-mid: #2e1a78; --sky-bottom: #4a2d8a;
+    --sky-radial: radial-gradient(ellipse at 50% 100%, rgba(80,50,140,.3) 0%, transparent 70%);
+    --sky-haze-color: rgba(100,70,160,.08);
+    --star-opacity: 1;
+
+    --ray-color: rgba(255,220,100,0); --ray-opacity: 0;
+    --horizon-color: rgba(80,50,120,.3); --horizon-opacity: .2;
+
+    /* Landscape Peak & Body Colors */
+    --l1-peak: #2a1e6e; --l1-body: #1e1555;
+    --l2-peak: #22185c; --l2-body: #181245;
+    --l3-peak: #1a1250; --l3-body: #120c35;
+    --l4-peak: #120c3c; --l4-body: #0c0825;
+    --l5-peak: #0c082a; --l5-body: #08061a;
+    --gnd-color: #060418;
+
+    /* Clock UI */
+    --text-primary: #fff; --text-secondary: rgba(255,255,255,.7);
+    --clock-glow: rgba(255,255,255,.12);
+    --glow-contrast: rgba(255,255,255,.7); /* Dynamic contrast glow */
+    --select-bg: rgba(255,255,255,0.15); /* Dynamic daytime brightness */
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksand', sans-serif; background: #000; }
+
+/* Scene */
+.scene { position: relative; width: 100%; height: 100%; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 48%, var(--sky-bottom) 100%); overflow: hidden; }
+
+/* Sky Atmosphere */
+.sky-atmo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.sky-radial { background: var(--sky-radial); z-index: 1; }
+.sky-haze { background: var(--sky-haze-color); z-index: 2; }
+
+/* Seasonal Tint (Autumn/Winter skies) */
+.season-tint {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 2; pointer-events: none; transition: background 2s ease, opacity 2s ease;
+}
+
+.light-rays { z-index: 3; opacity: var(--ray-opacity); transition: opacity 2s ease; overflow: hidden; }
+.ray { position: absolute; bottom: 35%; background: var(--ray-color); transform-origin: bottom center; border-radius: 0 0 50% 50%; filter: blur(8px); }
+.r1 { left: 38%; width: 4px; height: 35vh; transform: rotate(-12deg); opacity: .7; }
+.r2 { left: 44%; width: 3px; height: 42vh; transform: rotate(-5deg); opacity: .5; }
+.r3 { left: 50%; width: 5px; height: 50vh; transform: rotate(0); opacity: .8; }
+.r4 { left: 56%; width: 3px; height: 40vh; transform: rotate(6deg); opacity: .5; }
+.r5 { left: 62%; width: 4px; height: 33vh; transform: rotate(14deg); opacity: .6; }
+.r6 { left: 68%; width: 3px; height: 38vh; transform: rotate(20deg); opacity: .5; }
+
+/* Stars & Particles */
+#starsCanvas, #particlesCanvas, #shootingStars, #seasonCanvas { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; }
+#starsCanvas { height: 65%; opacity: var(--star-opacity); transition: opacity 2s ease; z-index: 4; }
+#particlesCanvas { height: 100%; z-index: 15; }
+#shootingStars { height: 50%; z-index: 5; overflow: hidden; }
+.shooting-star { position: absolute; width: 4px; height: 4px; background: #fff; border-radius: 50%; box-shadow: 0 0 6px 2px rgba(255,255,255,.9); animation: shoot 1s linear forwards; }
+.shooting-star::after { content: ''; position: absolute; top: 50%; left: 100%; width: 70px; height: 1.5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.8)); transform: translateY(-50%); }
+@keyframes shoot { 0% { transform: translate(0,0) rotate(-30deg); opacity: 1; } 100% { transform: translate(-280px,250px) rotate(-30deg); opacity: 0; } }
+
+/* Seasonal Canvas (Leaves/Snow) */
+.season-canvas { height: 100%; z-index: 8; transition: opacity 1s ease; }
+
+/* Celestial (Sun/Moon) */
+.cel { position: absolute; z-index: 9; pointer-events: none; }
+.sun-wrap { width: 130px; height: 130px; }
+.sun-body { position: absolute; inset: 25px; background: radial-gradient(circle at 38% 36%, #fffdf0, #ffe96b 40%, #ffc800 80%, #ff9d00 100%); border-radius: 50%; z-index: 3; box-shadow: 0 0 24px 8px rgba(255,210,50,.5); }
+.sun-inner { position: absolute; inset: 38px; background: radial-gradient(circle at 45% 42%, rgba(255,255,255,.9), rgba(255,255,220,0) 70%); border-radius: 50%; z-index: 4; }
+.sun-outer { position: absolute; inset: 5px; border-radius: 50%; z-index: 2; background: radial-gradient(circle, rgba(255,220,80,.35) 0%, rgba(255,180,40,.12) 60%, transparent 80%); animation: sunP 4s ease-in-out infinite; }
+.sun-flare { position: absolute; inset: -50px; border-radius: 50%; z-index: 1; background: radial-gradient(circle, rgba(255,240,150,.2) 0%, rgba(255,200,80,.06) 40%, transparent 65%); animation: sunP 6s ease-in-out infinite alternate; }
+@keyframes sunP { 0%, 100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.15); opacity: 1; } }
+
+.moon-wrap { width: 110px; height: 110px; }
+.moon-body { 
+    position: absolute; inset: 18px; 
+    background: 
+        radial-gradient(circle at 30% 60%, rgba(0,0,0,0.06) 0%, transparent 20%),
+        radial-gradient(circle at 70% 30%, rgba(0,0,0,0.05) 0%, transparent 25%),
+        radial-gradient(circle at 55% 75%, rgba(0,0,0,0.04) 0%, transparent 15%),
+        radial-gradient(circle at 42% 38%, #f4f2ea, #ddd8cc 65%, #c8c2b5 100%);
+    border-radius: 50%; z-index: 2; overflow: hidden; 
+    box-shadow: 0 0 18px 5px rgba(200,210,240,.3), inset -5px -5px 12px rgba(0,0,0,0.15); 
+}
+.moon-halo { position: absolute; inset: -30px; border-radius: 50%; z-index: 1; background: radial-gradient(circle, rgba(200,210,255,.22) 0%, transparent 65%); animation: moonG 5s ease-in-out infinite; }
+@keyframes moonG { 0%, 100% { transform: scale(1); opacity: .65; } 50% { transform: scale(1.18); opacity: 1; } }
+
+/* Horizon Glow */
+.horizon-glow { position: absolute; bottom: 38%; left: 0; width: 100%; height: 180px; background: linear-gradient(to top, var(--horizon-color), transparent); opacity: var(--horizon-opacity); transition: opacity 2s ease; z-index: 7; pointer-events: none; }
+
+/* ========== LAYERED MOUNTAINS (SHARP) ========== */
+.land-layer { position: absolute; bottom: 8.5%; left: 0; width: 100%; pointer-events: none; }
+.stop-p1 { stop-color: var(--l1-peak); transition: stop-color 2s ease; }
+.stop-b1 { stop-color: var(--l1-body); transition: stop-color 2s ease; }
+.stop-p2 { stop-color: var(--l2-peak); transition: stop-color 2s ease; }
+.stop-b2 { stop-color: var(--l2-body); transition: stop-color 2s ease; }
+.stop-p3 { stop-color: var(--l3-peak); transition: stop-color 2s ease; }
+.stop-b3 { stop-color: var(--l3-body); transition: stop-color 2s ease; }
+.stop-p4 { stop-color: var(--l4-peak); transition: stop-color 2s ease; }
+.stop-b4 { stop-color: var(--l4-body); transition: stop-color 2s ease; }
+.stop-p5 { stop-color: var(--l5-peak); transition: stop-color 2s ease; }
+.stop-b5 { stop-color: var(--l5-body); transition: stop-color 2s ease; }
+
+.l1 { height: 42%; z-index: 10; }
+.l2 { height: 35%; z-index: 11; }
+.l3 { height: 28%; z-index: 12; }
+.l4 { height: 21%; z-index: 13; }
+.l5 { height: 14%; z-index: 14; }
+
+.ground-base { position: absolute; bottom: 0; left: 0; width: 100%; height: 8.5%; z-index: 15; background: var(--gnd-color); transition: background 2s ease; pointer-events: none; }
+
+/* ========== CLOCK & TIMEZONE UI ========== */
+.clock-panel {
+    position: absolute; top: 35%; left: 50%; transform: translateX(-50%);
+    z-index: 25; text-align: center; color: var(--text-primary);
+    background: rgba(10, 5, 25, 0.25);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    padding: 24px 40px; border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    /* Giữ khung luôn cố định, không bị chớp hay thay đổi kích thước khi số nhảy */
+    min-width: 540px; max-width: 95vw;
+}
+.clock-greeting { font-size: clamp(.85rem, 2vw, 1.1rem); font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; }
+
+.clock-time { 
+    /* Dùng font-variant-numeric để cố định chiều rộng từng chữ số, ngăn việc chữ số làm khung co giãn */
+    font-family: 'Orbitron', sans-serif; 
+    font-variant-numeric: tabular-nums; 
+    font-size: clamp(3.5rem, 8vw, 6rem); 
+    font-weight: 700; letter-spacing: 2px; 
+    text-shadow: 0 0 35px var(--clock-glow), 0 4px 15px rgba(0,0,0,0.5); 
+    margin-bottom: 5px; 
+}
+
+.clock-date { font-size: clamp(.85rem, 2.2vw, 1.1rem); font-weight: 400; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 15px; }
+
+/* Location & Time Selector */
+.clock-location { 
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px; 
+    font-size: 1rem; font-weight: 700; color: var(--text-primary); 
+    background: rgba(255,255,255,0.05); padding: 8px 18px; border-radius: 30px; 
+    margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1);
+    text-shadow: 0 0 10px var(--glow-contrast);
+    box-shadow: 0 0 10px var(--glow-contrast);
+    transition: all 1s ease;
+}
+.loc-icon { font-size: 1.2rem; }
+
+.tz-selector { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 5px; }
+.tz-selector label {
+    font-size: 1.15rem; font-weight: 800; color: var(--text-primary);
+    text-transform: uppercase; letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--glow-contrast), 0 0 20px var(--glow-contrast);
+    transition: all 1s ease;
+}
+.tz-selector select { 
+    appearance: none; background: var(--select-bg); 
+    color: var(--text-primary); border: 2px solid var(--text-primary); 
+    padding: 8px 16px 8px 12px; border-radius: 10px; 
+    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.95rem; 
+    cursor: pointer; outline: none; 
+    box-shadow: 0 0 15px var(--glow-contrast), inset 0 0 10px var(--glow-contrast);
+    transition: all 1s ease; max-width: 250px; text-overflow: ellipsis;
+}
+.tz-selector select:hover { background: rgba(255,255,255,0.4); }
+.tz-selector select option { background: #1a1a2e; color: #fff; text-shadow: none; font-weight: 500; }
+
+@media(max-width: 600px) {
+    .clock-panel { top: 32%; padding: 16px 20px; width: 90%; min-width: auto; }
+    .sun-wrap { width: 90px; height: 90px; } .sun-body { inset: 16px; } .sun-inner { inset: 26px; } .sun-outer { inset: 3px; } .sun-flare { inset: -30px; }
+    .moon-wrap { width: 75px; height: 75px; } .moon-body { inset: 12px; } .moon-halo { inset: -18px; }
+}
