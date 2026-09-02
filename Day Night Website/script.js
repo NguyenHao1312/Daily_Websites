@@ -16,7 +16,7 @@ const seasonTint = document.getElementById('seasonTint');
    MODULE 3: SETTINGS & LOCAL STORAGE
    ══════════════════════════════════════════ */
 const SETTINGS_KEY = 'daynight_settings';
-const DEFAULTS = { timezone: null, is12h: false, showFireflies: true, tempUnit: 'C' };
+const DEFAULTS = { timezone: null, is12h: false, showFireflies: true, tempUnit: 'C', focusMode: false };
 let settings = { ...DEFAULTS };
 
 function loadSettings() {

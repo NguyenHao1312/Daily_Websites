@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day & Night Cycle - Realistic Leaves & Full Moon</title>
+    <title>ClockTime33</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Quicksand:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/widgets.css">
 </head>
 <body>
 <div class="scene" id="scene">
@@ -41,7 +42,7 @@
     <div class="horizon-glow" id="horizonGlow"></div>
 
     <!-- ========== WEATHER WIDGET ========== -->
-    <div class="weather-widget" id="weatherWidget">
+    <div class="weather-widget hideable" id="weatherWidget">
         <div class="weather-icon" id="weatherIcon">☀️</div>
         <div class="weather-info">
             <div class="weather-temp" id="weatherTemp">--°C</div>
@@ -80,7 +81,7 @@
         <div class="clock-date" id="clockDate">Thursday, August 27, 2026</div>
 
         <!-- 12h / 24h Toggle -->
-        <div class="time-format-toggle" id="timeFormatToggle">
+        <div class="time-format-toggle hideable" id="timeFormatToggle">
             <span class="fmt-label">24H</span>
             <label class="toggle-switch">
                 <input type="checkbox" id="fmt12h">
@@ -89,18 +90,24 @@
             <span class="fmt-label">12H</span>
         </div>
 
-        <div class="clock-location" id="clockLocation">
+        <div class="clock-location hideable" id="clockLocation">
             <span class="loc-icon">📍</span>
             <span class="loc-text" id="locText">Detecting Location...</span>
         </div>
-        <div class="tz-selector" id="tzSelector">
+        <div class="tz-selector hideable" id="tzSelector">
             <label for="gmtSelect">Time</label>
             <select id="gmtSelect"></select>
         </div>
     </div>
 
-    <!-- ========== SETTINGS BUTTON & DRAWER ========== -->
-    <button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙️</button>
+    <!-- ========== TOP-RIGHT BUTTON GROUP ========== -->
+    <div class="top-btn-group">
+        <button class="icon-btn focus-btn" id="focusBtn" aria-label="Focus Mode" title="Focus Mode">👁️</button>
+        <button class="icon-btn todo-btn" id="todoBtn" aria-label="To-Do List" title="To-Do List">📝</button>
+        <button class="icon-btn settings-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙️</button>
+    </div>
+
+    <!-- ========== SETTINGS DRAWER ========== -->
     <div class="settings-overlay" id="settingsOverlay"></div>
     <div class="settings-drawer" id="settingsDrawer">
         <div class="settings-header">
@@ -108,7 +115,6 @@
             <button class="settings-close" id="settingsClose">✕</button>
         </div>
         <div class="settings-body">
-            <!-- Fireflies -->
             <div class="settings-item">
                 <span class="settings-label">✨ Fireflies Effect</span>
                 <label class="toggle-switch">
@@ -116,7 +122,6 @@
                     <span class="toggle-slider"></span>
                 </label>
             </div>
-            <!-- Temperature Unit -->
             <div class="settings-item">
                 <span class="settings-label">🌡️ Temperature Unit</span>
                 <div class="settings-radio-group">
@@ -124,7 +129,6 @@
                     <label class="settings-radio"><input type="radio" name="tempUnit" value="F"> °F</label>
                 </div>
             </div>
-            <!-- Time Format -->
             <div class="settings-item">
                 <span class="settings-label">🕐 Time Format</span>
                 <div class="settings-radio-group">
@@ -132,7 +136,6 @@
                     <label class="settings-radio"><input type="radio" name="timeFormat" value="12"> 12H</label>
                 </div>
             </div>
-            <!-- Timezone -->
             <div class="settings-item settings-item-col">
                 <span class="settings-label">🌍 Timezone</span>
                 <select id="setTimezone" class="settings-select"></select>
@@ -140,7 +143,60 @@
         </div>
     </div>
 
+    <!-- ========== TO-DO PANEL ========== -->
+    <div class="todo-overlay" id="todoOverlay"></div>
+    <div class="todo-panel" id="todoPanel">
+        <div class="todo-header">
+            <h3>📝 To-Do List</h3>
+            <button class="todo-close" id="todoClose">✕</button>
+        </div>
+        <div class="todo-input-wrap">
+            <input type="text" id="todoInput" placeholder="Add a task..." />
+            <button class="todo-add-btn" id="todoAdd">+</button>
+        </div>
+        <ul class="todo-list" id="todoList"></ul>
+    </div>
+
+    <!-- ========== POMODORO TIMER ========== -->
+    <div class="pomodoro-widget hideable" id="pomodoroWidget">
+        <div class="pomo-header">
+            <span class="pomo-title">🍅 Pomodoro</span>
+            <button class="pomo-minimize" id="pomoMinimize">−</button>
+        </div>
+        <div class="pomo-body" id="pomoBody">
+            <div class="pomo-display" id="pomoDisplay">25:00</div>
+            <div class="pomo-mode">
+                <button class="pomo-mode-btn active" data-mode="work">Work</button>
+                <button class="pomo-mode-btn" data-mode="break">Break</button>
+            </div>
+            <div class="pomo-controls">
+                <button class="pomo-ctrl" id="pomoPlay">▶</button>
+                <button class="pomo-ctrl" id="pomoPause" style="display:none">⏸</button>
+                <button class="pomo-ctrl" id="pomoReset">↺</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== LOFI PLAYER ========== -->
+    <div class="lofi-widget hideable" id="lofiWidget">
+        <div class="lofi-header">🎵 Lofi Radio (Đang sửa chữa)</div>
+        <div class="lofi-controls" style="opacity: 0.5; pointer-events: none;">
+            <button class="lofi-btn" id="lofiToggle" disabled>▶</button>
+            <input type="range" id="lofiVolume" min="0" max="100" value="50" class="lofi-volume" disabled>
+            <select id="lofiChannel" class="lofi-select" disabled>
+                <option value="">Under Maintenance</option>
+            </select>
+        </div>
+    </div>
+    </div>
+
 </div>
+
+<!-- Scripts (modular) -->
 <script src="script.js"></script>
+<script src="js/focus.js"></script>
+<script src="js/pomodoro.js"></script>
+<script src="js/todo.js"></script>
+<script src="js/lofi.js"></script>
 </body>
 </html>

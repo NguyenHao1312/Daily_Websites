@@ -1,0 +1,409 @@
+/* =================================================
+   Day Night Dashboard — Widget Styles
+   Phase 1: UI Polish | Phase 2-3: Feature Widgets
+   ================================================= */
+
+/* ══════════════════════════════════════════
+   PHASE 1: CONTRAST & ACCESSIBILITY FIX
+   ══════════════════════════════════════════ */
+
+/* Boost text readability on gradient/glass backgrounds */
+.clock-date,
+.clock-greeting,
+.fmt-label,
+.weather-desc,
+.weather-city,
+.quote-text,
+.quote-author {
+    text-shadow: 0 1px 5px rgba(0,0,0,0.55), 0 0 12px rgba(0,0,0,0.2);
+}
+
+.clock-date { font-weight: 500 !important; }
+.weather-desc { opacity: .9; }
+.weather-city { opacity: .8; }
+
+/* ══════════════════════════════════════════
+   PHASE 1: TOP BUTTON GROUP (Focus, Todo, Settings)
+   ══════════════════════════════════════════ */
+.top-btn-group {
+    position: absolute; top: 20px; right: 20px; z-index: 30;
+    display: flex; gap: 10px; align-items: center;
+}
+
+.icon-btn {
+    width: 44px; height: 44px; border: none; border-radius: 50%; cursor: pointer;
+    background: rgba(10, 5, 25, 0.3);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    font-size: 1.2rem; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .3s ease; color: #fff;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.1); }
+.icon-btn:active { transform: scale(0.95); }
+
+/* Focus Mode active state */
+.focus-btn.active {
+    background: rgba(100,200,255,0.3);
+    border-color: rgba(100,200,255,0.5);
+    box-shadow: 0 0 20px rgba(100,200,255,0.3);
+}
+
+/* ══════════════════════════════════════════
+   PHASE 1: FOCUS MODE
+   ══════════════════════════════════════════ */
+.hideable {
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+body.focus-mode .hideable {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+body.focus-mode .top-btn-group .icon-btn:not(.focus-btn) {
+    opacity: 0; visibility: hidden; pointer-events: none;
+}
+
+body.focus-mode .clock-panel .clock-greeting,
+body.focus-mode .clock-panel .clock-time,
+body.focus-mode .clock-panel .clock-date {
+    opacity: 1 !important; visibility: visible !important;
+}
+
+/* ══════════════════════════════════════════
+   PHASE 1: TIMEZONE SELECT GLASSMORPHISM
+   ══════════════════════════════════════════ */
+.tz-selector select {
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-radius: 14px !important;
+    border-width: 1.5px !important;
+    border-color: rgba(255,255,255,0.2) !important;
+}
+
+/* ══════════════════════════════════════════
+   PHASE 2: QUOTE OF THE DAY
+   ══════════════════════════════════════════ */
+.quote-widget {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 28; text-align: center;
+    background: rgba(10, 5, 25, 0.3);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    padding: 14px 20px; border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+    width: 90%; max-width: 480px;
+    transition: all .3s ease;
+}
+
+.quote-text {
+    font-size: clamp(.8rem, 1.8vw, 1rem);
+    font-style: italic; font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.6; letter-spacing: .5px;
+    margin: 0;
+}
+
+.quote-author {
+    font-size: clamp(.65rem, 1.4vw, .82rem);
+    font-weight: 600; color: var(--text-secondary);
+    opacity: .7; margin-top: 4px;
+}
+
+/* ══════════════════════════════════════════
+   PHASE 2: POMODORO TIMER
+   ══════════════════════════════════════════ */
+.pomodoro-widget {
+    position: absolute; bottom: 24px; left: 24px; z-index: 28;
+    background: rgba(10, 5, 25, 0.3);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    padding: 14px 18px; border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+    color: #fff; min-width: 180px;
+    transition: all .3s ease;
+}
+
+.pomo-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+}
+.pomo-title { font-size: .85rem; font-weight: 700; letter-spacing: 1px; }
+.pomo-minimize {
+    background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer;
+    font-size: 1.2rem; width: 24px; height: 24px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+}
+.pomo-minimize:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+.pomo-body { transition: all .3s ease; overflow: hidden; }
+.pomo-body.collapsed { max-height: 0; opacity: 0; margin: 0; padding: 0; }
+
+.pomo-display {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.2rem; font-weight: 700;
+    text-align: center; letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(255,100,100,0.3);
+}
+
+.pomo-mode {
+    display: flex; gap: 6px; justify-content: center; margin-bottom: 10px;
+}
+.pomo-mode-btn {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.6); padding: 5px 14px; border-radius: 20px;
+    font-family: 'Quicksand', sans-serif; font-size: .75rem; font-weight: 700;
+    cursor: pointer; transition: all .2s ease; letter-spacing: .5px;
+}
+.pomo-mode-btn.active {
+    background: rgba(255,80,80,0.25); border-color: rgba(255,80,80,0.5);
+    color: #fff;
+}
+.pomo-mode-btn[data-mode="break"].active {
+    background: rgba(80,200,120,0.25); border-color: rgba(80,200,120,0.5);
+}
+.pomo-mode-btn:hover { background: rgba(255,255,255,0.15); }
+
+.pomo-controls {
+    display: flex; gap: 8px; justify-content: center;
+}
+.pomo-ctrl {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; width: 36px; height: 36px; border-radius: 50%;
+    font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+}
+.pomo-ctrl:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+
+/* ══════════════════════════════════════════
+   PHASE 2: TO-DO PANEL
+   ══════════════════════════════════════════ */
+.todo-overlay {
+    position: fixed; inset: 0; z-index: 40;
+    background: rgba(0,0,0,0.4);
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease;
+}
+.todo-overlay.open { opacity: 1; pointer-events: auto; }
+
+.todo-panel {
+    position: fixed; top: 0; right: 0; z-index: 50;
+    width: 340px; max-width: 92vw; height: 100%;
+    background: rgba(10, 8, 30, 0.85);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border-left: 1px solid rgba(255,255,255,0.08);
+    box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+    transform: translateX(100%);
+    transition: transform .35s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column;
+    color: #fff; font-family: 'Quicksand', sans-serif;
+}
+.todo-panel.open { transform: translateX(0); }
+
+.todo-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.todo-header h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; margin: 0; }
+.todo-close {
+    background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer;
+    font-size: 1.2rem; width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+}
+.todo-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+.todo-input-wrap {
+    display: flex; gap: 8px; padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.todo-input-wrap input {
+    flex: 1; background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    color: #fff; padding: 10px 14px; border-radius: 12px;
+    font-family: 'Quicksand', sans-serif; font-size: .88rem; font-weight: 500;
+    outline: none; transition: all .2s ease;
+}
+.todo-input-wrap input::placeholder { color: rgba(255,255,255,0.35); }
+.todo-input-wrap input:focus { border-color: rgba(100,200,255,0.5); background: rgba(255,255,255,0.12); }
+
+.todo-add-btn {
+    background: rgba(100,200,255,0.25); border: 1.5px solid rgba(100,200,255,0.4);
+    color: #fff; width: 42px; border-radius: 12px; font-size: 1.3rem;
+    cursor: pointer; transition: all .2s ease;
+    display: flex; align-items: center; justify-content: center;
+}
+.todo-add-btn:hover { background: rgba(100,200,255,0.4); }
+
+.todo-list {
+    list-style: none; padding: 12px 24px; margin: 0;
+    overflow-y: auto; flex: 1;
+    display: flex; flex-direction: column; gap: 6px;
+}
+
+.todo-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all .2s ease;
+}
+.todo-item:hover { background: rgba(255,255,255,0.08); }
+
+.todo-check {
+    appearance: none; width: 20px; height: 20px; min-width: 20px; border-radius: 6px;
+    border: 2px solid rgba(255,255,255,0.25); cursor: pointer;
+    position: relative; transition: all .2s ease;
+}
+.todo-check:checked {
+    background: rgba(100,200,255,0.4); border-color: rgba(100,200,255,0.6);
+}
+.todo-check:checked::after {
+    content: '✓'; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); color: #fff; font-size: .7rem; font-weight: 700;
+}
+
+.todo-text {
+    flex: 1; font-size: .88rem; font-weight: 500; word-break: break-word;
+    transition: all .2s ease;
+}
+.todo-item.done .todo-text {
+    text-decoration: line-through; opacity: .4;
+}
+
+.todo-delete {
+    background: none; border: none; color: rgba(255,255,255,0.2); cursor: pointer;
+    font-size: 1rem; width: 28px; height: 28px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+}
+.todo-delete:hover { background: rgba(255,80,80,0.2); color: rgba(255,80,80,0.8); }
+
+/* ══════════════════════════════════════════
+   PHASE 3: LOFI PLAYER
+   ══════════════════════════════════════════ */
+.lofi-widget {
+    position: absolute; bottom: 24px; right: 24px; z-index: 28;
+    background: rgba(10, 5, 25, 0.3);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    padding: 12px 16px; border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+    color: #fff; min-width: 170px;
+}
+
+.lofi-header {
+    font-size: .82rem; font-weight: 700; letter-spacing: 1px;
+    margin-bottom: 10px; text-align: center;
+}
+
+.lofi-controls {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center;
+}
+
+.lofi-btn {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; width: 34px; height: 34px; border-radius: 50%;
+    font-size: .95rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+}
+.lofi-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+.lofi-btn.playing {
+    background: rgba(100,200,255,0.25); border-color: rgba(100,200,255,0.5);
+    box-shadow: 0 0 12px rgba(100,200,255,0.2);
+}
+
+/* Custom range slider */
+.lofi-volume {
+    -webkit-appearance: none; appearance: none;
+    width: 80px; height: 5px; border-radius: 5px;
+    background: rgba(255,255,255,0.18);
+    outline: none; cursor: pointer;
+}
+.lofi-volume::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 20px; height: 20px;
+    border-radius: 50%; background: #64c8ff; cursor: pointer;
+    box-shadow: 0 0 8px rgba(100,200,255,0.5);
+    transition: transform .15s ease;
+}
+.lofi-volume::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+}
+.lofi-volume::-moz-range-thumb {
+    width: 20px; height: 20px; border-radius: 50%; background: #64c8ff; border: none;
+    box-shadow: 0 0 8px rgba(100,200,255,0.5);
+}
+
+.lofi-select {
+    appearance: none; background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.92); border: 1px solid rgba(255,255,255,0.2);
+    padding: 5px 10px; border-radius: 8px;
+    font-family: 'Quicksand', sans-serif; font-size: .75rem; font-weight: 700;
+    cursor: pointer; outline: none; max-width: 110px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.lofi-select option { background: #1a1a2e; color: #fff; }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE: TABLET (≤ 768px)
+   ══════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .top-btn-group { top: 14px; right: 14px; gap: 8px; }
+    .icon-btn { width: 38px; height: 38px; font-size: 1.05rem; }
+    .pomodoro-widget { bottom: 16px; left: 16px; padding: 12px 14px; min-width: 160px; }
+    .pomo-display { font-size: 1.8rem; }
+    .lofi-widget { bottom: 16px; right: 16px; padding: 10px 12px; min-width: 150px; }
+    .quote-widget { bottom: 16px; max-width: 320px; padding: 10px 14px; }
+    .todo-panel { width: 300px; }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE: MOBILE (≤ 480px)
+   ══════════════════════════════════════════ */
+@media (max-width: 480px) {
+    .top-btn-group { top: 10px; right: 10px; gap: 6px; }
+    .icon-btn { width: 34px; height: 34px; font-size: .95rem; }
+
+    .pomodoro-widget { bottom: 10px; left: 10px; padding: 10px 12px; min-width: 140px; border-radius: 14px; }
+    .pomo-title { font-size: .75rem; }
+    .pomo-display { font-size: 1.5rem; margin-bottom: 8px; }
+    .pomo-mode-btn { padding: 4px 10px; font-size: .68rem; }
+    .pomo-ctrl { width: 32px; height: 32px; font-size: .88rem; }
+
+    .lofi-widget { bottom: 10px; right: 10px; padding: 8px 10px; min-width: 130px; border-radius: 14px; }
+    .lofi-header { font-size: .72rem; margin-bottom: 8px; }
+    .lofi-btn { width: 30px; height: 30px; font-size: .82rem; }
+    .lofi-volume { width: 50px; }
+    .lofi-select { font-size: .65rem; padding: 3px 6px; }
+
+    .quote-widget { bottom: 100px; padding: 10px 16px; width: 92%; }
+    .quote-text { font-size: .75rem; }
+    .quote-author { font-size: .62rem; }
+
+    .todo-panel { max-width: 100vw; width: 100%; }
+    .todo-input-wrap { padding: 12px 16px; }
+    .todo-list { padding: 10px 16px; }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE: SMALL MOBILE (≤ 360px)
+   ══════════════════════════════════════════ */
+@media (max-width: 360px) {
+    .pomodoro-widget { padding: 8px 10px; }
+    .pomo-display { font-size: 1.3rem; }
+    .lofi-widget { padding: 6px 8px; }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE: LANDSCAPE MOBILE
+   ══════════════════════════════════════════ */
+@media (max-height: 500px) {
+    .pomodoro-widget { bottom: 8px; left: 8px; padding: 8px 10px; }
+    .pomo-display { font-size: 1.4rem; }
+    .lofi-widget { bottom: 8px; right: 8px; padding: 8px 10px; }
+    .quote-widget { display: none; } /* Hide on very short screens */
+}

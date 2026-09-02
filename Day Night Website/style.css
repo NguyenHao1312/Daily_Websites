@@ -210,18 +210,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 .tz-selector select option { background: #1a1a2e; color: #fff; text-shadow: none; font-weight: 500; }
 
 /* ========== SETTINGS BUTTON & DRAWER ========== */
-.settings-btn {
-    position: absolute; top: 20px; right: 20px; z-index: 30;
-    width: 44px; height: 44px; border: none; border-radius: 50%; cursor: pointer;
-    background: rgba(10, 5, 25, 0.3);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-    font-size: 1.3rem; line-height: 1;
-    transition: all .3s ease;
-    display: flex; align-items: center; justify-content: center;
-}
-.settings-btn:hover { background: rgba(255,255,255,0.15); transform: rotate(45deg); }
+/* Note: .settings-btn is now styled via .icon-btn in widgets.css */
 
 .settings-overlay {
     position: fixed; inset: 0; z-index: 40;
@@ -309,7 +298,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
     .weather-widget { top: 14px; left: 14px; padding: 10px 14px; gap: 10px; }
     .weather-icon { font-size: 1.8rem; }
     .weather-temp { font-size: 1.1rem; }
-    .settings-btn { top: 14px; right: 14px; width: 38px; height: 38px; font-size: 1.1rem; }
 }
 
 /* ========== RESPONSIVE: MOBILE (≤ 480px) ========== */
@@ -331,7 +319,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
     .weather-temp { font-size: .95rem; }
     .weather-desc { font-size: .68rem; }
     .weather-city { font-size: .6rem; }
-    .settings-btn { top: 10px; right: 10px; width: 34px; height: 34px; font-size: 1rem; }
     .time-format-toggle { gap: 6px; margin-bottom: 8px; }
     .fmt-label { font-size: .65rem; }
 }
@@ -347,7 +334,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 
 /* ========== RESPONSIVE: LANDSCAPE MOBILE ========== */
 @media (max-height: 500px) {
-    .clock-panel { top: 20%; padding: 10px 24px; }
+    .clock-panel { top: 20%; transform: translateX(-50%); padding: 10px 24px; }
     .clock-time { font-size: clamp(1.6rem, 6vw, 2.5rem); margin-bottom: 2px; }
     .clock-greeting { margin-bottom: 2px; font-size: .7rem; }
     .clock-date { margin-bottom: 6px; font-size: .7rem; }
