@@ -12,16 +12,19 @@
     const body = document.getElementById('pomoBody');
     const modeBtns = document.querySelectorAll('.pomo-mode-btn');
     const adjBtns = document.querySelectorAll('.pomo-adj-btn');
+    
     const workMinEl = document.getElementById('pomoWorkMin');
+    const workSecEl = document.getElementById('pomoWorkSec');
     const breakMinEl = document.getElementById('pomoBreakMin');
+    const breakSecEl = document.getElementById('pomoBreakSec');
 
     if (!display) return;
 
-    // Adjustable durations (in minutes)
-    let workMin = 25;
-    let breakMin = 5;
+    // Adjustable durations
+    let workMin = 25, workSec = 0;
+    let breakMin = 5, breakSec = 0;
 
-    function getDuration(m) { return m === 'work' ? workMin * 60 : breakMin * 60; }
+    function getDuration(m) { return m === 'work' ? (workMin * 60 + workSec) : (breakMin * 60 + breakSec); }
 
     let mode = 'work';
     let timeLeft = getDuration(mode);
@@ -29,8 +32,14 @@
     let intervalId = null;
 
     function formatTime(sec) {
-        const m = Math.floor(sec / 60);
+        const h = Math.floor(sec / 3600);
+        const m = Math.floor((sec % 3600) / 60);
         const s = sec % 60;
+        
+        if (h > 0) {
+            // Include hours if duration >= 60 minutes
+            return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
         return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }
 
@@ -44,8 +53,10 @@
     }
 
     function updateAdjDisplay() {
-        if (workMinEl) workMinEl.textContent = workMin;
-        if (breakMinEl) breakMinEl.textContent = breakMin;
+        if (workMinEl) workMinEl.value = workMin;
+        if (workSecEl) workSecEl.value = workSec;
+        if (breakMinEl) breakMinEl.value = breakMin;
+        if (breakSecEl) breakSecEl.value = breakSec;
     }
 
     function tick() {
@@ -106,16 +117,47 @@
         minimizeBtn.textContent = body.classList.contains('collapsed') ? '+' : '−';
     });
 
-    // ── Time Adjustment ──
+    // Handle manual input
+    [workMinEl, workSecEl, breakMinEl, breakSecEl].forEach(input => {
+        if (!input) return;
+        input.addEventListener('change', (e) => {
+            let val = parseInt(e.target.value) || 0;
+            
+            if (e.target.id === 'pomoWorkMin') {
+                workMin = Math.max(0, Math.min(1440, val));
+                e.target.value = workMin;
+            } else if (e.target.id === 'pomoWorkSec') {
+                workSec = Math.max(0, Math.min(59, val));
+                e.target.value = workSec;
+            } else if (e.target.id === 'pomoBreakMin') {
+                breakMin = Math.max(0, Math.min(1440, val));
+                e.target.value = breakMin;
+            } else if (e.target.id === 'pomoBreakSec') {
+                breakSec = Math.max(0, Math.min(59, val));
+                e.target.value = breakSec;
+            }
+
+            if (!running) {
+                // Determine if we need to update the display based on mode
+                if ((mode === 'work' && e.target.id.includes('Work')) ||
+                    (mode === 'break' && e.target.id.includes('Break'))) {
+                    timeLeft = getDuration(mode);
+                    updateDisplay();
+                }
+            }
+        });
+    });
+
+    // ── Time Adjustment Buttons ──
     adjBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const target = btn.dataset.target; // 'work' or 'break'
             const dir = parseInt(btn.dataset.dir); // +1 or -1
 
             if (target === 'work') {
-                workMin = Math.max(1, Math.min(120, workMin + dir * 5));
+                workMin = Math.max(0, Math.min(1440, workMin + dir));
             } else {
-                breakMin = Math.max(1, Math.min(60, breakMin + dir));
+                breakMin = Math.max(0, Math.min(1440, breakMin + dir));
             }
 
             updateAdjDisplay();
