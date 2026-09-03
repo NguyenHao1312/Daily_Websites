@@ -733,12 +733,24 @@ function update(ts) {
     const mm = String(targetDate.getMinutes()).padStart(2,'0');
     const ss = String(targetDate.getSeconds()).padStart(2,'0');
     
+    // Wrap digits in fixed-width spans to prevent Orbitron jittering
+    const wrapDigits = (str) => {
+        return str.split('').map(char => {
+            if (!isNaN(char)) {
+                return `<span class="digit">${char}</span>`;
+            }
+            return `<span class="colon">${char}</span>`; // for colon
+        }).join('');
+    };
+    
     if (settings.is12h) {
         const period = hours24 >= 12 ? 'PM' : 'AM';
         const h12 = hours24 % 12 || 12;
-        clockTime.innerHTML = `${String(h12).padStart(2,'0')}:${mm}:${ss}<span class="ampm">${period}</span>`;
+        const timeString = `${String(h12).padStart(2,'0')}:${mm}:${ss}`;
+        clockTime.innerHTML = `${wrapDigits(timeString)}<span class="ampm">${period}</span>`;
     } else {
-        clockTime.textContent = `${String(hours24).padStart(2,'0')}:${mm}:${ss}`;
+        const timeString = `${String(hours24).padStart(2,'0')}:${mm}:${ss}`;
+        clockTime.innerHTML = wrapDigits(timeString);
     }
 
     clockDate.textContent = targetDate.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
