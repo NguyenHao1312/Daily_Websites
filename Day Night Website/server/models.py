@@ -6,7 +6,7 @@ Defines the `preferences` and `todos` tables.
 
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, Integer, String  # pyright: ignore[reportMissingImports]
 
 from database import Base
 

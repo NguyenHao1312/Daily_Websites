@@ -75,7 +75,7 @@
     <div class="ground-base" id="groundBase"></div>
 
     <!-- ========== CLOCK & TIMEZONE UI ========== -->
-    <div class="clock-panel" id="clockPanel">
+    <div class="clock-panel hideable" id="clockPanel">
         <div class="clock-greeting" id="greeting">Good Afternoon</div>
         <div class="clock-time" id="clockTime">15:01:05</div>
         <div class="clock-date" id="clockDate">Thursday, August 27, 2026</div>
@@ -169,6 +169,26 @@
                 <button class="pomo-mode-btn active" data-mode="work">Work</button>
                 <button class="pomo-mode-btn" data-mode="break">Break</button>
             </div>
+            <div class="pomo-time-adjust">
+                <div class="pomo-adj-group">
+                    <label>Work</label>
+                    <div class="pomo-adj-controls">
+                        <button class="pomo-adj-btn" data-target="work" data-dir="-1">−</button>
+                        <span class="pomo-adj-value" id="pomoWorkMin">25</span>
+                        <span class="pomo-adj-unit">min</span>
+                        <button class="pomo-adj-btn" data-target="work" data-dir="1">+</button>
+                    </div>
+                </div>
+                <div class="pomo-adj-group">
+                    <label>Break</label>
+                    <div class="pomo-adj-controls">
+                        <button class="pomo-adj-btn" data-target="break" data-dir="-1">−</button>
+                        <span class="pomo-adj-value" id="pomoBreakMin">5</span>
+                        <span class="pomo-adj-unit">min</span>
+                        <button class="pomo-adj-btn" data-target="break" data-dir="1">+</button>
+                    </div>
+                </div>
+            </div>
             <div class="pomo-controls">
                 <button class="pomo-ctrl" id="pomoPlay">▶</button>
                 <button class="pomo-ctrl" id="pomoPause" style="display:none">⏸</button>
@@ -179,14 +199,23 @@
 
     <!-- ========== LOFI PLAYER ========== -->
     <div class="lofi-widget hideable" id="lofiWidget">
-        <div class="lofi-header">🎵 Lofi Radio (Fixing on process)</div>
-        <div class="lofi-controls" style="opacity: 0.5; pointer-events: none;">
-            <button class="lofi-btn" id="lofiToggle" disabled>▶</button>
-            <input type="range" id="lofiVolume" min="0" max="100" value="50" class="lofi-volume" disabled>
-            <select id="lofiChannel" class="lofi-select" disabled>
-                <option value="">Under Maintenance</option>
-            </select>
+        <div class="lofi-header">🎵 Lofi Radio</div>
+        <div class="lofi-track-name" id="lofiTrackName">Select a track</div>
+        <div class="lofi-controls">
+            <button class="lofi-btn lofi-prev" id="lofiPrev" title="Previous">⏮</button>
+            <button class="lofi-btn" id="lofiToggle" title="Play">▶</button>
+            <button class="lofi-btn lofi-next" id="lofiNext" title="Next">⏭</button>
+            <input type="range" id="lofiVolume" min="0" max="100" value="50" class="lofi-volume">
         </div>
+        <select id="lofiChannel" class="lofi-select">
+            <option value="assets/music/Beats Lofi.mp3">Beats Lofi</option>
+            <option value="assets/music/Cafe Lofi.mp3">Cafe Lofi</option>
+            <option value="assets/music/Chill Lofi.mp3">Chill Lofi</option>
+            <option value="assets/music/Lanterns.mp3">Lanterns</option>
+            <option value="assets/music/Loop Lofi.mp3">Loop Lofi</option>
+            <option value="assets/music/Tech Lofi.mp3">Tech Lofi</option>
+            <option value="assets/music/Window.mp3">Window</option>
+        </select>
     </div>
     </div>
 
