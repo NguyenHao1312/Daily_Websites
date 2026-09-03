@@ -1,5 +1,5 @@
 /* =================================================
-   Pomodoro Timer — Work/Break Cycles
+   Pomodoro Timer — Adjustable Work/Break Cycles
    ================================================= */
 (() => {
     'use strict';
@@ -11,12 +11,20 @@
     const minimizeBtn = document.getElementById('pomoMinimize');
     const body = document.getElementById('pomoBody');
     const modeBtns = document.querySelectorAll('.pomo-mode-btn');
+    const adjBtns = document.querySelectorAll('.pomo-adj-btn');
+    const workMinEl = document.getElementById('pomoWorkMin');
+    const breakMinEl = document.getElementById('pomoBreakMin');
 
     if (!display) return;
 
-    const DURATIONS = { work: 25 * 60, break: 5 * 60 };
+    // Adjustable durations (in minutes)
+    let workMin = 25;
+    let breakMin = 5;
+
+    function getDuration(m) { return m === 'work' ? workMin * 60 : breakMin * 60; }
+
     let mode = 'work';
-    let timeLeft = DURATIONS[mode];
+    let timeLeft = getDuration(mode);
     let running = false;
     let intervalId = null;
 
@@ -28,7 +36,6 @@
 
     function updateDisplay() {
         display.textContent = formatTime(timeLeft);
-        // Glow color based on mode
         if (mode === 'work') {
             display.style.textShadow = '0 0 20px rgba(255,100,100,0.3)';
         } else {
@@ -36,10 +43,14 @@
         }
     }
 
+    function updateAdjDisplay() {
+        if (workMinEl) workMinEl.textContent = workMin;
+        if (breakMinEl) breakMinEl.textContent = breakMin;
+    }
+
     function tick() {
         if (timeLeft <= 0) {
             stop();
-            // Auto-switch mode
             switchMode(mode === 'work' ? 'break' : 'work');
             start();
             return;
@@ -65,20 +76,20 @@
 
     function reset() {
         stop();
-        timeLeft = DURATIONS[mode];
+        timeLeft = getDuration(mode);
         updateDisplay();
     }
 
     function switchMode(newMode) {
         mode = newMode;
-        timeLeft = DURATIONS[mode];
+        timeLeft = getDuration(mode);
         modeBtns.forEach(b => {
             b.classList.toggle('active', b.dataset.mode === mode);
         });
         updateDisplay();
     }
 
-    // Events
+    // ── Events ──
     playBtn.addEventListener('click', start);
     pauseBtn.addEventListener('click', stop);
     resetBtn.addEventListener('click', reset);
@@ -95,6 +106,29 @@
         minimizeBtn.textContent = body.classList.contains('collapsed') ? '+' : '−';
     });
 
-    // Init
+    // ── Time Adjustment ──
+    adjBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.target; // 'work' or 'break'
+            const dir = parseInt(btn.dataset.dir); // +1 or -1
+
+            if (target === 'work') {
+                workMin = Math.max(1, Math.min(120, workMin + dir * 5));
+            } else {
+                breakMin = Math.max(1, Math.min(60, breakMin + dir));
+            }
+
+            updateAdjDisplay();
+
+            // If not running and current mode matches, update timer
+            if (!running && mode === target) {
+                timeLeft = getDuration(mode);
+                updateDisplay();
+            }
+        });
+    });
+
+    // ── Init ──
+    updateAdjDisplay();
     updateDisplay();
 })();
