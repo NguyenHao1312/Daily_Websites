@@ -465,9 +465,18 @@ body.focus-mode .top-btn-group .icon-btn:not(.focus-btn) {
 @media (max-width: 768px) {
     .top-btn-group { top: 14px; right: 14px; gap: 8px; }
     .icon-btn { width: 38px; height: 38px; font-size: 1.05rem; }
+    
     .pomodoro-widget { bottom: 16px; left: 16px; padding: 12px 14px; min-width: 160px; }
     .pomo-display { font-size: 1.8rem; }
+    .pomo-adj-input { font-size: .8rem; width: 34px; }
+    .pomo-adj-input.sec-input { width: 22px; }
+    .pomo-adj-btn { width: 20px; height: 20px; font-size: .7rem; }
+    
     .lofi-widget { bottom: 16px; right: 16px; padding: 10px 12px; min-width: 150px; }
+    .lofi-btn { width: 28px; height: 28px; font-size: .8rem; }
+    .lofi-prev, .lofi-next { width: 24px; height: 24px; font-size: .65rem; }
+    .lofi-volume { width: 50px; }
+    
     .quote-widget { bottom: 16px; max-width: 320px; padding: 10px 14px; }
     .todo-panel { width: 300px; }
 }
@@ -479,17 +488,31 @@ body.focus-mode .top-btn-group .icon-btn:not(.focus-btn) {
     .top-btn-group { top: 10px; right: 10px; gap: 6px; }
     .icon-btn { width: 34px; height: 34px; font-size: .95rem; }
 
-    .pomodoro-widget { bottom: 10px; left: 10px; padding: 10px 12px; min-width: 140px; border-radius: 14px; }
-    .pomo-title { font-size: .75rem; }
-    .pomo-display { font-size: 1.5rem; margin-bottom: 8px; }
-    .pomo-mode-btn { padding: 4px 10px; font-size: .68rem; }
-    .pomo-ctrl { width: 32px; height: 32px; font-size: .88rem; }
+    .pomodoro-widget { bottom: 10px; left: 10px; padding: 8px 10px; min-width: 140px; border-radius: 12px; }
+    .pomo-header { margin-bottom: 6px; }
+    .pomo-title { font-size: .7rem; }
+    .pomo-minimize { width: 20px; height: 20px; font-size: 1rem; }
+    .pomo-display { font-size: 1.5rem; margin-bottom: 6px; }
+    .pomo-mode { gap: 4px; margin-bottom: 8px; }
+    .pomo-mode-btn { padding: 4px 8px; font-size: .65rem; }
+    .pomo-time-adjust { gap: 6px; margin-bottom: 8px; }
+    .pomo-adj-group { gap: 4px; }
+    .pomo-adj-group label { font-size: .55rem; width: 35px; }
+    .pomo-adj-input { font-size: .7rem; width: 30px; }
+    .pomo-adj-input.sec-input { width: 20px; }
+    .pomo-adj-btn { width: 18px; height: 18px; font-size: .6rem; }
+    .pomo-adj-unit { font-size: .5rem; margin-right: 2px; }
+    .pomo-ctrl { width: 28px; height: 28px; font-size: .8rem; }
 
-    .lofi-widget { bottom: 10px; right: 10px; padding: 8px 10px; min-width: 130px; border-radius: 14px; }
-    .lofi-header { font-size: .72rem; margin-bottom: 8px; }
-    .lofi-btn { width: 30px; height: 30px; font-size: .82rem; }
-    .lofi-volume { width: 50px; }
-    .lofi-select { font-size: .65rem; padding: 3px 6px; }
+    .lofi-widget { bottom: 10px; right: 10px; padding: 8px 10px; min-width: 130px; border-radius: 12px; }
+    .lofi-header { font-size: .7rem; margin-bottom: 4px; }
+    .lofi-track-name { font-size: .65rem; margin-bottom: 6px; }
+    .lofi-controls { gap: 4px; margin-bottom: 6px; }
+    .lofi-btn { width: 26px; height: 26px; font-size: .75rem; }
+    .lofi-prev, .lofi-next { width: 22px; height: 22px; font-size: .6rem; }
+    .lofi-volume { width: 40px; height: 3px; }
+    .lofi-volume::-webkit-slider-thumb { width: 12px; height: 12px; }
+    .lofi-select { font-size: .6rem; padding: 3px 6px; border-radius: 6px; }
 
     .quote-widget { bottom: 100px; padding: 10px 16px; width: 92%; }
     .quote-text { font-size: .75rem; }
@@ -504,17 +527,22 @@ body.focus-mode .top-btn-group .icon-btn:not(.focus-btn) {
    RESPONSIVE: SMALL MOBILE (≤ 360px)
    ══════════════════════════════════════════ */
 @media (max-width: 360px) {
-    .pomodoro-widget { padding: 8px 10px; }
+    .pomodoro-widget { padding: 6px 8px; min-width: 130px; }
     .pomo-display { font-size: 1.3rem; }
-    .lofi-widget { padding: 6px 8px; }
+    .pomo-adj-input { width: 26px; }
+    .pomo-adj-input.sec-input { width: 18px; }
+    
+    .lofi-widget { padding: 6px 8px; min-width: 120px; }
+    .lofi-btn { width: 24px; height: 24px; font-size: .7rem; }
+    .lofi-volume { width: 35px; }
 }
 
 /* ══════════════════════════════════════════
    RESPONSIVE: LANDSCAPE MOBILE
    ══════════════════════════════════════════ */
 @media (max-height: 500px) {
-    .pomodoro-widget { bottom: 8px; left: 8px; padding: 8px 10px; }
-    .pomo-display { font-size: 1.4rem; }
-    .lofi-widget { bottom: 8px; right: 8px; padding: 8px 10px; }
+    .pomodoro-widget { bottom: 8px; left: 8px; padding: 6px 10px; }
+    .pomo-display { font-size: 1.3rem; margin-bottom: 4px; }
+    .lofi-widget { bottom: 8px; right: 8px; padding: 6px 10px; }
     .quote-widget { display: none; } /* Hide on very short screens */
 }

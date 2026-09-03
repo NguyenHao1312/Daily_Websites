@@ -286,7 +286,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 
 /* ========== RESPONSIVE: TABLET (≤ 768px) ========== */
 @media (max-width: 768px) {
-    .clock-panel { top: 46%; padding: 20px 28px; min-width: auto; width: 88%; }
+    .clock-panel { top: 48%; transform: translate(-50%, -50%); padding: 20px 28px; min-width: auto; width: 88%; }
     .clock-time { font-size: clamp(2.4rem, 10vw, 3.8rem); }
     .clock-greeting { font-size: .85rem; letter-spacing: 3px; margin-bottom: 6px; }
     .clock-date { font-size: .85rem; margin-bottom: 10px; }
@@ -302,7 +302,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 
 /* ========== RESPONSIVE: MOBILE (≤ 480px) ========== */
 @media (max-width: 480px) {
-    .clock-panel { top: 52%; padding: 14px 16px; width: 92%; border-radius: 16px; }
+    .clock-panel { top: 48%; transform: translate(-50%, -50%); padding: 14px 16px; width: 92%; border-radius: 16px; min-width: unset; }
     .clock-time { font-size: clamp(1.8rem, 12vw, 2.8rem); letter-spacing: 1px; margin-bottom: 2px; }
     .clock-greeting { font-size: .72rem; letter-spacing: 2px; margin-bottom: 4px; }
     .clock-date { font-size: .72rem; letter-spacing: 1px; margin-bottom: 8px; }
@@ -325,7 +325,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 
 /* ========== RESPONSIVE: SMALL MOBILE (≤ 360px) ========== */
 @media (max-width: 360px) {
-    .clock-panel { top: 54%; padding: 10px 12px; }
+    .clock-panel { top: 48%; padding: 10px 12px; }
     .clock-time { font-size: 1.6rem; }
     .clock-greeting { font-size: .65rem; }
     .clock-date { font-size: .65rem; }
@@ -334,7 +334,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 
 /* ========== RESPONSIVE: LANDSCAPE MOBILE ========== */
 @media (max-height: 500px) {
-    .clock-panel { top: 20%; transform: translateX(-50%); padding: 10px 24px; }
+    .clock-panel { top: 50%; transform: translate(-50%, -50%); padding: 10px 24px; min-width: unset; }
     .clock-time { font-size: clamp(1.6rem, 6vw, 2.5rem); margin-bottom: 2px; }
     .clock-greeting { margin-bottom: 2px; font-size: .7rem; }
     .clock-date { margin-bottom: 6px; font-size: .7rem; }

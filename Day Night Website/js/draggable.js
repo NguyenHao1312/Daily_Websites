@@ -11,65 +11,55 @@
 
         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-        handle.onmousedown = dragMouseDown;
-        
-        // Touch support for mobile
-        handle.ontouchstart = function(e) {
-            e.preventDefault(); // prevent scrolling
-            const touch = e.touches[0];
-            dragMouseDown({
-                clientX: touch.clientX,
-                clientY: touch.clientY,
-                type: 'touchstart',
-                preventDefault: () => {}
-            });
-        };
+        // Mouse Events
+        handle.addEventListener('mousedown', dragStart);
+        // Touch Events
+        handle.addEventListener('touchstart', dragStart, { passive: false });
 
-        function dragMouseDown(e) {
-            e = e || window.event;
-            // Prevent default unless it's a button click inside the header
+        function dragStart(e) {
             if (e.target.tagName.toLowerCase() === 'button') return;
-            e.preventDefault();
-
-            // Get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
+            
+            // Get initial positions based on event type
+            if (e.type === 'touchstart') {
+                pos3 = e.touches[0].clientX;
+                pos4 = e.touches[0].clientY;
+            } else {
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+            }
 
             // Disable transition to prevent dragging lag
             el.style.transition = 'none';
 
             // Convert CSS positioning to top/left explicitly to prevent stretching
             const rect = el.getBoundingClientRect();
-            // Need to set margin to 0 just in case
             el.style.margin = '0';
             el.style.bottom = 'auto';
             el.style.right = 'auto';
             el.style.left = rect.left + 'px';
             el.style.top = rect.top + 'px';
 
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
-
-            // Touch events
-            document.ontouchend = closeDragElement;
-            document.ontouchmove = function(e) {
-                const touch = e.touches[0];
-                elementDrag({
-                    clientX: touch.clientX,
-                    clientY: touch.clientY,
-                    preventDefault: () => {}
-                });
-            };
+            if (e.type === 'touchstart') {
+                document.addEventListener('touchmove', dragMove, { passive: false });
+                document.addEventListener('touchend', dragEnd);
+            } else {
+                document.addEventListener('mousemove', dragMove);
+                document.addEventListener('mouseup', dragEnd);
+            }
         }
 
-        function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
+        function dragMove(e) {
+            e.preventDefault(); // Prevent scrolling while dragging
+
+            let clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            let clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
             // Calculate the new cursor position:
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
+            pos1 = pos3 - clientX;
+            pos2 = pos4 - clientY;
+            pos3 = clientX;
+            pos4 = clientY;
             
             // Limit drag to window bounds
             let newTop = el.offsetTop - pos2;
@@ -83,15 +73,15 @@
             el.style.left = newLeft + "px";
         }
 
-        function closeDragElement() {
+        function dragEnd() {
             // Restore transition
             el.style.transition = '';
             
-            // Stop moving when mouse button is released:
-            document.onmouseup = null;
-            document.onmousemove = null;
-            document.ontouchend = null;
-            document.ontouchmove = null;
+            // Remove listeners
+            document.removeEventListener('mousemove', dragMove);
+            document.removeEventListener('mouseup', dragEnd);
+            document.removeEventListener('touchmove', dragMove);
+            document.removeEventListener('touchend', dragEnd);
         }
     }
 
