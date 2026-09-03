@@ -159,7 +159,7 @@
 
     <!-- ========== POMODORO TIMER ========== -->
     <div class="pomodoro-widget hideable" id="pomodoroWidget">
-        <div class="pomo-header">
+        <div class="pomo-header drag-handle" id="pomoHeader">
             <span class="pomo-title">🍅 Pomodoro</span>
             <button class="pomo-minimize" id="pomoMinimize">−</button>
         </div>
@@ -174,8 +174,10 @@
                     <label>Work</label>
                     <div class="pomo-adj-controls">
                         <button class="pomo-adj-btn" data-target="work" data-dir="-1">−</button>
-                        <span class="pomo-adj-value" id="pomoWorkMin">25</span>
-                        <span class="pomo-adj-unit">min</span>
+                        <input type="number" class="pomo-adj-input" id="pomoWorkMin" value="25" min="0" max="1440">
+                        <span class="pomo-adj-unit">m</span>
+                        <input type="number" class="pomo-adj-input sec-input" id="pomoWorkSec" value="0" min="0" max="59">
+                        <span class="pomo-adj-unit">s</span>
                         <button class="pomo-adj-btn" data-target="work" data-dir="1">+</button>
                     </div>
                 </div>
@@ -183,8 +185,10 @@
                     <label>Break</label>
                     <div class="pomo-adj-controls">
                         <button class="pomo-adj-btn" data-target="break" data-dir="-1">−</button>
-                        <span class="pomo-adj-value" id="pomoBreakMin">5</span>
-                        <span class="pomo-adj-unit">min</span>
+                        <input type="number" class="pomo-adj-input" id="pomoBreakMin" value="5" min="0" max="1440">
+                        <span class="pomo-adj-unit">m</span>
+                        <input type="number" class="pomo-adj-input sec-input" id="pomoBreakSec" value="0" min="0" max="59">
+                        <span class="pomo-adj-unit">s</span>
                         <button class="pomo-adj-btn" data-target="break" data-dir="1">+</button>
                     </div>
                 </div>
@@ -199,7 +203,7 @@
 
     <!-- ========== LOFI PLAYER ========== -->
     <div class="lofi-widget hideable" id="lofiWidget">
-        <div class="lofi-header">🎵 Lofi Radio</div>
+        <div class="lofi-header drag-handle" id="lofiHeader">🎵 Lofi Radio</div>
         <div class="lofi-track-name" id="lofiTrackName">Select a track</div>
         <div class="lofi-controls">
             <button class="lofi-btn lofi-prev" id="lofiPrev" title="Previous">⏮</button>
@@ -224,6 +228,7 @@
 <!-- Scripts (modular) -->
 <script src="script.js"></script>
 <script src="js/focus.js"></script>
+<script src="js/draggable.js"></script>
 <script src="js/pomodoro.js"></script>
 <script src="js/todo.js"></script>
 <script src="js/lofi.js"></script>

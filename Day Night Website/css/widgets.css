@@ -97,11 +97,20 @@ body.focus-mode .hideable {
     pointer-events: none !important;
 }
 
-/* Keep Lofi widget visible in Focus Mode */
-body.focus-mode .lofi-widget.hideable {
+/* Keep Lofi and Pomodoro widgets visible in Focus Mode */
+body.focus-mode .lofi-widget.hideable,
+body.focus-mode .pomodoro-widget.hideable {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
+}
+
+/* Drag Handle styling */
+.drag-handle {
+    cursor: grab;
+}
+.drag-handle:active {
+    cursor: grabbing;
 }
 
 body.focus-mode .top-btn-group .icon-btn:not(.focus-btn) {
@@ -205,16 +214,19 @@ body.focus-mode .top-btn-group .icon-btn:not(.focus-btn) {
 
 /* Time Adjustment */
 .pomo-time-adjust {
-    display: flex; gap: 10px; justify-content: center;
-    margin-bottom: 10px;
+    display: flex; flex-direction: column; gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
 }
 .pomo-adj-group {
-    text-align: center;
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; gap: 8px;
 }
 .pomo-adj-group label {
-    display: block; font-size: .6rem; font-weight: 600;
-    color: rgba(255,255,255,0.5); text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 3px;
+    font-size: .6rem; font-weight: 700;
+    color: rgba(255,255,255,0.7); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 0;
+    width: 45px; text-align: left;
 }
 .pomo-adj-controls {
     display: flex; align-items: center; gap: 4px;
@@ -227,13 +239,27 @@ body.focus-mode .top-btn-group .icon-btn:not(.focus-btn) {
     transition: all .2s ease; padding: 0;
 }
 .pomo-adj-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
-.pomo-adj-value {
+.pomo-adj-input {
     font-family: 'Orbitron', sans-serif;
     font-size: .85rem; font-weight: 700;
-    min-width: 22px; text-align: center;
+    width: 38px; text-align: center;
+    background: transparent; border: none; color: #fff;
+    outline: none; -moz-appearance: textfield;
+}
+.pomo-adj-input.sec-input {
+    width: 24px;
+}
+.pomo-adj-input::-webkit-outer-spin-button,
+.pomo-adj-input::-webkit-inner-spin-button {
+    -webkit-appearance: none; margin: 0;
+}
+.pomo-adj-input:focus {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
 }
 .pomo-adj-unit {
     font-size: .55rem; color: rgba(255,255,255,0.4); font-weight: 500;
+    margin-right: 4px;
 }
 
 .pomo-controls {
