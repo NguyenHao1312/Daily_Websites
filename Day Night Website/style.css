@@ -1,50 +1,117 @@
 /* =================================================
-   Day & Night Cycle — Dynamic Glow & Seasons
+   Day & Night Cycle — Dynamic Glow & Modern Aesthetic
+   Enhanced for Night, Dawn, Day, Noon, Dusk Themes
    ================================================= */
 
 :root {
-    --sky-top: #1b1464; --sky-mid: #2e1a78; --sky-bottom: #4a2d8a;
-    --sky-radial: radial-gradient(ellipse at 50% 100%, rgba(80,50,140,.3) 0%, transparent 70%);
-    --sky-haze-color: rgba(100,70,160,.08);
+    /* Sky & Atmosphere Tokens (Default: Midnight Observatory) */
+    --sky-top: #0b0928;
+    --sky-mid: #161142;
+    --sky-bottom: #261a62;
+    --sky-radial: radial-gradient(ellipse at 50% 90%, rgba(65, 45, 135, 0.42) 0%, transparent 68%);
+    --sky-haze-color: rgba(60, 38, 120, 0.08);
     --star-opacity: 1;
 
-    --ray-color: rgba(255,220,100,0); --ray-opacity: 0;
-    --horizon-color: rgba(80,50,120,.3); --horizon-opacity: .2;
+    --ray-color: rgba(255, 220, 100, 0);
+    --ray-opacity: 0;
+    --horizon-color: rgba(75, 48, 130, 0.35);
+    --horizon-opacity: 0.2;
 
-    /* Landscape Peak & Body Colors */
-    --l1-peak: #2a1e6e; --l1-body: #1e1555;
-    --l2-peak: #22185c; --l2-body: #181245;
-    --l3-peak: #1a1250; --l3-body: #120c35;
-    --l4-peak: #120c3c; --l4-body: #0c0825;
-    --l5-peak: #0c082a; --l5-body: #08061a;
-    --gnd-color: #060418;
+    /* Crisp Multi-layered Mountain Colors */
+    --l1-peak: #472b84; --l1-body: #321c64;
+    --l2-peak: #39206f; --l2-body: #281454;
+    --l3-peak: #2c165a; --l3-body: #1c0d40;
+    --l4-peak: #1e0e41; --l4-body: #13082e;
+    --l5-peak: #13072d; --l5-body: #0a041b;
+    --gnd-color: #070314;
 
-    /* Clock UI */
-    --text-primary: #fff; --text-secondary: rgba(255,255,255,.7);
-    --clock-glow: rgba(255,255,255,.12);
-    --glow-contrast: rgba(255,255,255,.7);
-    --select-bg: rgba(255,255,255,0.15);
+    /* Typography & Neon Glow Tokens */
+    --text-primary: #ffffff;
+    --text-secondary: rgba(215, 228, 255, 0.72);
+    --neon-cyan: #38bdf8;
+    --clock-glow: rgba(56, 189, 248, 0.65);
+    --clock-subglow: rgba(14, 165, 233, 0.35);
+    --card-bg: rgba(14, 12, 38, 0.48);
+    --card-border: rgba(255, 255, 255, 0.09);
+    --card-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksand', sans-serif; background: #000; }
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-/* Scene */
-.scene { position: relative; width: 100%; height: 100%; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 48%, var(--sky-bottom) 100%); overflow: hidden; }
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Plus Jakarta Sans', 'Quicksand', sans-serif;
+    background: #000;
+    color: var(--text-primary);
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ══════════════════════════════════════════
+   SCENE WRAPPER
+   ══════════════════════════════════════════ */
+.scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 48%, var(--sky-bottom) 100%);
+    overflow: hidden;
+    transition: background 2s ease;
+}
 
 /* Sky Atmosphere */
-.sky-atmo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-.sky-radial { background: var(--sky-radial); z-index: 1; }
-.sky-haze { background: var(--sky-haze-color); z-index: 2; }
+.sky-atmo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+.sky-radial {
+    background: var(--sky-radial);
+    z-index: 1;
+    transition: background 2s ease;
+}
+.sky-haze {
+    background: var(--sky-haze-color);
+    z-index: 2;
+    transition: background 2s ease;
+}
 
 /* Seasonal Tint */
 .season-tint {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 2; pointer-events: none; transition: background 2s ease, opacity 2s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    transition: background 2s ease, opacity 2s ease;
 }
 
-.light-rays { z-index: 3; opacity: var(--ray-opacity); transition: opacity 2s ease; overflow: hidden; }
-.ray { position: absolute; bottom: 35%; background: var(--ray-color); transform-origin: bottom center; border-radius: 0 0 50% 50%; filter: blur(8px); }
+/* Light Rays */
+.light-rays {
+    z-index: 3;
+    opacity: var(--ray-opacity);
+    transition: opacity 2s ease;
+    overflow: hidden;
+}
+.ray {
+    position: absolute;
+    bottom: 35%;
+    background: var(--ray-color);
+    transform-origin: bottom center;
+    border-radius: 0 0 50% 50%;
+    filter: blur(8px);
+}
 .r1 { left: 38%; width: 4px; height: 35vh; transform: rotate(-12deg); opacity: .7; }
 .r2 { left: 44%; width: 3px; height: 42vh; transform: rotate(-5deg); opacity: .5; }
 .r3 { left: 50%; width: 5px; height: 50vh; transform: rotate(0); opacity: .8; }
@@ -53,45 +120,169 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 .r6 { left: 68%; width: 3px; height: 38vh; transform: rotate(20deg); opacity: .5; }
 
 /* Stars & Particles */
-#starsCanvas, #particlesCanvas, #shootingStars, #seasonCanvas { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; }
-#starsCanvas { height: 65%; opacity: var(--star-opacity); transition: opacity 2s ease; z-index: 4; }
-#particlesCanvas { height: 100%; z-index: 15; }
-#shootingStars { height: 50%; z-index: 5; overflow: hidden; }
-.shooting-star { position: absolute; width: 4px; height: 4px; background: #fff; border-radius: 50%; box-shadow: 0 0 6px 2px rgba(255,255,255,.9); animation: shoot 1s linear forwards; }
-.shooting-star::after { content: ''; position: absolute; top: 50%; left: 100%; width: 70px; height: 1.5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.8)); transform: translateY(-50%); }
-@keyframes shoot { 0% { transform: translate(0,0) rotate(-30deg); opacity: 1; } 100% { transform: translate(-280px,250px) rotate(-30deg); opacity: 0; } }
-
-/* Seasonal Canvas */
-.season-canvas { height: 100%; z-index: 8; transition: opacity 1s ease; }
-
-/* Celestial (Sun/Moon) */
-.cel { position: absolute; z-index: 9; pointer-events: none; }
-.sun-wrap { width: 130px; height: 130px; }
-.sun-body { position: absolute; inset: 25px; background: radial-gradient(circle at 38% 36%, #fffdf0, #ffe96b 40%, #ffc800 80%, #ff9d00 100%); border-radius: 50%; z-index: 3; box-shadow: 0 0 24px 8px rgba(255,210,50,.5); }
-.sun-inner { position: absolute; inset: 38px; background: radial-gradient(circle at 45% 42%, rgba(255,255,255,.9), rgba(255,255,220,0) 70%); border-radius: 50%; z-index: 4; }
-.sun-outer { position: absolute; inset: 5px; border-radius: 50%; z-index: 2; background: radial-gradient(circle, rgba(255,220,80,.35) 0%, rgba(255,180,40,.12) 60%, transparent 80%); animation: sunP 4s ease-in-out infinite; }
-.sun-flare { position: absolute; inset: -50px; border-radius: 50%; z-index: 1; background: radial-gradient(circle, rgba(255,240,150,.2) 0%, rgba(255,200,80,.06) 40%, transparent 65%); animation: sunP 6s ease-in-out infinite alternate; }
-@keyframes sunP { 0%, 100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.15); opacity: 1; } }
-
-.moon-wrap { width: 110px; height: 110px; }
-.moon-body { 
-    position: absolute; inset: 18px; 
-    background: 
-        radial-gradient(circle at 30% 60%, rgba(0,0,0,0.06) 0%, transparent 20%),
-        radial-gradient(circle at 70% 30%, rgba(0,0,0,0.05) 0%, transparent 25%),
-        radial-gradient(circle at 55% 75%, rgba(0,0,0,0.04) 0%, transparent 15%),
-        radial-gradient(circle at 42% 38%, #f4f2ea, #ddd8cc 65%, #c8c2b5 100%);
-    border-radius: 50%; z-index: 2; overflow: hidden; 
-    box-shadow: 0 0 18px 5px rgba(200,210,240,.3), inset -5px -5px 12px rgba(0,0,0,0.15); 
+#starsCanvas, #particlesCanvas, #shootingStars, #seasonCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
 }
-.moon-halo { position: absolute; inset: -30px; border-radius: 50%; z-index: 1; background: radial-gradient(circle, rgba(200,210,255,.22) 0%, transparent 65%); animation: moonG 5s ease-in-out infinite; }
-@keyframes moonG { 0%, 100% { transform: scale(1); opacity: .65; } 50% { transform: scale(1.18); opacity: 1; } }
+#starsCanvas {
+    height: 65%;
+    opacity: var(--star-opacity);
+    transition: opacity 2s ease;
+    z-index: 4;
+}
+#particlesCanvas {
+    height: 100%;
+    z-index: 15;
+}
+#shootingStars {
+    height: 50%;
+    z-index: 5;
+    overflow: hidden;
+}
+.shooting-star {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.95);
+    animation: shoot 1s linear forwards;
+}
+.shooting-star::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 80px;
+    height: 1.5px;
+    background: linear-gradient(to left, transparent, rgba(255, 255, 255, 0.85));
+    transform: translateY(-50%);
+}
+@keyframes shoot {
+    0% { transform: translate(0, 0) rotate(-30deg); opacity: 1; }
+    100% { transform: translate(-300px, 260px) rotate(-30deg); opacity: 0; }
+}
+
+.season-canvas {
+    height: 100%;
+    z-index: 8;
+    transition: opacity 1s ease;
+}
+
+/* ══════════════════════════════════════════
+   CELESTIAL: SUN & PHOTOREALISTIC MOON
+   ══════════════════════════════════════════ */
+.cel {
+    position: absolute;
+    z-index: 9;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+}
+
+/* Sun */
+.sun-wrap {
+    width: 130px;
+    height: 130px;
+    opacity: 0;
+}
+.sun-body {
+    position: absolute;
+    inset: 25px;
+    background: radial-gradient(circle at 38% 36%, #fffdf0, #ffe96b 40%, #ffc800 80%, #ff9d00 100%);
+    border-radius: 50%;
+    z-index: 3;
+    box-shadow: 0 0 28px 10px rgba(255, 215, 60, 0.6);
+}
+.sun-inner {
+    position: absolute;
+    inset: 38px;
+    background: radial-gradient(circle at 45% 42%, rgba(255,255,255,.95), rgba(255,255,220,0) 70%);
+    border-radius: 50%;
+    z-index: 4;
+}
+.sun-outer {
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    z-index: 2;
+    background: radial-gradient(circle, rgba(255,220,80,.4) 0%, rgba(255,180,40,.15) 60%, transparent 80%);
+    animation: sunP 4s ease-in-out infinite;
+}
+.sun-flare {
+    position: absolute;
+    inset: -50px;
+    border-radius: 50%;
+    z-index: 1;
+    background: radial-gradient(circle, rgba(255,240,150,.25) 0%, rgba(255,200,80,.08) 40%, transparent 65%);
+    animation: sunP 6s ease-in-out infinite alternate;
+}
+@keyframes sunP {
+    0%, 100% { transform: scale(1); opacity: .85; }
+    50% { transform: scale(1.15); opacity: 1; }
+}
+
+/* Photorealistic Moon */
+.moon-wrap {
+    width: 120px;
+    height: 120px;
+    opacity: 1;
+}
+.moon-halo {
+    position: absolute;
+    inset: -35px;
+    border-radius: 50%;
+    z-index: 1;
+    background: radial-gradient(circle, rgba(210, 230, 255, 0.3) 0%, rgba(180, 210, 255, 0.12) 45%, transparent 70%);
+    animation: moonHaloPulse 6s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+@keyframes moonHaloPulse {
+    0% { transform: scale(0.96); opacity: 0.65; }
+    100% { transform: scale(1.12); opacity: 0.95; }
+}
+
+.moon-body-realistic {
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    z-index: 2;
+    overflow: hidden;
+    box-shadow: 0 0 25px 6px rgba(180, 210, 255, 0.45), 0 0 60px 15px rgba(140, 180, 255, 0.2), inset -6px -6px 16px rgba(10, 15, 30, 0.4);
+}
+.moon-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transform: rotate(-15deg);
+}
 
 /* Horizon Glow */
-.horizon-glow { position: absolute; bottom: 38%; left: 0; width: 100%; height: 180px; background: linear-gradient(to top, var(--horizon-color), transparent); opacity: var(--horizon-opacity); transition: opacity 2s ease; z-index: 7; pointer-events: none; }
+.horizon-glow {
+    position: absolute;
+    bottom: 38%;
+    left: 0;
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(to top, var(--horizon-color), transparent);
+    opacity: var(--horizon-opacity);
+    transition: opacity 2s ease;
+    z-index: 7;
+    pointer-events: none;
+}
 
-/* ========== LAYERED MOUNTAINS ========== */
-.land-layer { position: absolute; bottom: 8.5%; left: 0; width: 100%; pointer-events: none; }
+/* ══════════════════════════════════════════
+   LAYERED MOUNTAIN SILHOUETTES
+   ══════════════════════════════════════════ */
+.land-layer {
+    position: absolute;
+    bottom: 8%;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+}
 .stop-p1 { stop-color: var(--l1-peak); transition: stop-color 2s ease; }
 .stop-b1 { stop-color: var(--l1-body); transition: stop-color 2s ease; }
 .stop-p2 { stop-color: var(--l2-peak); transition: stop-color 2s ease; }
@@ -103,252 +294,367 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksan
 .stop-p5 { stop-color: var(--l5-peak); transition: stop-color 2s ease; }
 .stop-b5 { stop-color: var(--l5-body); transition: stop-color 2s ease; }
 
-.l1 { height: 42%; z-index: 10; }
-.l2 { height: 35%; z-index: 11; }
-.l3 { height: 28%; z-index: 12; }
-.l4 { height: 21%; z-index: 13; }
-.l5 { height: 14%; z-index: 14; }
+.l1 { height: 44%; z-index: 10; }
+.l2 { height: 37%; z-index: 11; }
+.l3 { height: 30%; z-index: 12; }
+.l4 { height: 23%; z-index: 13; }
+.l5 { height: 16%; z-index: 14; }
 
-.ground-base { position: absolute; bottom: 0; left: 0; width: 100%; height: 8.5%; z-index: 15; background: var(--gnd-color); transition: background 2s ease; pointer-events: none; }
+.ground-base {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 8.5%;
+    z-index: 15;
+    background: var(--gnd-color);
+    transition: background 2s ease;
+    pointer-events: none;
+}
 
-/* ========== WEATHER WIDGET ========== */
+/* ══════════════════════════════════════════
+   BRAND HEADER (TOP CENTER)
+   ══════════════════════════════════════════ */
+.brand-header {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 25;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+.brand-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+.brand-subtitle {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 3.5px;
+    color: rgba(160, 185, 225, 0.65);
+    margin-top: 3px;
+    text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════════
+   WEATHER WIDGET (TOP LEFT)
+   ══════════════════════════════════════════ */
 .weather-widget {
-    position: absolute; top: 20px; left: 20px; z-index: 30;
-    display: flex; align-items: center; gap: 12px;
-    background: rgba(10, 5, 25, 0.3);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    padding: 12px 18px; border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
-    color: var(--text-primary);
-    transition: all 1s ease;
-}
-.weather-icon { font-size: 2.2rem; line-height: 1; }
-.weather-info { display: flex; flex-direction: column; gap: 2px; }
-.weather-temp { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px; }
-.weather-desc { font-size: .78rem; font-weight: 500; color: var(--text-secondary); text-transform: capitalize; }
-.weather-city { font-size: .68rem; font-weight: 400; color: var(--text-secondary); opacity: .7; }
-
-/* ========== CLOCK & TIMEZONE UI ========== */
-.clock-panel {
-    position: absolute; top: 35%; left: 50%; transform: translateX(-50%);
-    z-index: 25; text-align: center; color: var(--text-primary);
-    background: rgba(10, 5, 25, 0.25);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    padding: 24px 40px; border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-    min-width: 540px; max-width: 95vw;
-}
-.clock-greeting { font-size: clamp(.85rem, 2vw, 1.1rem); font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; }
-
-.clock-time { 
-    font-family: 'Orbitron', sans-serif; 
-    font-size: clamp(2.2rem, 8vw, 6rem); 
-    font-weight: 700; letter-spacing: 0;
-    text-shadow: 0 0 35px var(--clock-glow), 0 4px 15px rgba(0,0,0,0.5); 
-    margin-bottom: 5px; 
-    white-space: nowrap; /* Prevent digits from wrapping to the next line */
-}
-.clock-time .digit {
-    display: inline-block;
-    text-align: center;
-    width: 1ch; /* Exact width of the '0' glyph, eliminating extra padding */
-}
-.clock-time .colon {
-    display: inline-block;
-    text-align: center;
-    width: 0.28ch; /* Extremely tight colon spacing */
-    position: relative;
-    top: -0.05em;
-}
-.clock-time .ampm { font-size: 0.35em; font-weight: 500; letter-spacing: 1px; vertical-align: super; margin-left: 6px; opacity: .7; }
-
-.clock-date { font-size: clamp(.75rem, 2.2vw, 1.1rem); font-weight: 400; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 10px; }
-
-/* 12h/24h Toggle */
-.time-format-toggle {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    margin-bottom: 12px;
-}
-.fmt-label { font-size: .75rem; font-weight: 700; letter-spacing: 1px; color: var(--text-secondary); text-transform: uppercase; }
-
-/* Toggle Switch (shared by all toggles) */
-.toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; cursor: pointer; }
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
-.toggle-slider {
-    position: absolute; inset: 0; border-radius: 22px;
-    background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.25);
-    transition: all .3s ease;
-}
-.toggle-slider::before {
-    content: ''; position: absolute; top: 2px; left: 2px;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: rgba(255,255,255,0.8);
-    transition: transform .3s ease, background .3s ease;
-}
-.toggle-switch input:checked + .toggle-slider { background: rgba(100,200,255,0.35); border-color: rgba(100,200,255,0.5); }
-.toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); background: #64c8ff; }
-
-/* Location & Time Selector */
-.clock-location { 
-    display: inline-flex; align-items: center; justify-content: center; gap: 6px; 
-    font-size: 1rem; font-weight: 700; color: var(--text-primary); 
-    background: rgba(255,255,255,0.05); padding: 8px 18px; border-radius: 30px; 
-    margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1);
-    text-shadow: 0 0 10px var(--glow-contrast);
-    box-shadow: 0 0 10px var(--glow-contrast);
-    transition: all 1s ease;
-}
-.loc-icon { font-size: 1.2rem; }
-
-.tz-selector { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
-.tz-selector label {
-    font-size: 1.15rem; font-weight: 800; color: var(--text-primary);
-    text-transform: uppercase; letter-spacing: 2px;
-    text-shadow: 0 0 10px var(--glow-contrast), 0 0 20px var(--glow-contrast);
-    transition: all 1s ease;
-}
-.tz-selector select { 
-    appearance: none; background: var(--select-bg); 
-    color: var(--text-primary); border: 2px solid var(--text-primary); 
-    padding: 8px 16px 8px 12px; border-radius: 10px; 
-    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 0.95rem; 
-    cursor: pointer; outline: none; 
-    box-shadow: 0 0 15px var(--glow-contrast), inset 0 0 10px var(--glow-contrast);
-    transition: all 1s ease; max-width: 280px; text-overflow: ellipsis;
-}
-.tz-selector select:hover { background: rgba(255,255,255,0.4); }
-.tz-selector select option { background: #1a1a2e; color: #fff; text-shadow: none; font-weight: 500; }
-
-/* ========== SETTINGS BUTTON & DRAWER ========== */
-/* Note: .settings-btn is now styled via .icon-btn in widgets.css */
-
-.settings-overlay {
-    position: fixed; inset: 0; z-index: 40;
-    background: rgba(0,0,0,0.4);
-    opacity: 0; pointer-events: none;
-    transition: opacity .3s ease;
-}
-.settings-overlay.open { opacity: 1; pointer-events: auto; }
-
-.settings-drawer {
-    position: fixed; top: 0; right: 0; z-index: 50;
-    width: 320px; max-width: 90vw; height: 100%;
-    background: rgba(10, 8, 30, 0.85);
-    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-    border-left: 1px solid rgba(255,255,255,0.08);
-    box-shadow: -10px 0 40px rgba(0,0,0,0.5);
-    transform: translateX(100%);
-    transition: transform .35s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex; flex-direction: column;
-    color: #fff; font-family: 'Quicksand', sans-serif;
-}
-.settings-drawer.open { transform: translateX(0); }
-
-.settings-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.settings-header h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; }
-.settings-close {
-    background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer;
-    font-size: 1.2rem; width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s ease;
-}
-.settings-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
-
-.settings-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 22px; overflow-y: auto; flex: 1; }
-
-.settings-item {
-    display: flex; align-items: center; justify-content: space-between;
+    position: absolute;
+    top: 24px;
+    left: 28px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
     gap: 12px;
+    background: var(--card-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    padding: 10px 18px;
+    border-radius: 30px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.4s ease;
 }
-.settings-item-col { flex-direction: column; align-items: stretch; gap: 8px; }
+.weather-widget:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+}
+.weather-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: var(--neon-cyan);
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+}
+.weather-svg-icon {
+    width: 24px;
+    height: 24px;
+}
+.weather-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+.weather-temp {
+    font-family: 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+    line-height: 1.2;
+}
+.weather-sub {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+.weather-dot {
+    opacity: 0.5;
+    font-size: 0.65rem;
+}
 
-.settings-label { font-size: .92rem; font-weight: 600; }
-
-.settings-radio-group { display: flex; gap: 16px; }
-.settings-radio {
-    display: flex; align-items: center; gap: 5px;
-    font-size: .85rem; font-weight: 600; cursor: pointer; color: rgba(255,255,255,0.75);
-}
-.settings-radio input[type="radio"] {
-    appearance: none; width: 16px; height: 16px; border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.3); cursor: pointer;
-    transition: all .2s ease; position: relative;
-}
-.settings-radio input[type="radio"]:checked { border-color: #64c8ff; }
-.settings-radio input[type="radio"]:checked::after {
-    content: ''; position: absolute; top: 3px; left: 3px;
-    width: 6px; height: 6px; border-radius: 50%; background: #64c8ff;
-}
-
-.settings-select {
-    appearance: none; background: rgba(255,255,255,0.08);
-    color: #fff; border: 1.5px solid rgba(255,255,255,0.15);
-    padding: 8px 12px; border-radius: 10px;
-    font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: .85rem;
-    cursor: pointer; outline: none; width: 100%;
-    transition: all .2s ease;
-}
-.settings-select:hover { background: rgba(255,255,255,0.15); }
-.settings-select option { background: #1a1a2e; color: #fff; }
-
-/* ========== RESPONSIVE: TABLET (≤ 768px) ========== */
-@media (max-width: 768px) {
-    .clock-panel { top: 48%; transform: translate(-50%, -50%); padding: 20px 28px; min-width: auto; width: 88%; }
-    .clock-time { font-size: clamp(2.4rem, 10vw, 3.8rem); }
-    .clock-greeting { font-size: .85rem; letter-spacing: 3px; margin-bottom: 6px; }
-    .clock-date { font-size: .85rem; margin-bottom: 10px; }
-    .clock-location { font-size: .85rem; padding: 6px 14px; margin-bottom: 10px; }
-    .tz-selector label { font-size: 1rem; }
-    .tz-selector select { font-size: .85rem; padding: 6px 12px; max-width: 220px; }
-    .sun-wrap { width: 100px; height: 100px; } .sun-body { inset: 20px; } .sun-inner { inset: 30px; } .sun-outer { inset: 4px; } .sun-flare { inset: -35px; }
-    .moon-wrap { width: 85px; height: 85px; } .moon-body { inset: 14px; } .moon-halo { inset: -22px; }
-    .weather-widget { top: 14px; left: 14px; padding: 10px 14px; gap: 10px; }
-    .weather-icon { font-size: 1.8rem; }
-    .weather-temp { font-size: 1.1rem; }
+/* ══════════════════════════════════════════
+   CENTER CLOCK CARD (LOWER CENTER AREA)
+   ══════════════════════════════════════════ */
+.clock-panel {
+    position: absolute;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    text-align: center;
+    width: 530px;
+    max-width: 92vw;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 22px 28px 18px;
+    border-radius: 28px;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    box-sizing: border-box;
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), filter 0.7s ease, visibility 0.7s ease, box-shadow 0.4s ease;
 }
 
-/* ========== RESPONSIVE: MOBILE (≤ 480px) ========== */
+.clock-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+.greeting-bullet {
+    color: var(--neon-cyan);
+    font-size: 1.1rem;
+    line-height: 1;
+    text-shadow: 0 0 10px var(--neon-cyan);
+}
+.clock-greeting {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: rgba(215, 230, 255, 0.85);
+    text-transform: uppercase;
+}
+
+.clock-time {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #e0f2fe;
+    text-shadow: 0 0 25px var(--clock-glow), 0 0 50px var(--clock-subglow), 0 4px 15px rgba(0, 0, 0, 0.5);
+    margin: 2px 0 6px;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.clock-period {
+    font-size: 0.42em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0.85;
+    margin-left: 8px;
+    color: #93c5fd;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.clock-date {
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+}
+
+/* Clock Bottom Bar (12/24H Pill + Timezone Location Pill) */
+.clock-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Segmented 12H / 24H Toggle */
+.segmented-pill-group {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 20px;
+    padding: 3px;
+}
+.seg-btn {
+    background: transparent;
+    border: none;
+    border-radius: 16px;
+    padding: 5px 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.seg-btn:hover {
+    color: #fff;
+}
+.seg-btn.active {
+    background: rgba(56, 189, 248, 0.22);
+    border: 1px solid rgba(56, 189, 248, 0.45);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
+}
+
+/* Timezone & Location Pill Selector */
+.tz-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 20px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.tz-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.18);
+}
+.tz-loc-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--neon-cyan);
+}
+.tz-pill-text {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: rgba(225, 235, 255, 0.88);
+}
+.tz-chevron {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1;
+}
+
+/* Utility to visually hide native element while keeping it accessible */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   ══════════════════════════════════════════ */
+@media (max-width: 860px) {
+    .brand-header { top: 14px; }
+    .brand-title { font-size: 0.95rem; }
+    .brand-subtitle { font-size: 0.58rem; letter-spacing: 2px; }
+
+    .weather-widget { top: 14px; left: 14px; padding: 7px 12px; border-radius: 22px; }
+    .weather-temp { font-size: 0.95rem; }
+    .weather-sub { font-size: 0.65rem; }
+
+    .moon-wrap { width: 80px; height: 80px; right: 12%; top: 10%; }
+    .sun-wrap { width: 85px; height: 85px; }
+
+    .clock-panel {
+        bottom: 16px;
+        top: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 88%;
+        max-width: 440px;
+        padding: 16px 20px 14px;
+        border-radius: 22px;
+    }
+    .clock-time { font-size: clamp(1.8rem, 5.5vw, 2.8rem); }
+    .clock-greeting { font-size: 0.72rem; letter-spacing: 2.5px; }
+    .clock-date { font-size: 0.8rem; margin-bottom: 12px; }
+    .clock-bottom-bar { flex-direction: row; justify-content: center; gap: 8px; flex-wrap: wrap; }
+}
+
 @media (max-width: 480px) {
-    .clock-panel { top: 48%; transform: translate(-50%, -50%); padding: 14px 16px; width: 92%; border-radius: 16px; min-width: unset; }
-    .clock-time { font-size: clamp(1.8rem, 12vw, 2.8rem); letter-spacing: 1px; margin-bottom: 2px; }
-    .clock-greeting { font-size: .72rem; letter-spacing: 2px; margin-bottom: 4px; }
-    .clock-date { font-size: .72rem; letter-spacing: 1px; margin-bottom: 8px; }
-    .clock-location { font-size: .75rem; padding: 5px 10px; margin-bottom: 8px; gap: 4px; }
-    .loc-icon { font-size: 1rem; }
-    .tz-selector { gap: 6px; }
-    .tz-selector label { font-size: .85rem; letter-spacing: 1px; }
-    .tz-selector select { font-size: .78rem; padding: 5px 10px; max-width: 180px; border-width: 1.5px; }
-    .sun-wrap { width: 70px; height: 70px; } .sun-body { inset: 12px; } .sun-inner { inset: 20px; } .sun-outer { inset: 2px; } .sun-flare { inset: -20px; }
-    .moon-wrap { width: 58px; height: 58px; } .moon-body { inset: 10px; } .moon-halo { inset: -15px; }
-    .horizon-glow { height: 100px; }
-    .weather-widget { top: 10px; left: 10px; padding: 8px 10px; gap: 8px; border-radius: 12px; }
-    .weather-icon { font-size: 1.5rem; }
-    .weather-temp { font-size: .95rem; }
-    .weather-desc { font-size: .68rem; }
-    .weather-city { font-size: .6rem; }
-    .time-format-toggle { gap: 6px; margin-bottom: 8px; }
-    .fmt-label { font-size: .65rem; }
+    .brand-header { display: none; }
+    .weather-widget { top: 10px; left: 10px; padding: 5px 10px; border-radius: 18px; }
+    .weather-icon-wrap { width: 22px; height: 22px; }
+    .weather-svg-icon { width: 16px; height: 16px; }
+    .weather-temp { font-size: 0.88rem; }
+    .weather-sub { font-size: 0.58rem; }
+
+    .moon-wrap { width: 62px; height: 62px; right: 8%; top: 8%; }
+
+    .clock-panel {
+        bottom: 12px;
+        top: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 24px);
+        max-width: 380px;
+        padding: 12px 14px 10px;
+        border-radius: 18px;
+    }
+    .clock-time { font-size: clamp(1.4rem, 6.8vw, 2.1rem); letter-spacing: 0.5px; margin: 0 0 4px; }
+    .clock-greeting { font-size: 0.65rem; letter-spacing: 2px; }
+    .clock-date { font-size: 0.72rem; margin-bottom: 8px; }
+    .seg-btn { padding: 3px 8px; font-size: 0.65rem; }
+    .tz-pill-btn { padding: 3px 8px; font-size: 0.65rem; }
 }
 
-/* ========== RESPONSIVE: SMALL MOBILE (≤ 360px) ========== */
-@media (max-width: 360px) {
-    .clock-panel { top: 48%; padding: 10px 12px; }
-    .clock-time { font-size: 1.6rem; }
-    .clock-greeting { font-size: .65rem; }
-    .clock-date { font-size: .65rem; }
-    .tz-selector select { max-width: 150px; font-size: .72rem; }
+@media (max-height: 520px) {
+    .brand-header { display: none; }
+    .clock-panel { top: 50%; bottom: auto; transform: translate(-50%, -50%); padding: 10px 16px 8px; }
+    .clock-time { font-size: 1.8rem; margin: 0 0 2px; }
+    .clock-greeting { font-size: 0.65rem; }
+    .clock-date { font-size: 0.68rem; margin-bottom: 6px; }
 }
 
-/* ========== RESPONSIVE: LANDSCAPE MOBILE ========== */
-@media (max-height: 500px) {
-    .clock-panel { top: 50%; transform: translate(-50%, -50%); padding: 10px 24px; min-width: unset; }
-    .clock-time { font-size: clamp(1.6rem, 6vw, 2.5rem); margin-bottom: 2px; }
-    .clock-greeting { margin-bottom: 2px; font-size: .7rem; }
-    .clock-date { margin-bottom: 6px; font-size: .7rem; }
-    .clock-location { margin-bottom: 6px; padding: 4px 10px; font-size: .75rem; }
+/* ══════════════════════════════════════════
+   HIDE NETLIFY BADGE / DRAWER TOOLBAR
+   ══════════════════════════════════════════ */
+#netlify-drawer,
+#netlify-drawer-iframe,
+netlify-drawer,
+.netlify-badge,
+[data-netlify-drawer],
+div[class*="netlify-drawer"],
+iframe[src*="netlify.app"],
+div:has(> a[href*="netlify.com"]),
+div:has(> button[aria-label*="Netlify"]) {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
 }

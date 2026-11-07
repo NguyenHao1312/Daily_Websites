@@ -1,548 +1,1456 @@
 /* =================================================
    Day Night Dashboard — Widget Styles
-   Phase 1: UI Polish | Phase 2-3: Feature Widgets
+   Enhanced UI/UX for Night, Dawn, Day, Noon Themes
    ================================================= */
 
 /* ══════════════════════════════════════════
-   PHASE 1: CONTRAST & ACCESSIBILITY FIX
-   ══════════════════════════════════════════ */
-
-/* Boost text readability on gradient/glass backgrounds */
-.clock-date,
-.clock-greeting,
-.fmt-label,
-.weather-desc,
-.weather-city,
-.quote-text,
-.quote-author {
-    text-shadow: 0 1px 5px rgba(0,0,0,0.55), 0 0 12px rgba(0,0,0,0.2);
-}
-
-.clock-date { font-weight: 500 !important; }
-.weather-desc { opacity: .9; }
-.weather-city { opacity: .8; }
-
-/* ══════════════════════════════════════════
-   PHASE 1: TOP BUTTON GROUP (Focus, Todo, Settings)
+   TOP RIGHT BUTTON GROUP & FOCUS BANNER
    ══════════════════════════════════════════ */
 .top-btn-group {
-    position: absolute; top: 20px; right: 20px; z-index: 30;
-    display: flex; gap: 10px; align-items: center;
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    z-index: 30;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .icon-btn {
-    width: 44px; height: 44px; border: none; border-radius: 50%; cursor: pointer;
-    background: rgba(10, 5, 25, 0.3);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-    font-size: 1.2rem; line-height: 1;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .3s ease; color: #fff;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: var(--card-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(225, 235, 255, 0.9);
 }
-.icon-btn:active { transform: scale(0.95); }
-
-/* ── Unique icon hover effects ── */
-/* Focus: soft breathing glow */
-.focus-btn:hover {
-    background: rgba(100,200,255,0.15);
-    box-shadow: 0 0 20px rgba(100,200,255,0.35);
-    animation: icon-breathe .8s ease-in-out infinite alternate;
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.25s ease;
 }
-@keyframes icon-breathe {
-    from { box-shadow: 0 0 12px rgba(100,200,255,0.2); transform: scale(1); }
-    to   { box-shadow: 0 0 24px rgba(100,200,255,0.5); transform: scale(1.08); }
+.icon-btn:hover {
+    background: rgba(56, 189, 248, 0.16);
+    border-color: rgba(56, 189, 248, 0.45);
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+    transform: translateY(-2px);
 }
-
-/* Todo: playful wiggle */
-.todo-btn:hover {
-    background: rgba(255,200,80,0.15);
-    animation: icon-wiggle .4s ease-in-out;
-}
-@keyframes icon-wiggle {
-    0%, 100% { transform: rotate(0deg); }
-    25%  { transform: rotate(-8deg); }
-    50%  { transform: rotate(8deg); }
-    75%  { transform: rotate(-4deg); }
+.icon-btn:active {
+    transform: scale(0.95);
 }
 
-/* Settings: smooth spin */
-.settings-btn:hover {
-    background: rgba(255,255,255,0.15);
-    animation: icon-spin .6s ease-in-out;
+/* Exit Focus Banner */
+.exit-focus-banner {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    z-index: 35;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
-@keyframes icon-spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(90deg); }
+.exit-focus-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
-
-/* Focus Mode active state */
-.focus-btn.active {
-    background: rgba(100,200,255,0.3);
-    border-color: rgba(100,200,255,0.5);
-    box-shadow: 0 0 20px rgba(100,200,255,0.3);
-    animation: icon-breathe 1.5s ease-in-out infinite alternate;
+.exit-focus-text kbd {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    font-family: inherit;
+    color: rgba(255, 255, 255, 0.85);
+}
+.exit-focus-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.35);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.exit-focus-btn:hover {
+    background: rgba(56, 189, 248, 0.35);
+    transform: scale(1.05);
 }
 
 /* ══════════════════════════════════════════
-   PHASE 1: FOCUS MODE
+   FOCUS MODE ACTIVE STATES
    ══════════════════════════════════════════ */
 .hideable {
-    transition: opacity 0.5s ease, visibility 0.5s ease;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.8s ease, visibility 0.8s ease;
 }
 
 body.focus-mode .hideable {
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
+    filter: blur(8px) !important;
+    transform: translateY(14px) !important;
 }
 
-/* Keep Lofi and Pomodoro widgets visible in Focus Mode */
-body.focus-mode .lofi-widget.hideable,
-body.focus-mode .pomodoro-widget.hideable {
+body.focus-mode .clock-panel {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    filter: blur(10px) !important;
+    transform: translate(-50%, 20px) scale(0.96) !important;
+}
+
+body.focus-mode .top-btn-group {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(-8px) !important;
+}
+
+body.focus-mode .exit-focus-banner {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateY(0) !important;
+}
+
+/* In Focus Mode, Pomodoro and Lofi remain visible companions */
+body.focus-mode .pomodoro-widget,
+body.focus-mode .lofi-widget {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
 }
 
-/* Drag Handle styling */
-.drag-handle {
-    cursor: grab;
-}
-.drag-handle:active {
-    cursor: grabbing;
-}
-
-body.focus-mode .top-btn-group .icon-btn:not(.focus-btn) {
-    opacity: 0; visibility: hidden; pointer-events: none;
-}
-
 /* ══════════════════════════════════════════
-   PHASE 1: TIMEZONE SELECT GLASSMORPHISM
+   TOP POEM BAR (BELOW TOP BAR)
    ══════════════════════════════════════════ */
-.tz-selector select {
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border-radius: 14px !important;
-    border-width: 1.5px !important;
-    border-color: rgba(255,255,255,0.2) !important;
+.top-poem-bar {
+    position: absolute;
+    top: 78px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 26;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    border-radius: 30px;
+    padding: 8px 22px;
+    width: auto;
+    max-width: 820px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    opacity: 1;
+    filter: blur(0px);
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 1.2s ease, transform 0.4s ease, border-color 0.3s ease;
+}
+.top-poem-bar:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45), 0 0 16px rgba(56, 189, 248, 0.2);
+}
+.top-poem-bar.fading-out {
+    opacity: 0;
+    filter: blur(8px);
+    pointer-events: none;
+    transform: translate(-50%, -6px);
+}
+.poem-quill-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--neon-cyan);
+    flex-shrink: 0;
+}
+.poem-quill-icon svg {
+    width: 15px;
+    height: 15px;
+}
+.poem-content {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.poem-text {
+    font-size: 0.8rem;
+    font-style: italic;
+    font-weight: 500;
+    color: rgba(240, 245, 255, 0.92);
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+}
+.poem-author {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(160, 185, 225, 0.75);
+    white-space: nowrap;
 }
 
 /* ══════════════════════════════════════════
-   PHASE 2: QUOTE OF THE DAY
-   ══════════════════════════════════════════ */
-.quote-widget {
-    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
-    z-index: 28; text-align: center;
-    background: rgba(10, 5, 25, 0.3);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    padding: 14px 20px; border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
-    width: 90%; max-width: 480px;
-    transition: all .3s ease;
-}
-
-.quote-text {
-    font-size: clamp(.8rem, 1.8vw, 1rem);
-    font-style: italic; font-weight: 400;
-    color: var(--text-secondary);
-    line-height: 1.6; letter-spacing: .5px;
-    margin: 0;
-}
-
-.quote-author {
-    font-size: clamp(.65rem, 1.4vw, .82rem);
-    font-weight: 600; color: var(--text-secondary);
-    opacity: .7; margin-top: 4px;
-}
-
-/* ══════════════════════════════════════════
-   PHASE 2: POMODORO TIMER
+   POMODORO TIMER WIDGET (BOTTOM LEFT)
    ══════════════════════════════════════════ */
 .pomodoro-widget {
-    position: absolute; bottom: 24px; left: 24px; z-index: 28;
-    background: rgba(10, 5, 25, 0.3);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    padding: 14px 18px; border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
-    color: #fff; min-width: 180px;
-    transition: all .3s ease;
+    position: absolute;
+    bottom: 28px;
+    left: 28px;
+    z-index: 28;
+    background: var(--card-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    padding: 16px 20px 18px;
+    border-radius: 24px;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
+    width: 210px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+.pomodoro-widget:hover {
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .pomo-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
 }
-.pomo-title { font-size: .85rem; font-weight: 700; letter-spacing: 1px; }
+.drag-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: grab;
+}
+.drag-title-wrap:active {
+    cursor: grabbing;
+}
+.drag-dots-svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0.55;
+    color: #fff;
+}
+.pomo-title, .lofi-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .pomo-minimize {
-    background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer;
-    font-size: 1.2rem; width: 24px; height: 24px; border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s ease;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    font-size: 1.1rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
 }
-.pomo-minimize:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.pomo-minimize:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
 
-.pomo-body { transition: all .3s ease; overflow: hidden; }
-.pomo-body.collapsed { max-height: 0; opacity: 0; margin: 0; padding: 0; }
-
-.pomo-display {
+/* ── Minimized Pomodoro State ── */
+.pomo-mini-meta {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    margin-right: 6px;
+}
+.pomo-mini-time {
     font-family: 'Orbitron', sans-serif;
-    font-size: 2.2rem; font-weight: 700;
-    text-align: center; letter-spacing: 2px;
-    margin-bottom: 10px;
-    text-shadow: 0 0 20px rgba(255,100,100,0.3);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    letter-spacing: 1px;
+}
+.pomo-mini-play-btn {
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #e0f2fe;
+    font-size: 0.65rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 2px;
+    transition: all 0.2s ease;
+}
+.pomo-mini-play-btn:hover {
+    background: rgba(56, 189, 248, 0.4);
+    transform: scale(1.1);
+}
+
+.pomodoro-widget.minimized {
+    width: 220px !important;
+    padding: 10px 14px 12px !important;
+    border-radius: 20px !important;
+}
+.pomodoro-widget.minimized .pomo-mini-meta {
+    display: flex !important;
+}
+.pomodoro-widget.minimized .pomo-body {
+    display: none !important;
 }
 
 .pomo-mode {
-    display: flex; gap: 6px; justify-content: center; margin-bottom: 10px;
-}
-.pomo-mode-btn {
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.6); padding: 5px 14px; border-radius: 20px;
-    font-family: 'Quicksand', sans-serif; font-size: .75rem; font-weight: 700;
-    cursor: pointer; transition: all .2s ease; letter-spacing: .5px;
-}
-.pomo-mode-btn.active {
-    background: rgba(255,80,80,0.25); border-color: rgba(255,80,80,0.5);
-    color: #fff;
-}
-.pomo-mode-btn[data-mode="break"].active {
-    background: rgba(80,200,120,0.25); border-color: rgba(80,200,120,0.5);
-}
-.pomo-mode-btn:hover { background: rgba(255,255,255,0.15); }
-
-/* Time Adjustment */
-.pomo-time-adjust {
-    display: flex; flex-direction: column; gap: 8px;
-    align-items: center;
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 3px;
     margin-bottom: 12px;
 }
-.pomo-adj-group {
-    display: flex; align-items: center; justify-content: space-between;
-    width: 100%; gap: 8px;
+.pomo-mode-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-radius: 13px;
+    padding: 4px 0;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
-.pomo-adj-group label {
-    font-size: .6rem; font-weight: 700;
-    color: rgba(255,255,255,0.7); text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 0;
-    width: 45px; text-align: left;
+.pomo-mode-btn.active {
+    background: rgba(56, 189, 248, 0.22);
+    border: 1px solid rgba(56, 189, 248, 0.45);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
 }
-.pomo-adj-controls {
-    display: flex; align-items: center; gap: 4px;
-}
-.pomo-adj-btn {
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-    color: #fff; width: 22px; height: 22px; border-radius: 6px;
-    font-size: .75rem; cursor: pointer; display: flex;
-    align-items: center; justify-content: center;
-    transition: all .2s ease; padding: 0;
-}
-.pomo-adj-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
-.pomo-adj-input {
+
+.pomo-display {
     font-family: 'Orbitron', sans-serif;
-    font-size: .85rem; font-weight: 700;
-    width: 38px; text-align: center;
-    background: transparent; border: none; color: #fff;
-    outline: none; -moz-appearance: textfield;
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.35);
+    margin: 2px 0 2px;
 }
-.pomo-adj-input.sec-input {
-    width: 24px;
+.pomo-subtitle {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-align: center;
+    color: rgba(160, 185, 225, 0.65);
+    text-transform: uppercase;
+    margin-bottom: 12px;
 }
-.pomo-adj-input::-webkit-outer-spin-button,
-.pomo-adj-input::-webkit-inner-spin-button {
-    -webkit-appearance: none; margin: 0;
+
+.pomo-time-adjust {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
 }
-.pomo-adj-input:focus {
-    background: rgba(255,255,255,0.1);
+.pomo-stepper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 3px 6px;
+}
+.pomo-step-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.65);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 4px;
+    transition: all 0.2s ease;
 }
-.pomo-adj-unit {
-    font-size: .55rem; color: rgba(255,255,255,0.4); font-weight: 500;
-    margin-right: 4px;
+.pomo-step-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+.pomo-val-display {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(230, 240, 255, 0.9);
 }
 
 .pomo-controls {
-    display: flex; gap: 8px; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 }
-.pomo-ctrl {
-    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-    color: #fff; width: 36px; height: 36px; border-radius: 50%;
-    font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: all .2s ease;
+.pomo-ctrl-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
 }
-.pomo-ctrl:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+.pomo-ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.08);
+}
+.pomo-ctrl-btn.reset-btn, .pomo-ctrl-btn.skip-btn {
+    width: 34px;
+    height: 34px;
+}
+.pomo-ctrl-btn.reset-btn svg {
+    width: 16px;
+    height: 16px;
+}
+.pomo-ctrl-btn.play-btn, .pomo-ctrl-btn.pause-btn {
+    width: 44px;
+    height: 44px;
+    background: rgba(56, 189, 248, 0.2);
+    border-color: rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+}
+.pomo-ctrl-btn.play-btn svg, .pomo-ctrl-btn.pause-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: #fff;
+}
+.pomo-ctrl-text {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+}
 
 /* ══════════════════════════════════════════
-   PHASE 2: TO-DO PANEL
-   ══════════════════════════════════════════ */
-.todo-overlay {
-    position: fixed; inset: 0; z-index: 40;
-    background: rgba(0,0,0,0.4);
-    opacity: 0; pointer-events: none;
-    transition: opacity .3s ease;
-}
-.todo-overlay.open { opacity: 1; pointer-events: auto; }
-
-.todo-panel {
-    position: fixed; top: 0; right: 0; z-index: 50;
-    width: 340px; max-width: 92vw; height: 100%;
-    background: rgba(10, 8, 30, 0.85);
-    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-    border-left: 1px solid rgba(255,255,255,0.08);
-    box-shadow: -10px 0 40px rgba(0,0,0,0.5);
-    transform: translateX(100%);
-    transition: transform .35s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex; flex-direction: column;
-    color: #fff; font-family: 'Quicksand', sans-serif;
-}
-.todo-panel.open { transform: translateX(0); }
-
-.todo-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.todo-header h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; margin: 0; }
-.todo-close {
-    background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer;
-    font-size: 1.2rem; width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s ease;
-}
-.todo-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
-
-.todo-input-wrap {
-    display: flex; gap: 8px; padding: 16px 24px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.todo-input-wrap input {
-    flex: 1; background: rgba(255,255,255,0.08);
-    border: 1.5px solid rgba(255,255,255,0.12);
-    color: #fff; padding: 10px 14px; border-radius: 12px;
-    font-family: 'Quicksand', sans-serif; font-size: .88rem; font-weight: 500;
-    outline: none; transition: all .2s ease;
-}
-.todo-input-wrap input::placeholder { color: rgba(255,255,255,0.35); }
-.todo-input-wrap input:focus { border-color: rgba(100,200,255,0.5); background: rgba(255,255,255,0.12); }
-
-.todo-add-btn {
-    background: rgba(100,200,255,0.25); border: 1.5px solid rgba(100,200,255,0.4);
-    color: #fff; width: 42px; border-radius: 12px; font-size: 1.3rem;
-    cursor: pointer; transition: all .2s ease;
-    display: flex; align-items: center; justify-content: center;
-}
-.todo-add-btn:hover { background: rgba(100,200,255,0.4); }
-
-.todo-list {
-    list-style: none; padding: 12px 24px; margin: 0;
-    overflow-y: auto; flex: 1;
-    display: flex; flex-direction: column; gap: 6px;
-}
-
-.todo-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 12px; border-radius: 10px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.06);
-    transition: all .2s ease;
-}
-.todo-item:hover { background: rgba(255,255,255,0.08); }
-
-.todo-check {
-    appearance: none; width: 20px; height: 20px; min-width: 20px; border-radius: 6px;
-    border: 2px solid rgba(255,255,255,0.25); cursor: pointer;
-    position: relative; transition: all .2s ease;
-}
-.todo-check:checked {
-    background: rgba(100,200,255,0.4); border-color: rgba(100,200,255,0.6);
-}
-.todo-check:checked::after {
-    content: '✓'; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); color: #fff; font-size: .7rem; font-weight: 700;
-}
-
-.todo-text {
-    flex: 1; font-size: .88rem; font-weight: 500; word-break: break-word;
-    transition: all .2s ease;
-}
-.todo-item.done .todo-text {
-    text-decoration: line-through; opacity: .4;
-}
-
-.todo-delete {
-    background: none; border: none; color: rgba(255,255,255,0.2); cursor: pointer;
-    font-size: 1rem; width: 28px; height: 28px; border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s ease;
-}
-.todo-delete:hover { background: rgba(255,80,80,0.2); color: rgba(255,80,80,0.8); }
-
-/* ══════════════════════════════════════════
-   PHASE 3: LOFI PLAYER (Local Music)
+   LOFI RADIO WIDGET (BOTTOM RIGHT)
    ══════════════════════════════════════════ */
 .lofi-widget {
-    position: absolute; bottom: 24px; right: 24px; z-index: 28;
-    background: rgba(10, 5, 25, 0.3);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    padding: 14px 18px; border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08);
-    color: #fff; min-width: 200px;
+    position: absolute;
+    bottom: 28px;
+    right: 28px;
+    z-index: 28;
+    background: var(--card-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    padding: 16px 20px 18px;
+    border-radius: 24px;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
+    width: 250px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+.lofi-widget:hover {
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .lofi-header {
-    font-size: .82rem; font-weight: 700; letter-spacing: 1px;
-    margin-bottom: 4px; text-align: center;
-}
-
-.lofi-track-name {
-    font-size: .7rem; font-weight: 500; text-align: center;
-    color: rgba(255,255,255,0.6); margin-bottom: 10px;
-    letter-spacing: .5px; white-space: nowrap;
-    overflow: hidden; text-overflow: ellipsis;
-}
-
-.lofi-controls {
-    display: flex; align-items: center; gap: 6px; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
-.lofi-btn {
-    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-    color: #fff; width: 32px; height: 32px; border-radius: 50%;
-    font-size: .85rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: all .2s ease;
+/* Animated Equalizer Bars */
+.lofi-equalizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 14px;
+    padding-bottom: 1px;
 }
-.lofi-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
-.lofi-btn.playing {
-    background: rgba(100,200,255,0.25); border-color: rgba(100,200,255,0.5);
-    box-shadow: 0 0 12px rgba(100,200,255,0.2);
-    animation: lofi-pulse 2s ease-in-out infinite;
+.eq-bar {
+    width: 3px;
+    background: var(--neon-cyan);
+    border-radius: 2px;
+    opacity: 0.6;
+    height: 4px;
+    transition: height 0.2s ease;
 }
-@keyframes lofi-pulse {
-    0%, 100% { box-shadow: 0 0 12px rgba(100,200,255,0.2); }
-    50% { box-shadow: 0 0 20px rgba(100,200,255,0.4); }
+.lofi-equalizer.playing .bar-1 {
+    animation: eqAnim1 0.7s ease-in-out infinite alternate;
+}
+.lofi-equalizer.playing .bar-2 {
+    animation: eqAnim2 0.5s ease-in-out infinite alternate;
+}
+.lofi-equalizer.playing .bar-3 {
+    animation: eqAnim3 0.9s ease-in-out infinite alternate;
+}
+@keyframes eqAnim1 { from { height: 4px; } to { height: 14px; } }
+@keyframes eqAnim2 { from { height: 3px; } to { height: 12px; } }
+@keyframes eqAnim3 { from { height: 5px; } to { height: 13px; } }
+
+.lofi-track-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+.lofi-track-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.lofi-ambient-tag {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(160, 185, 225, 0.7);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+.lofi-mood-quote {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: rgba(180, 200, 235, 0.65);
+    margin-bottom: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.lofi-prev, .lofi-next {
-    width: 28px; height: 28px; font-size: .72rem;
+.lofi-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+.lofi-ctrl-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.lofi-ctrl-btn svg {
+    width: 18px;
+    height: 18px;
+}
+.lofi-ctrl-btn:hover {
+    color: #ffffff;
+    transform: scale(1.1);
+}
+.lofi-ctrl-btn.play-circle-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.45);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.28);
+}
+.lofi-ctrl-btn.play-circle-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: #ffffff;
 }
 
-/* Custom range slider */
-.lofi-volume {
-    -webkit-appearance: none; appearance: none;
-    width: 60px; height: 4px; border-radius: 4px;
-    background: rgba(255,255,255,0.18);
-    outline: none; cursor: pointer;
+.lofi-volume-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
 }
-.lofi-volume::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 16px; height: 16px;
-    border-radius: 50%; background: #64c8ff; cursor: pointer;
-    box-shadow: 0 0 8px rgba(100,200,255,0.5);
-    transition: transform .15s ease;
+.vol-icon {
+    width: 14px;
+    height: 14px;
+    color: rgba(255, 255, 255, 0.6);
 }
-.lofi-volume::-webkit-slider-thumb:hover {
-    transform: scale(1.15);
+.lofi-volume-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    outline: none;
+    cursor: pointer;
 }
-.lofi-volume::-moz-range-thumb {
-    width: 16px; height: 16px; border-radius: 50%; background: #64c8ff; border: none;
-    box-shadow: 0 0 8px rgba(100,200,255,0.5);
+.lofi-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--neon-cyan);
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+.lofi-volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+}
+.vol-percent {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    width: 20px;
+    text-align: right;
 }
 
-.lofi-select {
-    display: block; width: 100%;
-    appearance: none; background: rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.15);
-    padding: 6px 10px; border-radius: 10px;
-    font-family: 'Quicksand', sans-serif; font-size: .72rem; font-weight: 600;
-    cursor: pointer; outline: none; text-align: center;
+.lofi-channel-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 12px;
+    padding: 6px 12px;
+    gap: 8px;
 }
-.lofi-select option { background: #1a1a2e; color: #fff; }
+.lofi-genre-icon {
+    font-size: 0.8rem;
+}
+.lofi-channel-select {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: rgba(230, 240, 255, 0.9);
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+}
+.lofi-channel-select option {
+    background: #14122d;
+    color: #ffffff;
+}
+.channel-chevron {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+}
+
+/* ── Minimized Lofi Radio State ── */
+.lofi-mini-body {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+}
+.lofi-widget.minimized {
+    width: 240px;
+    padding: 12px 16px 14px;
+    border-radius: 20px;
+}
+.lofi-widget.minimized .lofi-full-body {
+    display: none !important;
+}
+.lofi-widget.minimized .lofi-mini-body {
+    display: flex !important;
+}
+.lofi-widget.minimized .lofi-header {
+    margin-bottom: 8px;
+}
+.lofi-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.lofi-minimize-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 1.15rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.lofi-minimize-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.lofi-mini-selector-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 5px 8px;
+    margin-bottom: 8px;
+}
+.lofi-mini-select {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.lofi-mini-select option {
+    background: #14122d;
+    color: #ffffff;
+}
+.lofi-mini-play-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    transition: all 0.2s ease;
+}
+.lofi-mini-play-btn:hover {
+    background: rgba(56, 189, 248, 0.35);
+    transform: scale(1.05);
+}
+
+/* Dynamic columns changing according to the rhythm of the music */
+.lofi-mini-visualizer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 3px;
+    height: 44px;
+    padding: 4px 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+.rhythm-bar {
+    flex: 1;
+    background: linear-gradient(180deg, var(--neon-cyan), #818cf8);
+    border-radius: 2px;
+    min-height: 4px;
+    box-shadow: 0 0 6px rgba(56, 189, 248, 0.35);
+    transition: height 0.08s ease;
+}
+.lofi-widget.playing .rhythm-bar.b-1 { animation: rhythmPulse 0.4s ease-in-out infinite alternate; }
+.lofi-widget.playing .rhythm-bar.b-2 { animation: rhythmPulse 0.6s ease-in-out infinite alternate 0.1s; }
+.lofi-widget.playing .rhythm-bar.b-3 { animation: rhythmPulse 0.35s ease-in-out infinite alternate 0.2s; }
+.lofi-widget.playing .rhythm-bar.b-4 { animation: rhythmPulse 0.5s ease-in-out infinite alternate 0.05s; }
+.lofi-widget.playing .rhythm-bar.b-5 { animation: rhythmPulse 0.7s ease-in-out infinite alternate 0.15s; }
+.lofi-widget.playing .rhythm-bar.b-6 { animation: rhythmPulse 0.45s ease-in-out infinite alternate 0.25s; }
+.lofi-widget.playing .rhythm-bar.b-7 { animation: rhythmPulse 0.65s ease-in-out infinite alternate 0.1s; }
+.lofi-widget.playing .rhythm-bar.b-8 { animation: rhythmPulse 0.38s ease-in-out infinite alternate 0.05s; }
+.lofi-widget.playing .rhythm-bar.b-9 { animation: rhythmPulse 0.55s ease-in-out infinite alternate 0.2s; }
+.lofi-widget.playing .rhythm-bar.b-10 { animation: rhythmPulse 0.42s ease-in-out infinite alternate 0.12s; }
+.lofi-widget.playing .rhythm-bar.b-11 { animation: rhythmPulse 0.68s ease-in-out infinite alternate 0.18s; }
+.lofi-widget.playing .rhythm-bar.b-12 { animation: rhythmPulse 0.36s ease-in-out infinite alternate 0.08s; }
+.lofi-widget.playing .rhythm-bar.b-13 { animation: rhythmPulse 0.52s ease-in-out infinite alternate 0.22s; }
+.lofi-widget.playing .rhythm-bar.b-14 { animation: rhythmPulse 0.62s ease-in-out infinite alternate 0.14s; }
+.lofi-widget.playing .rhythm-bar.b-15 { animation: rhythmPulse 0.4s ease-in-out infinite alternate 0.06s; }
+.lofi-widget.playing .rhythm-bar.b-16 { animation: rhythmPulse 0.58s ease-in-out infinite alternate 0.16s; }
+.lofi-widget.playing .rhythm-bar.b-17 { animation: rhythmPulse 0.46s ease-in-out infinite alternate 0.24s; }
+.lofi-widget.playing .rhythm-bar.b-18 { animation: rhythmPulse 0.64s ease-in-out infinite alternate 0.1s; }
+
+@keyframes rhythmPulse {
+    0% { height: 4px; opacity: 0.5; }
+    50% { height: 26px; opacity: 0.85; }
+    100% { height: 38px; opacity: 1; }
+}
 
 /* ══════════════════════════════════════════
-   RESPONSIVE: TABLET (≤ 768px)
+   RIGHT DRAWER: TO-DO & SETTINGS PANELS
    ══════════════════════════════════════════ */
-@media (max-width: 768px) {
-    .top-btn-group { top: 14px; right: 14px; gap: 8px; }
-    .icon-btn { width: 38px; height: 38px; font-size: 1.05rem; }
-    
-    .pomodoro-widget { bottom: 16px; left: 16px; padding: 12px 14px; min-width: 160px; }
-    .pomo-display { font-size: 1.8rem; }
-    .pomo-adj-input { font-size: .8rem; width: 34px; }
-    .pomo-adj-input.sec-input { width: 22px; }
-    .pomo-adj-btn { width: 20px; height: 20px; font-size: .7rem; }
-    
-    .lofi-widget { bottom: 16px; right: 16px; padding: 10px 12px; min-width: 150px; }
-    .lofi-btn { width: 28px; height: 28px; font-size: .8rem; }
-    .lofi-prev, .lofi-next { width: 24px; height: 24px; font-size: .65rem; }
-    .lofi-volume { width: 50px; }
-    
-    .quote-widget { bottom: 16px; max-width: 320px; padding: 10px 14px; }
-    .todo-panel { width: 300px; }
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+.drawer-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.drawer-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 50;
+    width: 380px;
+    max-width: 92vw;
+    height: 100%;
+    background: rgba(11, 9, 28, 0.88);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.6);
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+}
+.drawer-panel.open {
+    transform: translateX(0);
+}
+.drawer-panel.minimized {
+    transform: translateX(calc(100% - 68px)) !important;
+    cursor: pointer;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
+}
+.drawer-panel.minimized .drawer-scroll-body,
+.drawer-panel.minimized .todo-scroll-area,
+.drawer-panel.minimized .todo-input-section,
+.drawer-panel.minimized .todo-progress-card,
+.drawer-panel.minimized .drawer-footer {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+}
+
+.drawer-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 28px 24px 18px;
+}
+.drawer-category {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--neon-cyan);
+    display: block;
+    margin-bottom: 4px;
+}
+.drawer-title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+}
+.drawer-subtitle {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(180, 195, 225, 0.7);
+    margin-top: 4px;
+}
+.drawer-close {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 1.2rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.drawer-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.drawer-header-btns {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.drawer-minimize {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 1.2rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.drawer-minimize:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* To-Do Input */
+.todo-input-section {
+    padding: 0 24px 16px;
+}
+.todo-input-pill {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 4px 6px 4px 14px;
+    transition: all 0.25s ease;
+}
+.todo-input-pill:focus-within {
+    border-color: rgba(56, 189, 248, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
+}
+.todo-input-pill input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    outline: none;
+}
+.todo-input-pill input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+.todo-add-pill-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.todo-add-pill-btn svg {
+    width: 16px;
+    height: 16px;
+}
+.todo-add-pill-btn:hover {
+    background: rgba(56, 189, 248, 0.35);
+    transform: scale(1.05);
+}
+
+/* To-Do Progress Card */
+.todo-progress-card {
+    padding: 12px 24px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.progress-title {
+    color: rgba(255, 255, 255, 0.7);
+}
+.progress-stats {
+    color: var(--neon-cyan);
+}
+.progress-track {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+    border-radius: 4px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* To-Do Scroll Area */
+.todo-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.todo-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: rgba(160, 180, 215, 0.6);
+}
+.section-count {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+}
+.completed-header {
+    margin-top: 10px;
+}
+
+.todo-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Individual Task Card */
+.task-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 12px 14px;
+    transition: all 0.25s ease;
+}
+.task-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+.task-checkbox-wrap {
+    margin-top: 2px;
+}
+.task-check {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    border: 1.8px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+.task-check:checked {
+    background: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+.task-check:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #0b0928;
+    font-size: 0.65rem;
+    font-weight: 900;
+}
+.task-content {
+    flex: 1;
+}
+.task-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(245, 250, 255, 0.95);
+    line-height: 1.3;
+}
+.task-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    color: rgba(160, 185, 225, 0.65);
+    margin-top: 4px;
+}
+.task-meta-dot {
+    color: var(--neon-cyan);
+    font-size: 0.65rem;
+}
+.task-delete-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+.task-card:hover .task-delete-btn {
+    opacity: 1;
+}
+.task-delete-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+.task-delete-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.task-card.done .task-title {
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.35);
+}
+.task-card.done .task-meta {
+    opacity: 0.5;
+}
+
+/* Drawer Footer */
+.drawer-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.footer-privacy-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(160, 180, 215, 0.65);
+}
+.shield-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--neon-cyan);
 }
 
 /* ══════════════════════════════════════════
-   RESPONSIVE: MOBILE (≤ 480px)
+   SETTINGS DRAWER STYLING
    ══════════════════════════════════════════ */
+.drawer-scroll-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+.settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.settings-group-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: rgba(160, 185, 225, 0.65);
+    text-transform: uppercase;
+}
+.settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.settings-row-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.row-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #ffffff;
+    display: block;
+}
+.row-desc {
+    font-size: 0.72rem;
+    color: rgba(180, 195, 225, 0.65);
+    display: block;
+    margin-top: 2px;
+}
+
+/* Switch Toggle */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ffffff;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+}
+.toggle-switch input:checked + .toggle-slider {
+    background: rgba(56, 189, 248, 0.35);
+    border-color: rgba(56, 189, 248, 0.6);
+}
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+    background: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* Theme Card Selector */
+.theme-card-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.theme-card-selector:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.18);
+}
+.theme-card-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.theme-icon-box {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--neon-cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.theme-icon-box svg {
+    width: 18px;
+    height: 18px;
+}
+.theme-card-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+.theme-card-desc {
+    font-size: 0.7rem;
+    color: rgba(180, 200, 235, 0.65);
+}
+.theme-card-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: var(--neon-cyan);
+    padding: 3px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Radio Pills */
+.pill-radio-group {
+    display: flex;
+    gap: 10px;
+}
+.pill-radio-option {
+    flex: 1;
+    cursor: pointer;
+}
+.pill-radio-option input {
+    display: none;
+}
+.pill-radio-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.65);
+    transition: all 0.25s ease;
+}
+.pill-radio-option input:checked + .pill-radio-label {
+    background: rgba(56, 189, 248, 0.22);
+    border-color: rgba(56, 189, 248, 0.5);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+/* Timezone Select */
+.custom-select-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px 12px;
+}
+.settings-select-field {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+}
+.settings-select-field option {
+    background: #14122d;
+    color: #fff;
+}
+.select-chevron {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+    pointer-events: none;
+}
+.tz-sub-caption {
+    font-size: 0.7rem;
+    color: rgba(56, 189, 248, 0.85);
+    margin-top: 2px;
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE WIDGETS (TABLET & MOBILE)
+   ══════════════════════════════════════════ */
+.drag-handle {
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+@media (max-width: 860px) {
+    /* Avoid bottom collision with lower Clock Card on tablet */
+    .pomodoro-widget { bottom: 185px; left: 16px; width: 185px; padding: 12px; z-index: 24; }
+    .lofi-widget { bottom: 185px; right: 16px; width: 215px; padding: 12px; z-index: 24; }
+    .drawer-panel { width: 360px; }
+    .top-poem-bar {
+        top: 68px;
+        max-width: 90vw;
+        padding: 6px 16px;
+    }
+}
+
 @media (max-width: 480px) {
-    .top-btn-group { top: 10px; right: 10px; gap: 6px; }
-    .icon-btn { width: 34px; height: 34px; font-size: .95rem; }
-
-    .pomodoro-widget { bottom: 10px; left: 10px; padding: 8px 10px; min-width: 140px; border-radius: 12px; }
-    .pomo-header { margin-bottom: 6px; }
-    .pomo-title { font-size: .7rem; }
-    .pomo-minimize { width: 20px; height: 20px; font-size: 1rem; }
-    .pomo-display { font-size: 1.5rem; margin-bottom: 6px; }
-    .pomo-mode { gap: 4px; margin-bottom: 8px; }
-    .pomo-mode-btn { padding: 4px 8px; font-size: .65rem; }
-    .pomo-time-adjust { gap: 6px; margin-bottom: 8px; }
-    .pomo-adj-group { gap: 4px; }
-    .pomo-adj-group label { font-size: .55rem; width: 35px; }
-    .pomo-adj-input { font-size: .7rem; width: 30px; }
-    .pomo-adj-input.sec-input { width: 20px; }
-    .pomo-adj-btn { width: 18px; height: 18px; font-size: .6rem; }
-    .pomo-adj-unit { font-size: .5rem; margin-right: 2px; }
-    .pomo-ctrl { width: 28px; height: 28px; font-size: .8rem; }
-
-    .lofi-widget { bottom: 10px; right: 10px; padding: 8px 10px; min-width: 130px; border-radius: 12px; }
-    .lofi-header { font-size: .7rem; margin-bottom: 4px; }
-    .lofi-track-name { font-size: .65rem; margin-bottom: 6px; }
-    .lofi-controls { gap: 4px; margin-bottom: 6px; }
-    .lofi-btn { width: 26px; height: 26px; font-size: .75rem; }
-    .lofi-prev, .lofi-next { width: 22px; height: 22px; font-size: .6rem; }
-    .lofi-volume { width: 40px; height: 3px; }
-    .lofi-volume::-webkit-slider-thumb { width: 12px; height: 12px; }
-    .lofi-select { font-size: .6rem; padding: 3px 6px; border-radius: 6px; }
-
-    .quote-widget { bottom: 100px; padding: 10px 16px; width: 92%; }
-    .quote-text { font-size: .75rem; }
-    .quote-author { font-size: .62rem; }
-
-    .todo-panel { max-width: 100vw; width: 100%; }
-    .todo-input-wrap { padding: 12px 16px; }
-    .todo-list { padding: 10px 16px; }
-}
-
-/* ══════════════════════════════════════════
-   RESPONSIVE: SMALL MOBILE (≤ 360px)
-   ══════════════════════════════════════════ */
-@media (max-width: 360px) {
-    .pomodoro-widget { padding: 6px 8px; min-width: 130px; }
-    .pomo-display { font-size: 1.3rem; }
-    .pomo-adj-input { width: 26px; }
-    .pomo-adj-input.sec-input { width: 18px; }
+    /* Mobile Layout — Floating companions sit gracefully above bottom clock */
+    .pomodoro-widget { bottom: 165px; left: 10px; width: 155px; padding: 10px 12px; border-radius: 16px; z-index: 24; }
+    .pomo-display { font-size: 1.5rem; }
+    .pomo-subtitle { font-size: 0.52rem; }
+    .pomo-val-display { font-size: 0.62rem; }
+    .pomodoro-widget.minimized { width: 175px !important; padding: 8px 12px !important; }
     
-    .lofi-widget { padding: 6px 8px; min-width: 120px; }
-    .lofi-btn { width: 24px; height: 24px; font-size: .7rem; }
-    .lofi-volume { width: 35px; }
-}
-
-/* ══════════════════════════════════════════
-   RESPONSIVE: LANDSCAPE MOBILE
-   ══════════════════════════════════════════ */
-@media (max-height: 500px) {
-    .pomodoro-widget { bottom: 8px; left: 8px; padding: 6px 10px; }
-    .pomo-display { font-size: 1.3rem; margin-bottom: 4px; }
-    .lofi-widget { bottom: 8px; right: 8px; padding: 6px 10px; }
-    .quote-widget { display: none; } /* Hide on very short screens */
+    .lofi-widget { bottom: 165px; right: 10px; width: 170px; padding: 10px 12px; border-radius: 16px; z-index: 24; }
+    .lofi-track-name { font-size: 0.72rem; }
+    .lofi-ctrl-btn.play-circle-btn { width: 32px; height: 32px; }
+    .lofi-widget.minimized { width: 185px !important; padding: 8px 12px !important; }
+    
+    .top-btn-group { top: 10px; right: 10px; gap: 6px; }
+    .top-btn { width: 36px; height: 36px; }
+    
+    .drawer-panel { width: 100vw; max-width: 100vw; }
+    
+    .top-poem-bar {
+        top: 54px;
+        max-width: calc(100% - 20px);
+        padding: 5px 12px;
+        border-radius: 20px;
+        gap: 8px;
+    }
+    .poem-quill-icon {
+        width: 20px;
+        height: 20px;
+    }
+    .poem-quill-icon svg {
+        width: 12px;
+        height: 12px;
+    }
+    .poem-text {
+        font-size: 0.68rem;
+        line-height: 1.25;
+    }
+    .poem-author {
+        font-size: 0.62rem;
+    }
 }

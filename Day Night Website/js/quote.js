@@ -1,17 +1,29 @@
 /* =================================================
-   Quote of the Day — API + localStorage Cache
+   Quote of the Day — API & Local Cache Engine
+   Matches Day Night Cycle Design Mockup (Image 1)
    ================================================= */
 (() => {
     'use strict';
 
     const CACHE_KEY = 'daynight_quote';
+    const API_BASE = 'http://localhost:8000/api';
     const textEl = document.getElementById('quoteText');
     const authorEl = document.getElementById('quoteAuthor');
 
-    if (!textEl) return;
+    if (!textEl || !authorEl) return;
+
+    const FALLBACK_QUOTES = [
+        { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+        { text: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
+        { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
+        { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+        { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+        { text: "Peace comes from within. Do not seek it without.", author: "Buddha" },
+        { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" }
+    ];
 
     function todayStr() {
-        return new Date().toISOString().slice(0, 10); // "2026-09-02"
+        return new Date().toISOString().slice(0, 10);
     }
 
     function displayQuote(text, author) {
@@ -38,61 +50,29 @@
         } catch(e) {}
     }
 
-    // API 1: ZenQuotes (most reliable, CORS-friendly)
-    async function fetchZenQuotes() {
-        const r = await fetch('https://zenquotes.io/api/random');
-        const data = await r.json();
-        if (data && data[0]) {
-            return { text: data[0].q, author: data[0].a };
-        }
+    async function fetchFromBackend() {
+        try {
+            const res = await fetch(`${API_BASE}/quote`, { signal: AbortSignal.timeout(1500) });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.text) return data;
+            }
+        } catch(e) {}
         return null;
-    }
-
-    // API 2: Quotable API (backup)
-    async function fetchQuotable() {
-        const r = await fetch('https://api.quotable.io/random');
-        const data = await r.json();
-        if (data && data.content) {
-            return { text: data.content, author: data.author };
-        }
-        return null;
-    }
-
-    // Fallback quotes (offline)
-    const FALLBACK_QUOTES = [
-        { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
-        { text: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
-        { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
-        { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
-        { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
-        { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
-        { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb" },
-        { text: "Your time is limited, don't waste it living someone else's life.", author: "Steve Jobs" }
-    ];
-
-    function getRandomFallback() {
-        const idx = Math.floor(Math.random() * FALLBACK_QUOTES.length);
-        return FALLBACK_QUOTES[idx];
     }
 
     async function loadQuote() {
-        // Check cache first
         const cached = getCached();
         if (cached) {
             displayQuote(cached.text, cached.author);
             return;
         }
 
-        // Try APIs
-        let quote = null;
-        try { quote = await fetchZenQuotes(); } catch(e) {}
-        if (!quote) {
-            try { quote = await fetchQuotable(); } catch(e) {}
-        }
+        let quote = await fetchFromBackend();
 
-        // Use fallback if all APIs fail
         if (!quote) {
-            quote = getRandomFallback();
+            const idx = Math.floor(Math.random() * FALLBACK_QUOTES.length);
+            quote = FALLBACK_QUOTES[idx];
         }
 
         displayQuote(quote.text, quote.author);

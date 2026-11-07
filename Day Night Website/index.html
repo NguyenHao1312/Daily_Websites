@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClockTime33</title>
+    <title>ClockTime33 — Your Quiet Space</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Quicksand:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/widgets.css">
 </head>
@@ -32,195 +32,579 @@
     <!-- Seasonal Particles (Leaves/Snow) -->
     <canvas id="seasonCanvas" class="season-canvas"></canvas>
 
-    <!-- Celestial -->
+    <!-- Celestial (Sun & Moon) -->
     <div class="cel sun-wrap" id="sunWrap">
-        <div class="sun-flare"></div><div class="sun-outer"></div><div class="sun-body"></div><div class="sun-inner"></div>
+        <div class="sun-flare"></div>
+        <div class="sun-outer"></div>
+        <div class="sun-body"></div>
+        <div class="sun-inner"></div>
     </div>
+    
+    <!-- Photorealistic Moon with Halo -->
     <div class="cel moon-wrap" id="moonWrap">
-        <div class="moon-halo"></div><div class="moon-body"></div>
+        <div class="moon-halo"></div>
+        <div class="moon-body-realistic">
+            <svg viewBox="0 0 100 100" class="moon-svg">
+                <defs>
+                    <radialGradient id="moonBase" cx="42%" cy="40%" r="56%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="35%" stop-color="#f0f3f8"/>
+                        <stop offset="70%" stop-color="#d4dbe8"/>
+                        <stop offset="90%" stop-color="#abb7cc"/>
+                        <stop offset="100%" stop-color="#808da3"/>
+                    </radialGradient>
+                    <clipPath id="moonSphereClip">
+                        <circle cx="50" cy="50" r="48"/>
+                    </clipPath>
+                </defs>
+                <circle cx="50" cy="50" r="48" fill="url(#moonBase)"/>
+                <g clip-path="url(#moonSphereClip)">
+                    <!-- Maria (lunar plains) features -->
+                    <path d="M18,32 Q26,20 42,22 Q52,28 46,42 Q36,48 24,44 Z" fill="#586173" opacity="0.42" filter="blur(2px)"/>
+                    <path d="M30,24 Q40,16 54,20 Q60,30 50,38 Q38,40 30,30 Z" fill="#4d5566" opacity="0.45" filter="blur(1.5px)"/>
+                    <path d="M54,26 Q68,24 74,34 Q72,46 60,46 Q50,42 54,30 Z" fill="#505869" opacity="0.4" filter="blur(2px)"/>
+                    <path d="M58,42 Q72,40 76,52 Q70,62 58,60 Q52,52 58,42 Z" fill="#4b5363" opacity="0.42" filter="blur(2px)"/>
+                    <ellipse cx="78" cy="38" rx="7" ry="5.5" fill="#464d5c" opacity="0.48" filter="blur(1px)"/>
+                    <path d="M64,58 Q78,56 80,68 Q72,78 62,74 Q56,66 64,58 Z" fill="#525a6b" opacity="0.38" filter="blur(2px)"/>
+                    <path d="M32,56 Q44,52 48,64 Q44,76 32,74 Q24,66 32,56 Z" fill="#525a6b" opacity="0.4" filter="blur(2px)"/>
+                    <ellipse cx="24" cy="62" rx="6" ry="5" fill="#4c5464" opacity="0.42" filter="blur(1px)"/>
+                    <!-- Tycho crater ray system -->
+                    <circle cx="48" cy="80" r="3" fill="#ffffff" opacity="0.85"/>
+                    <circle cx="48" cy="80" r="1.5" fill="#c4cad6"/>
+                    <path d="M48,80 L20,60 M48,80 L35,45 M48,80 L65,55 M48,80 L75,70 M48,80 L52,94 M48,80 L32,92" stroke="#ffffff" stroke-width="0.7" opacity="0.28" filter="blur(0.5px)"/>
+                    <!-- Copernicus crater -->
+                    <circle cx="36" cy="42" r="3.2" fill="#e8edf5" opacity="0.8"/>
+                    <circle cx="36" cy="42" r="1.8" fill="#5c6577"/>
+                    <path d="M36,42 L24,36 M36,42 L48,34 M36,42 L42,50 M36,42 L28,48" stroke="#ffffff" stroke-width="0.6" opacity="0.3" filter="blur(0.5px)"/>
+                    <!-- Kepler crater -->
+                    <circle cx="26" cy="40" r="2.2" fill="#ffffff" opacity="0.75"/>
+                    <!-- Subtle limb depth -->
+                    <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="6" filter="blur(3px)"/>
+                    <path d="M98,50 A48,48 0 0,1 50,98 A48,48 0 0,0 98,50 Z" fill="rgba(20,25,40,0.22)" filter="blur(4px)"/>
+                </g>
+            </svg>
+        </div>
     </div>
+    
     <div class="horizon-glow" id="horizonGlow"></div>
 
-    <!-- ========== WEATHER WIDGET ========== -->
-    <div class="weather-widget hideable" id="weatherWidget">
-        <div class="weather-icon" id="weatherIcon">☀️</div>
-        <div class="weather-info">
-            <div class="weather-temp" id="weatherTemp">--°C</div>
-            <div class="weather-desc" id="weatherDesc">Loading...</div>
-            <div class="weather-city" id="weatherCity">--</div>
+    <!-- ========== BRAND HEADER (TOP CENTER) ========== -->
+    <div class="brand-header hideable" id="brandHeader">
+        <h1 class="brand-title">ClockTime33</h1>
+        <p class="brand-subtitle" id="brandSubtitle">YOUR QUIET SPACE</p>
+    </div>
+
+    <!-- ========== TOP POEM BAR (BELOW TOP BAR) ========== -->
+    <div class="top-poem-bar hideable" id="topPoemBar" title="Click for next poem">
+        <div class="poem-quill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                <path d="M2 2l7.586 7.586"></path>
+                <circle cx="11" cy="11" r="2"></circle>
+            </svg>
+        </div>
+        <div class="poem-content">
+            <span class="poem-text" id="topPoemText">"Shall I compare thee to a summer's day? Thou art more lovely and more temperate."</span>
+            <span class="poem-author" id="topPoemAuthor">— William Shakespeare</span>
         </div>
     </div>
 
-    <!-- ========== LAYERED MOUNTAINS (SHARP PEAKS) ========== -->
-    <svg class="land-layer l1" viewBox="0 0 1440 280" preserveAspectRatio="none">
+    <!-- ========== WEATHER WIDGET (TOP LEFT) ========== -->
+    <div class="weather-widget hideable" id="weatherWidget">
+        <div class="weather-icon-wrap" id="weatherIconWrap">
+            <svg class="weather-svg-icon" id="weatherSvgIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+        </div>
+        <div class="weather-info">
+            <div class="weather-temp" id="weatherTemp">28°C</div>
+            <div class="weather-sub">
+                <span id="weatherDesc">Clear Sky</span>
+                <span class="weather-dot">•</span>
+                <span id="weatherCity">Ha Noi, VN</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== LAYERED MOUNTAINS (SHARP CRISP PEAKS) ========== -->
+    <svg class="land-layer l1" viewBox="0 0 1440 320" preserveAspectRatio="none">
         <defs><linearGradient id="g-l1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" class="stop-p1"/><stop offset="100%" class="stop-b1"/></linearGradient></defs>
-        <path d="M-50,280 L-50,120 L60,40 L180,140 L300,30 L450,130 L620,20 L800,150 L1020,40 L1200,160 L1380,50 L1490,140 L1490,280 Z" fill="url(#g-l1)"/>
+        <path d="M-50,320 L-50,150 L80,50 L200,165 L320,40 L470,155 L650,25 L830,170 L1040,45 L1210,175 L1370,55 L1490,150 L1490,320 Z" fill="url(#g-l1)"/>
     </svg>
-    <svg class="land-layer l2" viewBox="0 0 1440 240" preserveAspectRatio="none">
+    <svg class="land-layer l2" viewBox="0 0 1440 280" preserveAspectRatio="none">
         <defs><linearGradient id="g-l2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" class="stop-p2"/><stop offset="100%" class="stop-b2"/></linearGradient></defs>
-        <path d="M-50,240 L-50,110 L100,50 L250,150 L380,60 L520,160 L680,40 L850,140 L1000,50 L1150,160 L1320,60 L1490,130 L1490,240 Z" fill="url(#g-l2)"/>
+        <path d="M-50,280 L-50,130 L110,65 L260,175 L400,75 L540,185 L700,50 L870,165 L1020,60 L1170,180 L1340,70 L1490,145 L1490,280 Z" fill="url(#g-l2)"/>
     </svg>
-    <svg class="land-layer l3" viewBox="0 0 1440 200" preserveAspectRatio="none">
+    <svg class="land-layer l3" viewBox="0 0 1440 230" preserveAspectRatio="none">
         <defs><linearGradient id="g-l3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" class="stop-p3"/><stop offset="100%" class="stop-b3"/></linearGradient></defs>
-        <path d="M-50,200 L-50,140 L120,60 L280,130 L420,50 L580,120 L750,40 L920,130 L1080,55 L1250,140 L1420,70 L1490,120 L1490,200 Z" fill="url(#g-l3)"/>
+        <path d="M-50,230 L-50,155 L130,75 L290,150 L430,65 L600,140 L770,50 L940,150 L1100,68 L1270,160 L1430,80 L1490,135 L1490,230 Z" fill="url(#g-l3)"/>
     </svg>
-    <svg class="land-layer l4" viewBox="0 0 1440 160" preserveAspectRatio="none">
+    <svg class="land-layer l4" viewBox="0 0 1440 180" preserveAspectRatio="none">
         <defs><linearGradient id="g-l4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" class="stop-p4"/><stop offset="100%" class="stop-b4"/></linearGradient></defs>
-        <path d="M-50,160 L-50,90 L180,30 L360,110 L550,40 L720,105 L920,35 L1120,95 L1320,45 L1490,110 L1490,160 Z" fill="url(#g-l4)"/>
+        <path d="M-50,180 L-50,105 L190,40 L370,125 L560,50 L735,120 L935,45 L1135,110 L1335,55 L1490,125 L1490,180 Z" fill="url(#g-l4)"/>
     </svg>
-    <svg class="land-layer l5" viewBox="0 0 1440 100" preserveAspectRatio="none">
+    <svg class="land-layer l5" viewBox="0 0 1440 120" preserveAspectRatio="none">
         <defs><linearGradient id="g-l5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" class="stop-p5"/><stop offset="100%" class="stop-b5"/></linearGradient></defs>
-        <path d="M-50,100 L-50,50 L200,20 L450,70 L680,25 L950,65 L1220,30 L1490,75 L1490,100 Z" fill="url(#g-l5)"/>
+        <path d="M-50,120 L-50,60 L210,25 L460,80 L690,30 L960,75 L1230,35 L1490,85 L1490,120 Z" fill="url(#g-l5)"/>
     </svg>
     <div class="ground-base" id="groundBase"></div>
 
-    <!-- ========== CLOCK & TIMEZONE UI ========== -->
+    <!-- ========== CENTER CLOCK CARD (MOVED TO LOWER CENTER AREA) ========== -->
     <div class="clock-panel hideable" id="clockPanel">
-        <div class="clock-greeting" id="greeting">Good Afternoon</div>
-        <div class="clock-time" id="clockTime">15:01:05</div>
-        <div class="clock-date" id="clockDate">Thursday, August 27, 2026</div>
-
-        <!-- 12h / 24h Toggle -->
-        <div class="time-format-toggle hideable" id="timeFormatToggle">
-            <span class="fmt-label">24H</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="fmt12h">
-                <span class="toggle-slider"></span>
-            </label>
-            <span class="fmt-label">12H</span>
+        <div class="clock-header">
+            <span class="greeting-bullet">•</span>
+            <span class="clock-greeting" id="greeting">GOOD EVENING</span>
         </div>
+        
+        <div class="clock-time" id="clockTime">21:45:08</div>
+        <div class="clock-date" id="clockDate">Thursday, Nov 6, 2026</div>
 
-        <div class="clock-location hideable" id="clockLocation">
-            <span class="loc-icon">📍</span>
-            <span class="loc-text" id="locText">Detecting Location...</span>
-        </div>
-        <div class="tz-selector hideable" id="tzSelector">
-            <label for="gmtSelect">Time</label>
-            <select id="gmtSelect"></select>
+        <div class="clock-bottom-bar">
+            <!-- 12h / 24h Segmented Pill Toggle -->
+            <div class="segmented-pill-group" id="formatSegmented">
+                <button class="seg-btn" id="seg12h" type="button">12H</button>
+                <button class="seg-btn active" id="seg24h" type="button">24H</button>
+            </div>
+
+            <!-- Timezone & Location Pill Selector -->
+            <div class="tz-pill-btn" id="tzPillBtn" title="Click to change timezone">
+                <svg class="tz-loc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="10" r="3"></circle>
+                    <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
+                </svg>
+                <span class="tz-pill-text" id="tzPillText">Ha Noi, GMT+7</span>
+                <span class="tz-chevron">⌄</span>
+            </div>
+            
+            <select id="gmtSelect" class="visually-hidden" aria-label="Select timezone"></select>
         </div>
     </div>
 
-    <!-- ========== TOP-RIGHT BUTTON GROUP ========== -->
-    <div class="top-btn-group">
-        <button class="icon-btn focus-btn" id="focusBtn" aria-label="Focus Mode" title="Focus Mode">👁️</button>
-        <button class="icon-btn todo-btn" id="todoBtn" aria-label="To-Do List" title="To-Do List">📝</button>
-        <button class="icon-btn settings-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙️</button>
+    <!-- ========== TOP-RIGHT ACTIONS ========== -->
+    <div class="top-btn-group" id="topBtnGroup">
+        <button class="icon-btn focus-btn" id="focusBtn" aria-label="Focus Mode" title="Focus Mode">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+        </button>
+        <button class="icon-btn todo-btn" id="todoBtn" aria-label="To-Do List" title="To-Do List">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+        </button>
+        <button class="icon-btn settings-btn" id="settingsBtn" aria-label="Settings" title="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="21" x2="4" y2="14"></line>
+                <line x1="4" y1="10" x2="4" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="3"></line>
+                <line x1="20" y1="21" x2="20" y2="16"></line>
+                <line x1="20" y1="12" x2="20" y2="3"></line>
+                <line x1="1" y1="14" x2="7" y2="14"></line>
+                <line x1="9" y1="8" x2="15" y2="8"></line>
+                <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+        </button>
     </div>
 
-    <!-- ========== SETTINGS DRAWER ========== -->
-    <div class="settings-overlay" id="settingsOverlay"></div>
-    <div class="settings-drawer" id="settingsDrawer">
-        <div class="settings-header">
-            <h3>⚙️ Settings</h3>
-            <button class="settings-close" id="settingsClose">✕</button>
-        </div>
-        <div class="settings-body">
-            <div class="settings-item">
-                <span class="settings-label">✨ Fireflies Effect</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="setFireflies" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            <div class="settings-item">
-                <span class="settings-label">🌡️ Temperature Unit</span>
-                <div class="settings-radio-group">
-                    <label class="settings-radio"><input type="radio" name="tempUnit" value="C" checked> °C</label>
-                    <label class="settings-radio"><input type="radio" name="tempUnit" value="F"> °F</label>
-                </div>
-            </div>
-            <div class="settings-item">
-                <span class="settings-label">🕐 Time Format</span>
-                <div class="settings-radio-group">
-                    <label class="settings-radio"><input type="radio" name="timeFormat" value="24" checked> 24H</label>
-                    <label class="settings-radio"><input type="radio" name="timeFormat" value="12"> 12H</label>
-                </div>
-            </div>
-            <div class="settings-item settings-item-col">
-                <span class="settings-label">🌍 Timezone</span>
-                <select id="setTimezone" class="settings-select"></select>
-            </div>
-        </div>
+    <!-- Exit Focus Mode Banner (Shown in Focus Mode) -->
+    <div class="exit-focus-banner" id="exitFocusBanner">
+        <span class="exit-focus-text" id="exitFocusText">Exit focus <kbd>esc</kbd></span>
+        <button class="exit-focus-btn" id="exitFocusBtn" title="Exit Focus Mode">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+        </button>
     </div>
 
-    <!-- ========== TO-DO PANEL ========== -->
-    <div class="todo-overlay" id="todoOverlay"></div>
-    <div class="todo-panel" id="todoPanel">
-        <div class="todo-header">
-            <h3>📝 To-Do List</h3>
-            <button class="todo-close" id="todoClose">✕</button>
-        </div>
-        <div class="todo-input-wrap">
-            <input type="text" id="todoInput" placeholder="Add a task..." />
-            <button class="todo-add-btn" id="todoAdd">+</button>
-        </div>
-        <ul class="todo-list" id="todoList"></ul>
-    </div>
-
-    <!-- ========== POMODORO TIMER ========== -->
-    <div class="pomodoro-widget hideable" id="pomodoroWidget">
+    <!-- ========== POMODORO TIMER (BOTTOM LEFT) ========== -->
+    <div class="pomodoro-widget" id="pomodoroWidget">
         <div class="pomo-header drag-handle" id="pomoHeader">
-            <span class="pomo-title">🍅 Pomodoro</span>
-            <button class="pomo-minimize" id="pomoMinimize">−</button>
+            <div class="drag-title-wrap">
+                <svg class="drag-dots-svg" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="6" cy="6" r="2"></circle><circle cx="6" cy="12" r="2"></circle><circle cx="6" cy="18" r="2"></circle>
+                    <circle cx="14" cy="6" r="2"></circle><circle cx="14" cy="12" r="2"></circle><circle cx="14" cy="18" r="2"></circle>
+                </svg>
+                <span class="pomo-title" id="pomoTitle">Pomodoro</span>
+            </div>
+            <div class="pomo-mini-meta" id="pomoMiniMeta">
+                <span class="pomo-mini-time" id="pomoMiniTime">25:00</span>
+                <button class="pomo-mini-play-btn" id="pomoMiniPlay" title="Start/Pause timer" aria-label="Toggle Pomodoro">▶</button>
+            </div>
+            <button class="pomo-minimize" id="pomoMinimize" aria-label="Minimize timer" title="Minimize/Maximize timer">−</button>
         </div>
         <div class="pomo-body" id="pomoBody">
-            <div class="pomo-display" id="pomoDisplay">25:00</div>
             <div class="pomo-mode">
-                <button class="pomo-mode-btn active" data-mode="work">Work</button>
-                <button class="pomo-mode-btn" data-mode="break">Break</button>
+                <button class="pomo-mode-btn active" data-mode="work" id="pomoModeWork">Work</button>
+                <button class="pomo-mode-btn" data-mode="break" id="pomoModeBreak">Break</button>
             </div>
+            <div class="pomo-display" id="pomoDisplay">25:00</div>
+            <div class="pomo-subtitle" id="pomoSubtitle">TIME TO FOCUS</div>
+            
             <div class="pomo-time-adjust">
-                <div class="pomo-adj-group">
-                    <label>Work</label>
-                    <div class="pomo-adj-controls">
-                        <button class="pomo-adj-btn" data-target="work" data-dir="-1">−</button>
-                        <input type="number" class="pomo-adj-input" id="pomoWorkMin" value="25" min="0" max="1440">
-                        <span class="pomo-adj-unit">m</span>
-                        <input type="number" class="pomo-adj-input sec-input" id="pomoWorkSec" value="0" min="0" max="59">
-                        <span class="pomo-adj-unit">s</span>
-                        <button class="pomo-adj-btn" data-target="work" data-dir="1">+</button>
-                    </div>
+                <div class="pomo-stepper">
+                    <button class="pomo-step-btn" data-target="min" data-dir="-1">−</button>
+                    <span class="pomo-val-display" id="pomoWorkMinVal">25 m</span>
+                    <button class="pomo-step-btn" data-target="min" data-dir="1">+</button>
                 </div>
-                <div class="pomo-adj-group">
-                    <label>Break</label>
-                    <div class="pomo-adj-controls">
-                        <button class="pomo-adj-btn" data-target="break" data-dir="-1">−</button>
-                        <input type="number" class="pomo-adj-input" id="pomoBreakMin" value="5" min="0" max="1440">
-                        <span class="pomo-adj-unit">m</span>
-                        <input type="number" class="pomo-adj-input sec-input" id="pomoBreakSec" value="0" min="0" max="59">
-                        <span class="pomo-adj-unit">s</span>
-                        <button class="pomo-adj-btn" data-target="break" data-dir="1">+</button>
-                    </div>
+                <div class="pomo-stepper">
+                    <button class="pomo-step-btn" data-target="sec" data-dir="-1">−</button>
+                    <span class="pomo-val-display" id="pomoWorkSecVal">00 s</span>
+                    <button class="pomo-step-btn" data-target="sec" data-dir="1">+</button>
                 </div>
             </div>
+
+            <!-- Hidden native inputs for exact numerical sync -->
+            <input type="number" id="pomoWorkMin" value="25" min="1" max="1440" class="visually-hidden">
+            <input type="number" id="pomoWorkSec" value="0" min="0" max="59" class="visually-hidden">
+            <input type="number" id="pomoBreakMin" value="5" min="1" max="1440" class="visually-hidden">
+            <input type="number" id="pomoBreakSec" value="0" min="0" max="59" class="visually-hidden">
+
             <div class="pomo-controls">
-                <button class="pomo-ctrl" id="pomoPlay">▶</button>
-                <button class="pomo-ctrl" id="pomoPause" style="display:none">⏸</button>
-                <button class="pomo-ctrl" id="pomoReset">↺</button>
+                <button class="pomo-ctrl-btn reset-btn" id="pomoReset" title="Reset timer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                        <path d="M3 3v5h5"></path>
+                    </svg>
+                </button>
+                <button class="pomo-ctrl-btn play-btn" id="pomoPlay" title="Start timer">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                </button>
+                <button class="pomo-ctrl-btn pause-btn" id="pomoPause" title="Pause timer" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                </button>
+                <button class="pomo-ctrl-btn skip-btn" id="pomoSkip" title="Switch mode / 00">
+                    <span class="pomo-ctrl-text">00</span>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- ========== LOFI PLAYER ========== -->
-    <div class="lofi-widget hideable" id="lofiWidget">
-        <div class="lofi-header drag-handle" id="lofiHeader">🎵 Lofi Radio</div>
-        <div class="lofi-track-name" id="lofiTrackName">Select a track</div>
-        <div class="lofi-controls">
-            <button class="lofi-btn lofi-prev" id="lofiPrev" title="Previous">⏮</button>
-            <button class="lofi-btn" id="lofiToggle" title="Play">▶</button>
-            <button class="lofi-btn lofi-next" id="lofiNext" title="Next">⏭</button>
-            <input type="range" id="lofiVolume" min="0" max="100" value="50" class="lofi-volume">
+    <!-- ========== LOFI RADIO PLAYER (BOTTOM RIGHT) ========== -->
+    <div class="lofi-widget" id="lofiWidget">
+        <div class="lofi-header drag-handle" id="lofiHeader">
+            <div class="drag-title-wrap">
+                <svg class="drag-dots-svg" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="6" cy="6" r="2"></circle><circle cx="6" cy="12" r="2"></circle><circle cx="6" cy="18" r="2"></circle>
+                    <circle cx="14" cy="6" r="2"></circle><circle cx="14" cy="12" r="2"></circle><circle cx="14" cy="18" r="2"></circle>
+                </svg>
+                <span class="lofi-title" id="lofiTitle">Lofi Radio</span>
+            </div>
+            
+            <div class="lofi-header-actions">
+                <!-- Animated audio equalizer bars -->
+                <div class="lofi-equalizer" id="lofiEqualizer">
+                    <span class="eq-bar bar-1"></span>
+                    <span class="eq-bar bar-2"></span>
+                    <span class="eq-bar bar-3"></span>
+                </div>
+                <!-- Minimize / Maximize Button for Music -->
+                <button class="lofi-minimize-btn" id="lofiMinimizeBtn" aria-label="Minimize/Maximize Music" title="Minimize/Maximize Music">−</button>
+            </div>
         </div>
-        <select id="lofiChannel" class="lofi-select">
-            <option value="assets/music/Beats Lofi.mp3">Beats Lofi</option>
-            <option value="assets/music/Cafe Lofi.mp3">Cafe Lofi</option>
-            <option value="assets/music/Chill Lofi.mp3">Chill Lofi</option>
-            <option value="assets/music/Lanterns.mp3">Lanterns</option>
-            <option value="assets/music/Loop Lofi.mp3">Loop Lofi</option>
-            <option value="assets/music/Tech Lofi.mp3">Tech Lofi</option>
-            <option value="assets/music/Window.mp3">Window</option>
-        </select>
+        
+        <!-- Full Player Body -->
+        <div class="lofi-full-body" id="lofiFullBody">
+            <div class="lofi-track-row">
+                <div class="lofi-track-name" id="lofiTrackName">Window - Chill Beats</div>
+                <span class="lofi-ambient-tag" id="lofiAmbientTag">Wind</span>
+            </div>
+            <div class="lofi-mood-quote" id="lofiMoodQuote">A little sound. A little stillness.</div>
+
+            <div class="lofi-controls">
+                <button class="lofi-ctrl-btn" id="lofiPrev" title="Previous Track">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                        <line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"></line>
+                    </svg>
+                </button>
+                <button class="lofi-ctrl-btn play-circle-btn" id="lofiToggle" title="Play / Pause">
+                    <svg class="lofi-play-icon" id="lofiPlayIcon" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <svg class="lofi-pause-icon" id="lofiPauseIcon" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                </button>
+                <button class="lofi-ctrl-btn" id="lofiNext" title="Next Track">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                        <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="lofi-volume-row">
+                <svg class="vol-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+                <input type="range" id="lofiVolume" min="0" max="100" value="65" class="lofi-volume-slider">
+                <span class="vol-percent" id="volPercent">65</span>
+            </div>
+
+            <div class="lofi-channel-wrap">
+                <span class="lofi-genre-icon">🎵</span>
+                <select id="lofiChannel" class="lofi-channel-select">
+                    <option value="assets/music/Window.mp3" data-ambient="Wind" data-quote="A little sound. A little stillness.">Window - Chill Beats</option>
+                    <option value="assets/music/Chill Lofi.mp3" data-ambient="Rain" data-quote="Soft rain against the quiet room.">Chill Lofi - Calm Study</option>
+                    <option value="assets/music/Cafe Lofi.mp3" data-ambient="Coffee" data-quote="Warm sips of afternoon peace.">Cafe Lofi - Warm Espresso</option>
+                    <option value="assets/music/Beats Lofi.mp3" data-ambient="Night" data-quote="Gentle rhythms in the moonlight.">Beats Lofi - Midnight Walk</option>
+                    <option value="assets/music/Lanterns.mp3" data-ambient="Breeze" data-quote="Glowing lanterns in the stillness.">Lanterns - Twilight Glow</option>
+                    <option value="assets/music/Loop Lofi.mp3" data-ambient="Waves" data-quote="Endless ocean wave focus loop.">Loop Lofi - Flow State</option>
+                    <option value="assets/music/Tech Lofi.mp3" data-ambient="Cosmos" data-quote="Electric stars across the horizon.">Tech Lofi - Neon Coding</option>
+                </select>
+                <span class="channel-chevron">⌄</span>
+            </div>
+        </div>
+
+        <!-- Minimized Music Body: Track Selector & Rhythm Equalizer Columns -->
+        <div class="lofi-mini-body" id="lofiMiniBody" style="display: none;">
+            <div class="lofi-mini-selector-wrap">
+                <span class="lofi-genre-icon">🎵</span>
+                <select id="lofiMiniSelect" class="lofi-mini-select">
+                    <option value="assets/music/Window.mp3">Window - Chill Beats</option>
+                    <option value="assets/music/Chill Lofi.mp3">Chill Lofi - Calm Study</option>
+                    <option value="assets/music/Cafe Lofi.mp3">Cafe Lofi - Warm Espresso</option>
+                    <option value="assets/music/Beats Lofi.mp3">Beats Lofi - Midnight Walk</option>
+                    <option value="assets/music/Lanterns.mp3">Lanterns - Twilight Glow</option>
+                    <option value="assets/music/Loop Lofi.mp3">Loop Lofi - Flow State</option>
+                    <option value="assets/music/Tech Lofi.mp3">Tech Lofi - Neon Coding</option>
+                </select>
+                <button class="lofi-mini-play-btn" id="lofiMiniPlayBtn" title="Play/Pause">▶</button>
+            </div>
+            
+            <!-- Dynamic columns changing according to the rhythm of the music -->
+            <div class="lofi-mini-visualizer" id="lofiMiniVisualizer">
+                <!-- 18 dynamic animated rhythm columns -->
+                <span class="rhythm-bar b-1"></span>
+                <span class="rhythm-bar b-2"></span>
+                <span class="rhythm-bar b-3"></span>
+                <span class="rhythm-bar b-4"></span>
+                <span class="rhythm-bar b-5"></span>
+                <span class="rhythm-bar b-6"></span>
+                <span class="rhythm-bar b-7"></span>
+                <span class="rhythm-bar b-8"></span>
+                <span class="rhythm-bar b-9"></span>
+                <span class="rhythm-bar b-10"></span>
+                <span class="rhythm-bar b-11"></span>
+                <span class="rhythm-bar b-12"></span>
+                <span class="rhythm-bar b-13"></span>
+                <span class="rhythm-bar b-14"></span>
+                <span class="rhythm-bar b-15"></span>
+                <span class="rhythm-bar b-16"></span>
+                <span class="rhythm-bar b-17"></span>
+                <span class="rhythm-bar b-18"></span>
+            </div>
+        </div>
     </div>
+
+    <!-- ========== TO-DO DRAWER (RIGHT) ========== -->
+    <div class="drawer-overlay" id="todoOverlay"></div>
+    <div class="drawer-panel" id="todoPanel">
+        <div class="drawer-header">
+            <div>
+                <span class="drawer-category" id="lblMakeSpace">MAKE SPACE</span>
+                <h2 class="drawer-title" id="lblYourTodo">Your To-Do</h2>
+                <p class="drawer-subtitle" id="lblTodoSub">One thing at a time. You've got this.</p>
+            </div>
+            <div class="drawer-header-btns">
+                <button class="drawer-minimize" id="todoMinimize" title="Minimize To-Do" aria-label="Minimize To-Do">−</button>
+                <button class="drawer-close" id="todoClose" aria-label="Close to-do panel">✕</button>
+            </div>
+        </div>
+
+        <div class="todo-input-section">
+            <div class="todo-input-pill">
+                <input type="text" id="todoInput" placeholder="What's on your mind?" autocomplete="off" />
+                <button class="todo-add-pill-btn" id="todoAdd" title="Add task">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="todo-progress-card">
+            <div class="progress-labels">
+                <span class="progress-title" id="lblTodaysWins">Today's little wins</span>
+                <span class="progress-stats" id="todoProgressStats">1 of 5 done</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="todoProgressFill" style="width: 20%;"></div>
+            </div>
+        </div>
+
+        <div class="todo-scroll-area">
+            <!-- Section: Up Next -->
+            <div class="todo-section-header">
+                <span class="section-label" id="lblUpNext">UP NEXT</span>
+                <span class="section-count" id="upNextCount">04</span>
+            </div>
+            <ul class="todo-list" id="todoListUpNext"></ul>
+
+            <!-- Section: Completed -->
+            <div class="todo-section-header completed-header">
+                <span class="section-label" id="lblCompleted">COMPLETED</span>
+                <span class="section-count" id="completedCount">01</span>
+            </div>
+            <ul class="todo-list" id="todoListCompleted"></ul>
+        </div>
+
+        <div class="drawer-footer">
+            <div class="footer-privacy-note">
+                <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+                <span id="lblTodoFooter">Your tasks stay in this quiet little space.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SETTINGS DRAWER (RIGHT) ========== -->
+    <div class="drawer-overlay" id="settingsOverlay"></div>
+    <div class="drawer-panel" id="settingsDrawer">
+        <div class="drawer-header">
+            <div>
+                <span class="drawer-category" id="lblMakeItYours">MAKE IT YOURS</span>
+                <h2 class="drawer-title" id="lblSettingsTitle">Settings</h2>
+                <p class="drawer-subtitle" id="lblSettingsSub">Small details. Your kind of calm.</p>
+            </div>
+            <button class="drawer-close" id="settingsClose" aria-label="Close settings">✕</button>
+        </div>
+
+        <div class="drawer-scroll-body">
+            <!-- Section: Language Switcher -->
+            <div class="settings-group">
+                <div class="settings-group-title" id="lblLanguageGroup">LANGUAGE / NGÔN NGỮ</div>
+                <div class="settings-row-col">
+                    <div class="row-info">
+                        <span class="row-title" id="lblLanguageTitle">Interface Language</span>
+                        <span class="row-desc" id="lblLanguageDesc">Instantly adapts all text across the space.</span>
+                    </div>
+                    <div class="pill-radio-group lang-radio-group">
+                        <label class="pill-radio-option">
+                            <input type="radio" name="appLang" value="en" checked>
+                            <span class="pill-radio-label">English</span>
+                        </label>
+                        <label class="pill-radio-option">
+                            <input type="radio" name="appLang" value="vi">
+                            <span class="pill-radio-label">Tiếng Việt</span>
+                        </label>
+                        <label class="pill-radio-option">
+                            <input type="radio" name="appLang" value="th">
+                            <span class="pill-radio-label">ไทย (Thai)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: Atmosphere -->
+            <div class="settings-group">
+                <div class="settings-group-title" id="lblAtmosphereGroup">ATMOSPHERE</div>
+                
+                <div class="settings-row">
+                    <div class="row-info">
+                        <span class="row-title" id="lblFireflies">Fireflies</span>
+                        <span class="row-desc" id="lblFirefliesDesc">A little light in the landscape.</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="setFireflies" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <!-- Theme / Scene Card Selector -->
+                <div class="theme-card-selector" id="themeCardSelector" title="Click to cycle theme">
+                    <div class="theme-card-left">
+                        <div class="theme-icon-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="m8 3 4 8 5-5 5 15H2L8 3z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="theme-card-name" id="themeCardName">Midnight observatory</div>
+                            <div class="theme-card-desc" id="themeCardDesc">Your evening escape</div>
+                        </div>
+                    </div>
+                    <div class="theme-card-badge" id="themeCardBadge">Night</div>
+                </div>
+            </div>
+
+            <!-- Section: Clock & Weather -->
+            <div class="settings-group">
+                <div class="settings-group-title" id="lblClockWeatherGroup">CLOCK & WEATHER</div>
+
+                <div class="settings-row-col">
+                    <div class="row-info">
+                        <span class="row-title" id="lblTemperature">Temperature</span>
+                        <span class="row-desc" id="lblTemperatureDesc">Choose how the weather feels.</span>
+                    </div>
+                    <div class="pill-radio-group">
+                        <label class="pill-radio-option">
+                            <input type="radio" name="tempUnit" value="C" checked>
+                            <span class="pill-radio-label">°C</span>
+                        </label>
+                        <label class="pill-radio-option">
+                            <input type="radio" name="tempUnit" value="F">
+                            <span class="pill-radio-label">°F</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-row-col">
+                    <div class="row-info">
+                        <span class="row-title" id="lblTimeFormat">Time format</span>
+                        <span class="row-desc" id="lblTimeFormatDesc">A familiar rhythm for your day.</span>
+                    </div>
+                    <div class="pill-radio-group">
+                        <label class="pill-radio-option">
+                            <input type="radio" name="timeFormat" value="24" checked>
+                            <span class="pill-radio-label">24H</span>
+                        </label>
+                        <label class="pill-radio-option">
+                            <input type="radio" name="timeFormat" value="12">
+                            <span class="pill-radio-label">12H</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-row-col">
+                    <div class="row-info">
+                        <span class="row-title" id="lblTimezone">Regional timezone</span>
+                        <span class="row-desc" id="lblTimezoneDesc">Keep your clock close to home.</span>
+                    </div>
+                    <div class="custom-select-wrap">
+                        <select id="setTimezone" class="settings-select-field"></select>
+                        <span class="select-chevron">⌄</span>
+                    </div>
+                    <div class="tz-sub-caption" id="tzSubCaption">Ha Noi, Viet Nam • GMT+7</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="drawer-footer">
+            <div class="footer-privacy-note">
+                <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+                <span id="lblSettingsFooter">Your preferences are saved, quietly.</span>
+            </div>
+        </div>
     </div>
 
 </div>
