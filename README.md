@@ -22,7 +22,7 @@ This repository is a curated collection of **mini-websites** built for personal 
 
 | # | Project | Live Demo / Link | Description | Technologies | Status |
 |---|---------|------------------|-------------|--------------|--------|
-| 1 | [🎂 Happy Birthday Website](./Happy%20Birthday%20Website) | [📖 **Project Docs**](./Happy%20Birthday%20Website/README.md) | Interactive celebration platform with 3D cake, mic candle blow, 3D gift box, photo booth, guestbook wall, Web Audio synth, 6-language i18n, and FastAPI backend | HTML5, CSS3, Vanilla JS, Web Audio API, FastAPI, SQLite | 🚀 Upgraded (v2.0) |
+| 1 | [🎂 Happy Birthday Website](./Happy%20Birthday%20Website) | [🔗 **happy-birthday-1305.netlify.app**](https://happy-birthday-1305.netlify.app/) | Interactive celebration platform with 3D cake, mic candle blow, 3D gift box, photo booth, guestbook wall, Web Audio synth, 6-language i18n, and FastAPI backend | HTML5, CSS3, Vanilla JS, Web Audio API, FastAPI, SQLite | 🚀 Live (v2.0) |
 | 2 | [🌤️ Day Night Website](./Day%20Night%20Website) | [🔗 **clock-time-33.netlify.app**](https://clock-time-33.netlify.app/) | Dynamic aesthetic clock (ClockTime33) with realistic day/night cycles, lunar crater SVG, 4-season weather, Lofi Radio, Pomodoro, and global timezones | HTML5, CSS3, Vanilla JS, FastAPI, SQLite | 🚀 Live (v2.0) |
 | ... | *More coming soon...* | | | | ⏳ In Planning |
 
@@ -87,9 +87,11 @@ This repository is a curated collection of **mini-websites** built for personal 
 ### 🌐 Official Cloud Hosting Partner: **Netlify**
 [![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://www.netlify.com/)
 
-- **Production Live URL:** [https://clock-time-33.netlify.app/](https://clock-time-33.netlify.app/)
+- **Production Live URLs:**
+  - 🎂 **Happy Birthday Website:** [https://happy-birthday-1305.netlify.app/](https://happy-birthday-1305.netlify.app/)
+  - 🌤️ **Day Night Website (ClockTime33):** [https://clock-time-33.netlify.app/](https://clock-time-33.netlify.app/)
 - Continuous Deployment (CD) connected directly with Git version control.
-- Edge CDN caching and automated static site deployment configured via [`netlify.toml`](./Day%20Night%20Website/netlify.toml).
+- Edge CDN caching and automated static site deployment configured via `netlify.toml`.
 - Optimized headers, asset routing, and seamless modern web experience.
 
 ---
@@ -136,7 +138,7 @@ This repository is a curated collection of **mini-websites** built for personal 
    ```
 
 2. Open the desired website:
-   - For **Happy Birthday Website**: Open `Happy Birthday Website/index.html` in your browser.
+   - For **Happy Birthday Website**: Open `Happy Birthday Website/index.html` in your browser or visit [happy-birthday-1305.netlify.app](https://happy-birthday-1305.netlify.app/).
    - For **Day Night Website (Frontend)**: Open `Day Night Website/index.html` in your browser or visit [clock-time-33.netlify.app](https://clock-time-33.netlify.app/).
 
 3. Run the optional FastAPI backend:

@@ -2,7 +2,8 @@
 
 > A modern, interactive birthday celebration website featuring a 3D tiered celebration cake with flame-blowing and microphone breath detection, an interactive 3D surprise gift box with unwrapping physics, personalized greeting cards with safe shareable URLs, an online birthday wishes wall (guestbook), a photo memory keepsake booth, a polyphonic Web Audio API music & sound studio, and full 6-language reactive localization.
 
-[![Netlify Deploy](https://img.shields.io/badge/Hosted_on-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](./netlify.toml)
+[![Netlify Status](https://img.shields.io/badge/Deployed_with-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://happy-birthday-1305.netlify.app/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-happy--birthday--1305.netlify.app-ff69b4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://happy-birthday-1305.netlify.app/)
 [![QA Test Suite](https://img.shields.io/badge/QA_Tests-30%2F30_PASS-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](./test_birthday.py)
 [![Languages](https://img.shields.io/badge/Languages-VI%20%7C%20EN%20%7C%20TH%20%7C%20ZH%20%7C%20JA%20%7C%20ES-blueviolet?style=for-the-badge)](./script.js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](../LICENSE)
@@ -64,7 +65,9 @@
 
 ## 🚀 Deployment
 
-The project is pre-configured for static edge deployment on **Netlify** via [`netlify.toml`](./netlify.toml):
+- **Production Live URL:** [https://happy-birthday-1305.netlify.app/](https://happy-birthday-1305.netlify.app/)
+- Continuous Deployment (CD) connected directly with Git version control.
+- Edge CDN caching and automated static site deployment configured via [`netlify.toml`](./netlify.toml):
 
 ```toml
 [build]
