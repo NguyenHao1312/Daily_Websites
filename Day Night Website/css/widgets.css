@@ -1402,98 +1402,108 @@ body.focus-mode .lofi-widget {
 }
 
 @media (max-width: 860px) {
-    /* Avoid bottom collision with lower Clock Card on tablet */
-    .pomodoro-widget { bottom: 185px; left: 16px; width: 175px; padding: 10px 12px; border-radius: 18px; z-index: 24; }
-    .lofi-widget { bottom: 185px; right: 16px; width: 195px; padding: 10px 12px; border-radius: 18px; z-index: 24; }
+    /* Floating companions sit gracefully at bottom corners below centered Clock Card on tablet portrait */
+    .pomodoro-widget { bottom: max(22px, calc(16px + env(safe-area-inset-bottom, 0px))); left: 16px; width: 175px; padding: 10px 12px; border-radius: 18px; z-index: 24; }
+    .lofi-widget { bottom: max(22px, calc(16px + env(safe-area-inset-bottom, 0px))); right: 16px; width: 195px; padding: 10px 12px; border-radius: 18px; z-index: 24; }
     .drawer-panel { width: 360px; }
     .top-poem-bar {
         top: 68px;
         max-width: 90vw;
         padding: 6px 16px;
     }
+    body.focus-mode .clock-panel {
+        transform: translate(-50%, calc(-50% + 15px)) scale(0.96) !important;
+    }
 }
 
 @media (max-width: 480px) {
-    /* Mobile Layout — Floating companions sit gracefully above bottom clock */
+    /* Mobile Layout — Sleek, compact companion widgets docked below centered Clock Card */
     .pomodoro-widget {
-        bottom: 165px;
+        bottom: max(14px, calc(10px + env(safe-area-inset-bottom, 0px)));
         left: 10px;
-        width: min(155px, calc(50vw - 14px));
-        padding: 8px 10px;
-        border-radius: 16px;
+        width: min(136px, calc(50vw - 14px));
+        padding: 6px 8px;
+        border-radius: 14px;
         z-index: 24;
     }
-    .pomo-header { margin-bottom: 6px; }
-    .pomo-title { font-size: 0.74rem; }
-    .pomo-minimize { width: 20px; height: 20px; font-size: 0.9rem; }
-    .pomo-mode { margin-bottom: 6px; padding: 2px; border-radius: 12px; }
-    .pomo-mode-btn { font-size: 0.65rem; padding: 3px 0; border-radius: 10px; }
-    .pomo-display { font-size: 1.45rem; margin: 1px 0; }
-    .pomo-subtitle { font-size: 0.52rem; letter-spacing: 1px; margin-bottom: 6px; }
-    .pomo-time-adjust { margin-bottom: 6px; gap: 3px; }
-    .pomo-stepper { padding: 2px 3px; border-radius: 8px; }
-    .pomo-step-btn { width: 16px; height: 16px; font-size: 0.7rem; }
-    .pomo-val-display { font-size: 0.6rem; }
-    .pomo-controls { gap: 6px; }
-    .pomo-ctrl-btn.reset-btn, .pomo-ctrl-btn.skip-btn { width: 26px; height: 26px; }
-    .pomo-ctrl-btn.reset-btn svg { width: 12px; height: 12px; }
-    .pomo-ctrl-btn.play-btn, .pomo-ctrl-btn.pause-btn { width: 32px; height: 32px; }
-    .pomo-ctrl-btn.play-btn svg, .pomo-ctrl-btn.pause-btn svg { width: 13px; height: 13px; }
-    .pomo-ctrl-text { font-size: 0.62rem; }
+    .pomo-header { margin-bottom: 4px; }
+    .pomo-title { font-size: 0.7rem; }
+    .pomo-minimize { width: 18px; height: 18px; font-size: 0.85rem; }
+    .pomo-mode { margin-bottom: 4px; padding: 1.5px; border-radius: 10px; }
+    .pomo-mode-btn { font-size: 0.6rem; padding: 2px 0; border-radius: 8px; }
+    .pomo-display { font-size: 1.35rem; margin: 0; }
+    .pomo-subtitle { font-size: 0.48rem; letter-spacing: 0.8px; margin-bottom: 4px; }
+    .pomo-time-adjust { margin-bottom: 4px; gap: 2px; }
+    .pomo-stepper { padding: 2px 3px; border-radius: 7px; }
+    .pomo-step-btn { width: 15px; height: 15px; font-size: 0.65rem; }
+    .pomo-val-display { font-size: 0.56rem; }
+    .pomo-controls { gap: 5px; }
+    .pomo-ctrl-btn.reset-btn, .pomo-ctrl-btn.skip-btn { width: 24px; height: 24px; }
+    .pomo-ctrl-btn.reset-btn svg { width: 11px; height: 11px; }
+    .pomo-ctrl-btn.play-btn, .pomo-ctrl-btn.pause-btn { width: 28px; height: 28px; }
+    .pomo-ctrl-btn.play-btn svg, .pomo-ctrl-btn.pause-btn svg { width: 12px; height: 12px; }
+    .pomo-ctrl-text { font-size: 0.58rem; }
     .pomodoro-widget.minimized {
-        width: 140px !important;
-        padding: 6px 10px !important;
-        border-radius: 14px !important;
+        width: 130px !important;
+        padding: 5px 8px !important;
+        border-radius: 12px !important;
     }
-    .pomo-mini-meta { gap: 6px; }
-    .pomo-mini-time { font-size: 0.78rem; letter-spacing: 0.5px; }
-    .pomo-mini-play-btn { width: 18px; height: 18px; font-size: 0.58rem; }
+    .pomodoro-widget.minimized .pomo-title {
+        display: none;
+    }
+    .pomo-mini-meta { gap: 5px; }
+    .pomo-mini-time { font-size: 0.74rem; letter-spacing: 0.5px; }
+    .pomo-mini-play-btn { width: 17px; height: 17px; font-size: 0.54rem; }
     
     .lofi-widget {
-        bottom: 165px;
+        bottom: max(14px, calc(10px + env(safe-area-inset-bottom, 0px)));
         right: 10px;
-        width: min(165px, calc(50vw - 14px));
-        padding: 8px 10px;
-        border-radius: 16px;
+        width: min(144px, calc(50vw - 14px));
+        padding: 6px 8px;
+        border-radius: 14px;
         z-index: 24;
     }
-    .lofi-header { margin-bottom: 6px; }
-    .lofi-title { font-size: 0.74rem; }
-    .lofi-minimize-btn { width: 20px; height: 20px; font-size: 0.95rem; }
-    .lofi-equalizer { height: 11px; }
-    .lofi-track-row { gap: 4px; margin-bottom: 1px; }
-    .lofi-track-name { font-size: 0.68rem; }
-    .lofi-ambient-tag { font-size: 0.52rem; padding: 1px 4px; }
-    .lofi-mood-quote { font-size: 0.56rem; margin-bottom: 6px; }
-    .lofi-controls { gap: 8px; margin-bottom: 6px; }
-    .lofi-ctrl-btn svg { width: 13px; height: 13px; }
-    .lofi-ctrl-btn.play-circle-btn { width: 30px; height: 30px; }
-    .lofi-ctrl-btn.play-circle-btn svg { width: 13px; height: 13px; }
-    .lofi-volume-row { gap: 6px; margin-bottom: 6px; }
-    .vol-icon { width: 12px; height: 12px; }
-    .lofi-volume-slider { height: 3px; }
-    .vol-percent { font-size: 0.58rem; width: 16px; }
-    .lofi-channel-wrap { padding: 3px 6px; border-radius: 8px; gap: 4px; }
-    .lofi-genre-icon { font-size: 0.68rem; }
-    .lofi-channel-select { font-size: 0.62rem; }
+    .lofi-header { margin-bottom: 4px; }
+    .lofi-title { font-size: 0.7rem; }
+    .lofi-minimize-btn { width: 18px; height: 18px; font-size: 0.85rem; }
+    .lofi-equalizer { height: 10px; }
+    .lofi-track-row { gap: 3px; margin-bottom: 1px; }
+    .lofi-track-name { font-size: 0.64rem; max-width: 86px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lofi-ambient-tag { font-size: 0.48rem; padding: 1px 3px; }
+    .lofi-mood-quote { font-size: 0.52rem; margin-bottom: 4px; line-height: 1.2; }
+    .lofi-controls { gap: 6px; margin-bottom: 4px; }
+    .lofi-ctrl-btn svg { width: 12px; height: 12px; }
+    .lofi-ctrl-btn.play-circle-btn { width: 26px; height: 26px; }
+    .lofi-ctrl-btn.play-circle-btn svg { width: 11px; height: 11px; }
+    .lofi-volume-row { gap: 5px; margin-bottom: 4px; }
+    .vol-icon { width: 11px; height: 11px; }
+    .lofi-volume-slider { height: 2.5px; }
+    .vol-percent { font-size: 0.54rem; width: 14px; }
+    .lofi-channel-wrap { padding: 2px 5px; border-radius: 7px; gap: 3px; }
+    .lofi-genre-icon { font-size: 0.62rem; }
+    .lofi-channel-select { min-width: 0; font-size: 0.58rem; }
     .lofi-widget.minimized {
-        width: 150px !important;
-        padding: 6px 10px !important;
-        border-radius: 14px !important;
+        width: 138px !important;
+        padding: 5px 8px !important;
+        border-radius: 12px !important;
     }
-    .lofi-mini-selector-wrap { padding: 3px 6px; margin-bottom: 6px; border-radius: 8px; }
-    .lofi-mini-select { font-size: 0.62rem; }
-    .lofi-mini-play-btn { width: 18px; height: 18px; font-size: 0.58rem; }
-    .lofi-mini-visualizer { height: 16px; gap: 2px; }
+    .lofi-mini-selector-wrap { padding: 2px 5px; margin-bottom: 4px; border-radius: 7px; }
+    .lofi-mini-select { min-width: 0; font-size: 0.58rem; }
+    .lofi-mini-play-btn { width: 17px; height: 17px; font-size: 0.54rem; }
+    .lofi-mini-visualizer { height: 14px; gap: 2px; }
     .rhythm-bar { width: 2px; border-radius: 1px; }
     
-    .top-btn-group { top: 10px; right: 10px; gap: 6px; }
+    .top-btn-group {
+        top: max(10px, calc(6px + env(safe-area-inset-top, 0px)));
+        right: max(10px, calc(6px + env(safe-area-inset-right, 0px)));
+        gap: 6px;
+    }
     .icon-btn { width: 36px; height: 36px; }
     
     .drawer-panel { width: 100vw; max-width: 100vw; }
     
     .top-poem-bar {
-        top: 54px;
+        top: max(54px, calc(46px + env(safe-area-inset-top, 0px)));
         max-width: calc(100% - 20px);
         padding: 5px 12px;
         border-radius: 20px;
@@ -1513,6 +1523,30 @@ body.focus-mode .lofi-widget {
     }
     .poem-author {
         font-size: 0.62rem;
+    }
+}
+
+/* Tablet landscape orientation adaptations for widgets */
+@media (min-width: 769px) and (max-width: 1200px) and (orientation: landscape) {
+    .pomodoro-widget {
+        bottom: max(20px, calc(14px + env(safe-area-inset-bottom, 0px)));
+        left: max(16px, env(safe-area-inset-left, 0px));
+        top: auto;
+        right: auto;
+        width: min(185px, 22vw);
+        padding: 10px 12px;
+        border-radius: 18px;
+        z-index: 24;
+    }
+    .lofi-widget {
+        bottom: max(20px, calc(14px + env(safe-area-inset-bottom, 0px)));
+        right: max(16px, env(safe-area-inset-right, 0px));
+        top: auto;
+        left: auto;
+        width: min(205px, 24vw);
+        padding: 10px 12px;
+        border-radius: 18px;
+        z-index: 24;
     }
 }
 
@@ -1617,28 +1651,4 @@ body.focus-mode .lofi-widget {
     .drawer-scroll-body { padding: 4px 16px; }
     .settings-group { margin-bottom: 10px; }
     .drawer-footer { padding: 8px 16px; }
-}
-
-/* Tablet landscape orientation adaptations for widgets */
-@media (min-width: 769px) and (max-width: 1200px) and (orientation: landscape), (min-width: 769px) and (max-width: 1100px) {
-    .pomodoro-widget {
-        bottom: max(20px, calc(14px + env(safe-area-inset-bottom, 0px)));
-        left: max(16px, env(safe-area-inset-left, 0px));
-        top: auto;
-        right: auto;
-        width: min(185px, 22vw);
-        padding: 10px 12px;
-        border-radius: 18px;
-        z-index: 24;
-    }
-    .lofi-widget {
-        bottom: max(20px, calc(14px + env(safe-area-inset-bottom, 0px)));
-        right: max(16px, env(safe-area-inset-right, 0px));
-        top: auto;
-        left: auto;
-        width: min(205px, 24vw);
-        padding: 10px 12px;
-        border-radius: 18px;
-        z-index: 24;
-    }
 }

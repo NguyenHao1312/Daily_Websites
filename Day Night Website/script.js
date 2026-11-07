@@ -1063,7 +1063,14 @@ function fitClockTime() {
     if (!clockTime) return;
     clockTime.style.fontSize = '';
     const container = document.getElementById('clockPanel');
-    const maxAllowed = container ? (container.clientWidth - 56) : clockTime.clientWidth;
+    let padH = 56;
+    if (container) {
+        const cs = window.getComputedStyle(container);
+        const pl = parseFloat(cs.paddingLeft) || 0;
+        const pr = parseFloat(cs.paddingRight) || 0;
+        if (pl + pr > 0) padH = pl + pr;
+    }
+    const maxAllowed = container ? (container.clientWidth - padH) : clockTime.clientWidth;
     const contentWidth = clockTime.scrollWidth;
     if (maxAllowed > 0 && contentWidth > maxAllowed) {
         const scale = maxAllowed / contentWidth;

@@ -313,12 +313,28 @@ run_test("TC-019", "Clock Time overflow prevention & responsive auto-fit", test_
 def test_tc020_mobile_tablet_collision_prevention():
     with open(WIDGETS_CSS_PATH, "r", encoding="utf-8") as f:
         w_css = f.read()
-    # Ensure on tablet and mobile, widgets are positioned above the bottom clock
+    with open(CSS_PATH, "r", encoding="utf-8") as f:
+        css = f.read()
+    # Ensure tablet and mobile media queries exist
     assert "@media (max-width: 860px)" in w_css
-    assert "bottom: 185px" in w_css, "Widgets must sit safely above lower clock card on tablet"
-    assert "bottom: 165px" in w_css, "Widgets must sit safely above lower clock card on mobile"
+    assert "@media (max-width: 480px)" in w_css
+    # Central hero Clock Card on mobile and tablet portrait
+    assert "top: 50%" in css, "Clock Card must be vertically centered on tablet portrait"
+    assert "top: 48%" in css, "Clock Card must be vertically centered on mobile portrait"
+    assert "transform: translate(-50%, -50%)" in css, "Clock must use translate(-50%, -50%) to center"
+    # Ensure tablet landscape query does not leak into portrait tablets
+    assert "(min-width: 769px) and (max-width: 1100px)" not in css, "Tablet landscape must not match portrait tablets"
+    assert "(min-width: 769px) and (max-width: 1100px)" not in w_css, "Tablet landscape in widgets.css must not match portrait tablets"
+    # Focus mode smooth transition from centered clock
+    assert "calc(-50% + 15px)" in w_css, "Focus mode on mobile/tablet must preserve centered vertical offset"
+    # Mobile safe-area top support
+    assert "env(safe-area-inset-top" in css, "style.css must support safe area top insets for notch/island"
+    assert "env(safe-area-inset-top" in w_css, "widgets.css must support safe area top insets"
+    # Compact docked widgets at bottom corners with safe-area insets
+    assert "bottom: max(22px" in w_css, "Widgets must dock at bottom on tablet portrait"
+    assert "bottom: max(14px" in w_css, "Widgets must dock at bottom on mobile portrait"
 
-run_test("TC-020", "Mobile and Tablet layout collision prevention", test_tc020_mobile_tablet_collision_prevention)
+run_test("TC-020", "Mobile and Tablet layout collision prevention & centered clock", test_tc020_mobile_tablet_collision_prevention)
 
 def test_tc021_mobile_tablet_landscape_support():
     with open(CSS_PATH, "r", encoding="utf-8") as f:
@@ -347,15 +363,19 @@ def test_tc022_mobile_compact_sizing_and_elevated_clock():
     with open(WIDGETS_CSS_PATH, "r", encoding="utf-8") as f:
         w_css = f.read()
 
-    # Elevated bottom clock on mobile portrait to avoid collision with gesture navigation bars
-    assert "bottom: max(26px" in css, "Mobile portrait clock panel must sit comfortably above bottom navigation bar"
+    # Desktop Clock Card remains at bottom
+    assert "bottom: 26px" in css, "Desktop clock panel must sit near bottom: 26px"
 
-    # Compact mobile controls
-    assert "pomo-stepper { padding: 2px 3px" in w_css, "Mobile Pomodoro steppers must be compact to prevent overflow"
-    assert "width: 140px !important;" in w_css, "Minimized Pomodoro must be sleek and compact on mobile"
-    assert "width: 150px !important;" in w_css, "Minimized Lofi must be sleek and compact on mobile"
+    # Mobile portrait clock panel is centered vertically
+    assert "top: 48%" in css, "Mobile portrait clock panel must be centered vertically"
+    assert "bottom: auto" in css, "Mobile portrait clock panel must set bottom: auto"
 
-run_test("TC-022", "Mobile compact widget sizing & elevated bottom clock clearance", test_tc022_mobile_compact_sizing_and_elevated_clock)
+    # Sleek compact mobile controls and narrowed frames
+    assert "pomo-stepper { padding: 2px 3px" in w_css, "Mobile Pomodoro steppers must be compact"
+    assert "width: 130px !important;" in w_css, "Minimized Pomodoro must be sleek and compact on mobile"
+    assert "width: 138px !important;" in w_css, "Minimized Lofi must be sleek and compact on mobile"
+
+run_test("TC-022", "Mobile compact widget sizing & vertically centered clock", test_tc022_mobile_compact_sizing_and_elevated_clock)
 
 def test_tc023_draggable_viewport_clamping_and_reset():
     with open(DRAG_PATH, "r", encoding="utf-8") as f:
