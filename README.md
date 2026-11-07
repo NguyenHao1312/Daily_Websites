@@ -20,13 +20,35 @@ This repository is a curated collection of **mini-websites** built for personal 
 
 | # | Project | Live Demo / Link | Description | Technologies | Status |
 |---|---------|------------------|-------------|--------------|--------|
-| 1 | [🎂 Happy Birthday Website](./Happy%20Birthday%20Website) | *Local / Coming soon* | A beautiful animated birthday greeting website with music and confetti | HTML, CSS, JavaScript | ✅ Stable |
+| 1 | [🎂 Happy Birthday Website](./Happy%20Birthday%20Website) | [📖 **Project Docs**](./Happy%20Birthday%20Website/README.md) | Interactive celebration platform with 3D cake, mic candle blow, 3D gift box, photo booth, guestbook wall, Web Audio synth, and 6-language i18n | HTML5, CSS3, Vanilla JS, Web Audio API | 🚀 Upgraded (v2.0) |
 | 2 | [🌤️ Day Night Website](./Day%20Night%20Website) | [🔗 **clock-time-33.netlify.app**](https://clock-time-33.netlify.app/) | Dynamic aesthetic clock (ClockTime33) with realistic day/night cycles, lunar crater SVG, 4-season weather, Lofi Radio, Pomodoro, and global timezones | HTML5, CSS3, Vanilla JS, FastAPI, SQLite | 🚀 Live (v2.0) |
 | ... | *More coming soon...* | | | | ⏳ In Planning |
 
 ---
 
 ## 🚀 Current Progress & Highlights (Tiến Trình Hiện Tại)
+
+### 🎂 Happy Birthday Website (Birthday Magic v2.0) — Major Upgrade
+- **3D Tiered Cake & Candle Blowing:**
+  - Multi-tiered cake with frosting drips, strawberry/cherry toppings, sequential candles, and realistic smoke particles.
+  - Interactive blowing modes: individual touch/click, "Blow All" cascade, and **Microphone breath detection** via Web Audio API.
+  - Cosmic Secret Wish Reveal popup triggered upon extinguishing all candles.
+- **Interactive 3D Surprise Gift Box:**
+  - 3D perspective box with ribbon bow untying physics and flying lid animation revealing a Polaroid celebration card.
+- **Card Personalizer & Safe Shareable URLs (XSS Protected):**
+  - Custom recipient name, custom age, sender signature, and custom message with instant preset templates.
+  - Generates shareable URL with 1-click clipboard copy, fully sanitized against OWASP CWE-79 XSS attacks.
+- **Photo Memory Keepsake Booth:**
+  - Upload photo into 4 aesthetic frames (Polaroid, Royal Gold, Neon Party, Vintage Film) with fun stickers and high-res PNG export.
+- **Birthday Wishes Wall (Online Guestbook):**
+  - Interactive guestbook with avatar emojis, 5 color themes, heart like counters, and `localStorage` persistence.
+- **Polyphonic Web Audio Synthesizer & SFX Soundboard:**
+  - 3 harmonized tracks (Classic Music Box, Lively Jazz Ragtime, Royal Fanfare) and 4 procedural SFX (Horn, Pop, Cheers, Chimes) with 100% offline capability.
+- **Full Multilingual i18n (6 Languages):**
+  - Instant reactive DOM language switching with 100% dictionary symmetry across **Tiếng Việt (VI)**, **English (EN)**, **ไทย (TH)**, **中文 (ZH)**, **日本語 (JA)**, and **Español (ES)**.
+- **Quality Assurance & Infrastructure:**
+  - Complete test suite at [`Happy Birthday Website/test_birthday.py`](./Happy%20Birthday%20Website/test_birthday.py) with **22/22 passing tests (100% PASS)**.
+  - Netlify deployment config ([`netlify.toml`](./Happy%20Birthday%20Website/netlify.toml)) & SQL Server SSMS 22 schema ([`V001__init_birthday_schema.sql`](./Happy%20Birthday%20Website/server/sql/V001__init_birthday_schema.sql)).
 
 ### 🌟 Day Night Cycle Dashboard (ClockTime33 v2.0) — Major Upgrade
 - **Photorealistic Night & Moon Theme:**

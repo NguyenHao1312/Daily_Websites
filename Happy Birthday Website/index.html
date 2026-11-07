@@ -1,159 +1,490 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎂 สุขสันต์วันเกิด! 🎂</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🎂 Chúc Mừng Sinh Nhật! 🎂</title>
+    <meta name="description" content="Trang web chúc mừng sinh nhật tương tác hiện đại với bánh kem 3D thổi nến, hộp quà bất ngờ, pháo hoa, nhạc giao hưởng Web Audio và thiệp cá nhân hóa.">
+    <meta name="keywords" content="happy birthday, chuc mung sinh nhat, thoi nen, hop qua, phao hoa, loi chuc sinh nhat">
+    
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="🎂 Chúc Mừng Sinh Nhật Đặc Biệt! ✨">
+    <meta property="og:description" content="Một món quà sinh nhật diệu kỳ với bánh kem thổi nến, nhạc và những lời chúc ý nghĩa nhất!">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=1200&auto=format&fit=crop&q=80">
+    <meta name="theme-color" content="#0a0a2e">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Language Selector -->
-    <div class="lang-selector">
-        <select id="lang-select">
-            <option value="th">🇹🇭 ไทย</option>
-            <option value="vi">🇻🇳 Tiếng Việt</option>
-            <option value="en">🇬🇧 English</option>
-            <option value="zh">🇨🇳 中文</option>
-            <option value="ja">🇯🇵 日本語</option>
-            <option value="es">🇪🇸 Español</option>
-        </select>
-    </div>
+    <!-- Accessibility Skip Link -->
+    <a href="#hero" class="skip-to-content">Chuyển đến nội dung chính</a>
 
-    <!-- Particles / Confetti Canvas -->
-    <canvas id="confetti-canvas"></canvas>
+    <!-- Top Navigation Bar -->
+    <header class="navbar glass-nav" id="top-navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-brand">
+                <span class="brand-icon">🎂</span>
+                <span class="brand-text">Birthday Magic</span>
+            </a>
 
-    <!-- Floating balloons -->
-    <div class="balloons-container" id="balloons"></div>
+            <div class="nav-actions">
+                <!-- Sound SFX Toggle -->
+                <button class="nav-icon-btn" id="sfx-toggle" title="Bật/Tắt hiệu ứng âm thanh" aria-label="Toggle Sound Effects">
+                    <span id="sfx-icon">🔊</span>
+                </button>
+
+                <!-- Mini Music Pill -->
+                <button class="nav-music-pill" id="nav-music-btn" title="Phát nhạc sinh nhật" aria-label="Play Birthday Music">
+                    <span class="music-disc-icon">🎵</span>
+                    <span class="nav-music-label">Nhạc</span>
+                </button>
+
+                <!-- Personalize CTA -->
+                <button class="nav-cta-btn" id="open-personalizer-btn" aria-label="Tạo thiệp riêng">
+                    <span>✨</span>
+                    <span class="nav-cta-text">Tạo thiệp riêng</span>
+                </button>
+
+                <!-- Language Selector -->
+                <div class="lang-selector-wrapper">
+                    <label for="lang-select" class="sr-only">Chọn ngôn ngữ</label>
+                    <select id="lang-select" aria-label="Chọn ngôn ngữ">
+                        <option value="vi">🇻🇳 Tiếng Việt</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="th">🇹🇭 ไทย</option>
+                        <option value="zh">🇨🇳 中文</option>
+                        <option value="ja">🇯🇵 日本語</option>
+                        <option value="es">🇪🇸 Español</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Canvas Animation Layers -->
+    <canvas id="fireworks-canvas" aria-hidden="true"></canvas>
+    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+    <div class="balloons-container" id="balloons" aria-hidden="true"></div>
 
     <!-- Main Content -->
     <main>
         <!-- Hero Section -->
         <section class="hero" id="hero">
+            <!-- Background glow orbs -->
+            <div class="hero-glow hero-glow-1"></div>
+            <div class="hero-glow hero-glow-2"></div>
+
             <div class="hero-content">
+                <!-- Recipient Personalized Pill -->
+                <div class="recipient-badge-wrapper" id="recipient-wrapper">
+                    <div class="recipient-pill glass-card" id="recipient-badge">
+                        <span class="badge-sparkle">✨</span>
+                        <span id="recipient-name-display">Ngày đặc biệt của bạn</span>
+                        <span class="badge-sparkle">✨</span>
+                    </div>
+                </div>
+
                 <div class="sparkle-wrapper">
                     <span class="sparkle">✨</span>
-                    <h1 class="hero-title">Happy Birthday!</h1>
+                    <h1 class="hero-title" id="main-hero-title">Happy Birthday!</h1>
                     <span class="sparkle">✨</span>
                 </div>
-                <p class="hero-subtitle">สุขสันต์วันเกิดเพื่อนรัก!</p>
-                <div class="cake-emoji">🎂</div>
-                <button class="scroll-btn" onclick="document.getElementById('wish').scrollIntoView({behavior:'smooth'})">
-                    <span>ดูคำอวยพร</span>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 5v14M5 12l7 7 7-7"/>
-                    </svg>
-                </button>
+
+                <p class="hero-subtitle" id="main-hero-subtitle">Chúc mừng sinh nhật bạn thân yêu!</p>
+
+                <!-- 3D Interactive Celebration Cake -->
+                <div class="cake-showcase-container" id="cake-showcase">
+                    <!-- Age Badge on Cake -->
+                    <div class="cake-age-pill" id="cake-age-pill" title="Tuổi mừng sinh nhật">
+                        <span class="age-icon">🎈</span>
+                        <span id="cake-age-display">Special Day</span>
+                    </div>
+
+                    <!-- Interactive Tiered Cake -->
+                    <div class="cake-3d" id="celebration-cake">
+                        <!-- Candles Row -->
+                        <div class="candles-rack" id="candles-rack">
+                            <div class="candle" data-index="1" style="--h: 65px; --c: #ff6b9d;">
+                                <div class="flame" id="flame-1">🔥</div>
+                                <div class="wick"></div>
+                                <div class="smoke"></div>
+                            </div>
+                            <div class="candle" data-index="2" style="--h: 80px; --c: #ffd166;">
+                                <div class="flame" id="flame-2">🔥</div>
+                                <div class="wick"></div>
+                                <div class="smoke"></div>
+                            </div>
+                            <div class="candle" data-index="3" style="--h: 70px; --c: #06d6a0;">
+                                <div class="flame" id="flame-3">🔥</div>
+                                <div class="wick"></div>
+                                <div class="smoke"></div>
+                            </div>
+                            <div class="candle" data-index="4" style="--h: 85px; --c: #a29bfe;">
+                                <div class="flame" id="flame-4">🔥</div>
+                                <div class="wick"></div>
+                                <div class="smoke"></div>
+                            </div>
+                            <div class="candle" data-index="5" style="--h: 68px; --c: #ff758c;">
+                                <div class="flame" id="flame-5">🔥</div>
+                                <div class="wick"></div>
+                                <div class="smoke"></div>
+                            </div>
+                        </div>
+
+                        <!-- Top Tier -->
+                        <div class="cake-tier cake-tier-top">
+                            <div class="cake-toppings">
+                                <span>🍓</span><span>⭐</span><span>🍒</span><span>⭐</span><span>🍓</span>
+                            </div>
+                            <div class="frosting-drips"></div>
+                        </div>
+
+                        <!-- Bottom Tier -->
+                        <div class="cake-tier cake-tier-bottom">
+                            <div class="cake-decorations">
+                                <span class="pearl"></span><span class="pearl"></span><span class="pearl"></span><span class="pearl"></span><span class="pearl"></span>
+                            </div>
+                        </div>
+
+                        <!-- Cake Golden Platter -->
+                        <div class="cake-plate"></div>
+                    </div>
+
+                    <!-- Candle Status and Control Toolbar -->
+                    <p class="candle-instruction" id="candle-instruction">
+                        Chạm vào từng ngọn nến để thổi tắt! 🌬️
+                    </p>
+
+                    <div class="cake-actions-bar">
+                        <button class="action-btn action-primary" id="blow-all-candles-btn">
+                            <span>🌬️</span>
+                            <span class="btn-text">Thổi tất cả nến</span>
+                        </button>
+                        <button class="action-btn action-secondary" id="relight-candles-btn">
+                            <span>✨</span>
+                            <span class="btn-text">Thắp lại nến</span>
+                        </button>
+                        <button class="action-btn action-accent" id="mic-blow-btn" title="Thổi nến bằng micro thiết bị">
+                            <span>🎤</span>
+                            <span class="btn-text">Thổi bằng Mic</span>
+                        </button>
+                    </div>
+
+                    <!-- Secret Birthday Wish Card Reveal (Shown when candles blown) -->
+                    <div class="wish-reveal-popup glass-card" id="wish-reveal-popup" style="display: none;">
+                        <div class="reveal-header">
+                            <span class="reveal-icon">🎉</span>
+                            <h3 id="reveal-title">Điều ước đã được gửi đến vũ trụ!</h3>
+                        </div>
+                        <p id="reveal-text">
+                            Chúc cho mọi ước mơ tươi đẹp nhất của bạn trong tuổi mới đều biến thành hiện thực rực rỡ! 🌟
+                        </p>
+                        <div class="reveal-sparkles">💖 ✨ 🎂 ✨ 💖</div>
+                    </div>
+                </div>
+
+                <!-- Navigation Scroll Indicator -->
+                <div class="hero-scroll-cue">
+                    <button class="scroll-down-btn" id="scroll-to-gift-btn" onclick="document.getElementById('surprise-gift').scrollIntoView({behavior:'smooth'})" aria-label="Cuộn xuống xem quà">
+                        <span id="hero-scroll-label">Mở hộp quà sinh nhật</span>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M12 5v14M5 12l7 7 7-7"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </section>
 
-        <!-- Wish Section -->
+        <!-- 3D Interactive Surprise Gift Box Section -->
+        <section class="gift-section" id="surprise-gift">
+            <div class="container">
+                <div class="section-badge">
+                    <span>🎁</span>
+                    <span id="gift-badge-title">Món quà bất ngờ</span>
+                </div>
+                <h2 class="section-title" id="gift-section-title">Hộp Quà Kỳ Diệu Dành Cho Bạn</h2>
+                <p class="section-desc" id="gift-section-desc">
+                    Một điều đặc biệt được gói ghém riêng cho ngày sinh nhật của bạn. Hãy chạm vào hộp quà để mở nhé!
+                </p>
+
+                <!-- Interactive 3D Gift Box Component -->
+                <div class="gift-stage">
+                    <div class="gift-box-wrapper" id="gift-box" role="button" tabindex="0" aria-label="Chạm để mở hộp quà">
+                        <!-- Gift Box Lid with Ribbon Bow -->
+                        <div class="gift-lid-wrapper" id="gift-lid">
+                            <div class="gift-ribbon-bow">
+                                <div class="bow-loop bow-left"></div>
+                                <div class="bow-knot">🎀</div>
+                                <div class="bow-loop bow-right"></div>
+                            </div>
+                            <div class="gift-lid-cap"></div>
+                        </div>
+
+                        <!-- Gift Box Base -->
+                        <div class="gift-box-body">
+                            <div class="ribbon-v"></div>
+                            <div class="ribbon-h"></div>
+                            <div class="box-glow"></div>
+                        </div>
+
+                        <!-- Floating Tap Indicator -->
+                        <div class="gift-tap-hint" id="gift-hint">
+                            <span>👆</span>
+                            <span id="gift-hint-text">Chạm vào đây để mở quà!</span>
+                        </div>
+                    </div>
+
+                    <!-- Revealed Gift Surprise Card -->
+                    <div class="gift-revealed-card glass-card" id="gift-revealed-card" style="display: none;">
+                        <div class="card-polaroid-frame">
+                            <div class="polaroid-header">
+                                <span class="polaroid-stamp">🎂 VIP BIRTHDAY</span>
+                                <span class="polaroid-date" id="polaroid-date-display">Today</span>
+                            </div>
+                            <div class="polaroid-art">
+                                <div class="floating-celebration-art">🎉 💖 🥳 🌟</div>
+                                <h3 id="polaroid-congrats-title">Chúc Bạn Tuổi Mới Đại Cát!</h3>
+                                <p id="polaroid-congrats-body">
+                                    Thêm một tuổi mới là thêm vô vàn cơ hội rực rỡ, niềm vui bất tận và những chuyến hành trình phi thường. Luôn tỏa sáng nhé!
+                                </p>
+                            </div>
+                            <div class="polaroid-footer">
+                                <span class="polaroid-signature" id="polaroid-from-display">💝 Gửi trọn yêu thương</span>
+                            </div>
+                        </div>
+                        <div class="gift-close-action">
+                            <button class="action-btn action-secondary" id="rewrap-gift-btn">
+                                <span>🎁</span>
+                                <span id="rewrap-gift-label">Gói quà lại</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wish Message Section -->
         <section class="wish-section" id="wish">
             <div class="container">
                 <div class="wish-card glass-card" data-animate>
                     <div class="wish-icon">💝</div>
-                    <h2 class="wish-title">คำอวยพรสำหรับเธอ</h2>
+                    <h2 class="wish-title" id="wish-card-title">Lời Chúc Sinh Nhật Trọn Vẹn</h2>
                     <div class="divider">
                         <span>🌟</span>
                     </div>
-                    <p class="wish-text">
-                        ขอให้เธอมีวันเกิดที่แสนสุขและเต็มไปด้วยความสนุกสนาน! 
-                        หวังว่าทุกความฝันของเธอจะเป็นจริง 
-                        ขอให้เธอมีสุขภาพแข็งแรง มีความสุข และประสบความสำเร็จในชีวิต! 🎉
+                    <p class="wish-text" id="wish-body-text-1">
+                        Chúc bạn có một ngày sinh nhật thật rực rỡ, ấm áp và ngập tràn nụ cười hạnh phúc! Hy vọng mọi dự định ấp ủ, mọi ước mơ của bạn trong tuổi mới đều sẽ đơm hoa kết trái ngọt ngào.
                     </p>
-                    <p class="wish-text">
-                        ขอบคุณที่เป็นเพื่อนที่ยอดเยี่ยม 
-                        ทุกช่วงเวลาที่อยู่ด้วยกันคือความทรงจำอันล้ำค่า 
-                        ขอให้ปีใหม่ของเธอเต็มไปด้วยความรักและโชคดี! 💖
+                    <p class="wish-text" id="wish-body-text-2">
+                        Cảm ơn bạn vì đã luôn là một người tuyệt vời, mang đến nguồn năng lượng tích cực cho tất cả mọi người xung quanh. Chúc bạn một năm mới an khang, vững bước và chạm đến đỉnh cao mới!
                     </p>
+                    <div class="wish-signature-block">
+                        <span class="sign-from-label" id="sign-from-label">Người gửi lời chúc:</span>
+                        <span class="sign-name" id="sign-name-display">Những người bạn thân thiết</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Photo / Memory Section -->
+        <!-- Memory Section & Photo Keepsake Booth -->
         <section class="memory-section" id="memories">
             <div class="container">
-                <h2 class="section-title" data-animate>🎁 สิ่งที่ยอดเยี่ยมเกี่ยวกับเธอ</h2>
+                <div class="section-badge">
+                    <span>⭐</span>
+                    <span id="memory-badge-label">Phẩm chất & Kỷ niệm</span>
+                </div>
+                <h2 class="section-title" id="memory-section-title">Những Phẩm Chất Tuyệt Vời Của Bạn</h2>
+
+                <!-- 6 Personality Cards Grid -->
                 <div class="cards-grid">
                     <div class="memory-card glass-card" data-animate>
                         <div class="card-icon">😊</div>
-                        <h3>ร่าเริงเสมอ</h3>
-                        <p>รอยยิ้มของเธอทำให้ทุกวันสดใสขึ้น</p>
+                        <h3 id="mem1-title">Luôn Vui Vẻ</h3>
+                        <p id="mem1-text">Nụ cười rạng rỡ của bạn xua tan mọi mệt mỏi và làm bừng sáng mọi khoảnh khắc.</p>
                     </div>
                     <div class="memory-card glass-card" data-animate>
                         <div class="card-icon">💪</div>
-                        <h3>เข้มแข็ง</h3>
-                        <p>เธอแกร่งเสมอเมื่อเผชิญกับทุกอุปสรรค</p>
+                        <h3 id="mem2-title">Bản Lĩnh & Kiên Cường</h3>
+                        <p id="mem2-text">Bạn luôn vững vàng, dũng cảm vượt qua mọi thử thách trên bước đường cuộc sống.</p>
                     </div>
                     <div class="memory-card glass-card" data-animate>
                         <div class="card-icon">🌈</div>
-                        <h3>ใจดี</h3>
-                        <p>หัวใจที่อบอุ่นของเธอแผ่ขยายความรัก</p>
+                        <h3 id="mem3-title">Trái Tim Ấm Áp</h3>
+                        <p id="mem3-text">Sự chân thành và lòng tốt của bạn luôn sưởi ấm, lan tỏa tình yêu thương đến mọi người.</p>
                     </div>
                     <div class="memory-card glass-card" data-animate>
                         <div class="card-icon">⭐</div>
-                        <h3>มีพรสวรรค์</h3>
-                        <p>เธอเก่งและมีความสามารถมากกว่าที่เธอคิด</p>
+                        <h3 id="mem4-title">Tài Năng & Sáng Tạo</h3>
+                        <p id="mem4-text">Bạn thông minh, tài hoa và có tiềm năng to lớn hơn cả những gì bạn nghĩ.</p>
                     </div>
                     <div class="memory-card glass-card" data-animate>
                         <div class="card-icon">🤝</div>
-                        <h3>น่าเชื่อถือ</h3>
-                        <p>อยู่เคียงข้างเสมอเมื่อเพื่อนต้องการ</p>
+                        <h3 id="mem5-title">Đáng Tin Cậy</h3>
+                        <p id="mem5-text">Một người bạn chân thành, luôn kề vai sát cánh và sẵn sàng chia sẻ khi cần.</p>
                     </div>
                     <div class="memory-card glass-card" data-animate>
                         <div class="card-icon">🎯</div>
-                        <h3>มุ่งมั่น</h3>
-                        <p>ไม่มีอะไรหยุดเธอจากการบรรลุเป้าหมายได้</p>
+                        <h3 id="mem6-title">Quyết Tâm & Đam Mê</h3>
+                        <p id="mem6-text">Ngọn lửa nhiệt huyết luôn dẫn đường để bạn chinh phục những đỉnh cao mới.</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Photo Memory Booth -->
+                <div class="photo-booth-wrapper glass-card" data-animate id="photo-booth">
+                    <div class="photo-booth-header">
+                        <span class="booth-icon">📸</span>
+                        <h3 id="booth-title">Khung Ảnh Kỷ Niệm Sinh Nhật</h3>
+                        <p id="booth-desc">Tải ảnh của bạn hoặc người thương để tạo khung kỷ niệm lung linh!</p>
+                    </div>
+
+                    <div class="booth-canvas-area">
+                        <!-- Frame Display Area -->
+                        <div class="photo-frame polaroid-style" id="photo-frame">
+                            <div class="frame-inner" id="frame-inner">
+                                <img id="user-photo-preview" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=80" alt="Ảnh sinh nhật kỷ niệm">
+                                <div class="stickers-layer" id="stickers-layer"></div>
+                            </div>
+                            <div class="frame-caption">
+                                <span class="caption-text" id="frame-caption-text">Happy Birthday! Best Day Ever 🎉</span>
+                            </div>
+                        </div>
+
+                        <!-- Booth Controls Toolbar -->
+                        <div class="booth-controls">
+                            <!-- File Upload Input -->
+                            <div class="booth-control-group">
+                                <label for="photo-file-input" class="upload-label-btn">
+                                    <span>📷</span>
+                                    <span id="choose-photo-btn-text">Chọn ảnh kỷ niệm</span>
+                                </label>
+                                <input type="file" id="photo-file-input" accept="image/*" class="sr-only">
+                            </div>
+
+                            <!-- Frame Style Selector -->
+                            <div class="booth-control-group">
+                                <label class="control-label" id="frame-style-label">Chọn kiểu khung:</label>
+                                <div class="frame-pills" id="frame-selector">
+                                    <button class="frame-btn active" data-frame="polaroid-style" id="frame-opt-polaroid">Polaroid</button>
+                                    <button class="frame-btn" data-frame="gold-style" id="frame-opt-gold">Hoàng Gia</button>
+                                    <button class="frame-btn" data-frame="neon-style" id="frame-opt-neon">Neon Party</button>
+                                    <button class="frame-btn" data-frame="vintage-style" id="frame-opt-vintage">Cổ Điển</button>
+                                </div>
+                            </div>
+
+                            <!-- Sticker Palette -->
+                            <div class="booth-control-group">
+                                <label class="control-label" id="sticker-palette-label">Dán nhãn vui nhộn (chạm để dán):</label>
+                                <div class="stickers-palette">
+                                    <button class="sticker-btn" data-sticker="🎂" title="Bánh kem">🎂</button>
+                                    <button class="sticker-btn" data-sticker="👑" title="Vương miện">👑</button>
+                                    <button class="sticker-btn" data-sticker="🕶️" title="Kính râm">🕶️</button>
+                                    <button class="sticker-btn" data-sticker="🎈" title="Bóng bay">🎈</button>
+                                    <button class="sticker-btn" data-sticker="🎉" title="Pháo giấy">🎉</button>
+                                    <button class="sticker-btn" data-sticker="💖" title="Trái tim">💖</button>
+                                </div>
+                            </div>
+
+                            <div class="booth-action-row">
+                                <button class="action-btn action-secondary" id="clear-stickers-btn">
+                                    <span>🧹</span>
+                                    <span id="clear-stickers-text">Xóa nhãn</span>
+                                </button>
+                                <button class="action-btn action-primary" id="save-photo-btn">
+                                    <span>💾</span>
+                                    <span id="save-photo-text">Tải ảnh về máy</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Countdown / Age Section -->
-        <section class="countdown-section" id="countdown">
+        <!-- Birthday Wishes Wall / Guestbook Section -->
+        <section class="guestbook-section" id="guestbook">
             <div class="container">
-                <div class="countdown-card glass-card" data-animate>
-                    <h2 class="section-title">🎊 ปาร์ตี้วันเกิด 🎊</h2>
-                    <div class="party-emojis">
-                        <span class="bounce-emoji" style="--delay: 0s">🎈</span>
-                        <span class="bounce-emoji" style="--delay: 0.2s">🎉</span>
-                        <span class="bounce-emoji" style="--delay: 0.4s">🎂</span>
-                        <span class="bounce-emoji" style="--delay: 0.6s">🎁</span>
-                        <span class="bounce-emoji" style="--delay: 0.8s">🎊</span>
-                        <span class="bounce-emoji" style="--delay: 1.0s">🥳</span>
-                        <span class="bounce-emoji" style="--delay: 1.2s">🎶</span>
-                        <span class="bounce-emoji" style="--delay: 1.4s">💃</span>
-                    </div>
-                    <p class="party-message">วันนี้เป็นวันพิเศษของเธอ! 🌟</p>
-                    <button class="blow-candle-btn" id="blowCandleBtn">
-                        🕯️ มาเป่าเทียนกันเถอะ! 🕯️
-                    </button>
-                    <div class="candles-container" id="candlesContainer" style="display:none;">
-                        <div class="candles">
-                            <div class="candle" style="--h: 60px"><div class="flame" id="flame1">🔥</div></div>
-                            <div class="candle" style="--h: 75px"><div class="flame" id="flame2">🔥</div></div>
-                            <div class="candle" style="--h: 55px"><div class="flame" id="flame3">🔥</div></div>
-                            <div class="candle" style="--h: 70px"><div class="flame" id="flame4">🔥</div></div>
-                            <div class="candle" style="--h: 65px"><div class="flame" id="flame5">🔥</div></div>
+                <div class="section-badge">
+                    <span>💌</span>
+                    <span id="guestbook-badge-label">Sổ lưu bút online</span>
+                </div>
+                <h2 class="section-title" id="guestbook-title">Bức Tường Lời Chúc Sinh Nhật</h2>
+                <p class="section-desc" id="guestbook-desc">
+                    Hãy gửi tặng một lời chúc ngọt ngào để cùng lưu lại dấu ấn cho ngày đặc biệt này nhé!
+                </p>
+
+                <!-- New Wish Input Form -->
+                <div class="guestbook-form-card glass-card" data-animate>
+                    <form id="new-wish-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="guest-name" id="form-name-label">Tên của bạn:</label>
+                                <input type="text" id="guest-name" placeholder="VD: Bảo Trâm, Hoàng Long..." required maxlength="40">
+                            </div>
+                            <div class="form-group">
+                                <label id="form-emoji-label">Biểu tượng cảm xúc:</label>
+                                <div class="emoji-picker-row" id="guest-emoji-picker">
+                                    <button type="button" class="avatar-emoji-btn active" data-emoji="🎂">🎂</button>
+                                    <button type="button" class="avatar-emoji-btn" data-emoji="🎉">🎉</button>
+                                    <button type="button" class="avatar-emoji-btn" data-emoji="🌟">🌟</button>
+                                    <button type="button" class="avatar-emoji-btn" data-emoji="💖">💖</button>
+                                    <button type="button" class="avatar-emoji-btn" data-emoji="🥳">🥳</button>
+                                    <button type="button" class="avatar-emoji-btn" data-emoji="🎁">🎁</button>
+                                </div>
+                            </div>
                         </div>
-                        <p class="blow-instruction">กดที่เปลวเทียนเพื่อเป่า! 🌬️</p>
-                        <div class="birthday-wish-reveal" id="wishReveal" style="display: none;">
-                            <h3>🎉 คำอธิษฐานถูกส่งไปแล้ว! 🎉</h3>
-                            <p>ขอให้ทุกสิ่งดีๆ เกิดขึ้นกับเธอ!</p>
+
+                        <div class="form-group">
+                            <label for="guest-msg" id="form-msg-label">Lời chúc sinh nhật:</label>
+                            <textarea id="guest-msg" rows="3" placeholder="Viết những lời chúc chân thành, vui nhộn hoặc ấm áp nhất tại đây..." required maxlength="300"></textarea>
+                            <div class="char-count"><span id="current-char">0</span>/300</div>
                         </div>
-                    </div>
+
+                        <div class="form-footer-row">
+                            <div class="theme-color-select">
+                                <span class="theme-label" id="theme-color-label">Màu thiệp:</span>
+                                <div class="color-options" id="wish-color-options">
+                                    <button type="button" class="color-dot color-rose active" data-color="rose" title="Hồng Rose"></button>
+                                    <button type="button" class="color-dot color-violet" data-color="violet" title="Tím Galaxy"></button>
+                                    <button type="button" class="color-dot color-sunset" data-color="sunset" title="Cam Hoàng Hôn"></button>
+                                    <button type="button" class="color-dot color-ocean" data-color="ocean" title="Xanh Đại Dương"></button>
+                                    <button type="button" class="color-dot color-emerald" data-color="emerald" title="Xanh Ngọc"></button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="action-btn action-primary" id="submit-wish-btn">
+                                <span>🚀</span>
+                                <span id="submit-wish-text">Gửi lời chúc ngay</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Wishes Wall Grid Container -->
+                <div class="wishes-wall-grid" id="wishes-wall-grid">
+                    <!-- Populated dynamically via JS with localStorage persistence -->
                 </div>
             </div>
         </section>
 
-        <!-- Music Section -->
+        <!-- Interactive Celebration Music & Sound Studio -->
         <section class="music-section" id="music">
             <div class="container">
                 <div class="music-card glass-card" data-animate>
-                    <h2 class="section-title">🎵 เพลงสำหรับเธอ 🎵</h2>
-                    <div class="music-visualizer" id="musicVisualizer">
+                    <div class="section-badge">
+                        <span>🎶</span>
+                        <span id="music-badge-label">Giai điệu sinh nhật</span>
+                    </div>
+                    <h2 class="section-title" id="music-title">Studio Âm Nhạc & Tiệc Tùng</h2>
+
+                    <!-- 18-bar Animated Rhythm Equalizer Visualizer -->
+                    <div class="music-visualizer" id="musicVisualizer" aria-hidden="true">
                         <div class="bar" style="--i:1"></div>
                         <div class="bar" style="--i:2"></div>
                         <div class="bar" style="--i:3"></div>
@@ -164,11 +495,56 @@
                         <div class="bar" style="--i:8"></div>
                         <div class="bar" style="--i:9"></div>
                         <div class="bar" style="--i:10"></div>
+                        <div class="bar" style="--i:11"></div>
+                        <div class="bar" style="--i:12"></div>
+                        <div class="bar" style="--i:13"></div>
+                        <div class="bar" style="--i:14"></div>
+                        <div class="bar" style="--i:15"></div>
+                        <div class="bar" style="--i:16"></div>
+                        <div class="bar" style="--i:17"></div>
+                        <div class="bar" style="--i:18"></div>
                     </div>
-                    <button class="music-btn" id="musicBtn">
-                        <span class="music-icon">▶️</span>
-                        <span>เล่นเพลง Happy Birthday</span>
-                    </button>
+
+                    <!-- Track Selection Dropdown / Buttons -->
+                    <div class="track-selector-wrapper">
+                        <label for="track-select" id="track-select-label">Giai điệu biểu diễn:</label>
+                        <select id="track-select" class="track-dropdown">
+                            <option value="classic">🎵 1. Hộp Nhạc & Tiếng Chuông (Classic Music Box)</option>
+                            <option value="jazz">🎷 2. Giai Điệu Vui Nhộn Ragtime (Lively Jazz)</option>
+                            <option value="fanfare">🎺 3. Khúc Hoan Ca Hoàng Gia (Royal Fanfare)</option>
+                        </select>
+                    </div>
+
+                    <!-- Play / Pause Main Controller -->
+                    <div class="music-controls-row">
+                        <button class="music-btn" id="musicBtn" aria-label="Phát hoặc dừng nhạc">
+                            <span class="music-icon" id="music-play-icon">▶️</span>
+                            <span id="music-btn-text">Phát nhạc mừng sinh nhật</span>
+                        </button>
+                    </div>
+
+                    <!-- SFX Soundboard Pad -->
+                    <div class="sfx-board-wrapper">
+                        <h4 class="sfx-board-heading" id="sfx-board-heading">Bàn Phím Tiếng Động Tiệc Tùng:</h4>
+                        <div class="sfx-buttons-grid">
+                            <button class="sfx-pad-btn" id="sfx-btn-horn">
+                                <span class="sfx-icon">🎺</span>
+                                <span class="sfx-label" id="sfx-label-horn">Kèn tiệc</span>
+                            </button>
+                            <button class="sfx-pad-btn" id="sfx-btn-pop">
+                                <span class="sfx-icon">🎈</span>
+                                <span class="sfx-label" id="sfx-label-pop">Nổ bóng</span>
+                            </button>
+                            <button class="sfx-pad-btn" id="sfx-btn-cheers">
+                                <span class="sfx-icon">👏</span>
+                                <span class="sfx-label" id="sfx-label-cheers">Vỗ tay & reo hò</span>
+                            </button>
+                            <button class="sfx-pad-btn" id="sfx-btn-chimes">
+                                <span class="sfx-icon">✨</span>
+                                <span class="sfx-label" id="sfx-label-chimes">Chuông phép thuật</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -176,16 +552,102 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="container">
-                <p class="footer-text">
-                    สร้างด้วย 💖 พิเศษสำหรับเธอ
-                </p>
-                <div class="footer-emojis">
-                    🎂 🎈 🎉 🎁 🌟 💝 🎊 🥳
+                <div class="footer-celebrate-strip">
+                    <button class="action-btn action-accent" id="celebrate-footer-btn">
+                        <span>🎆</span>
+                        <span id="footer-fireworks-btn-label">Bắn pháo hoa rực rỡ!</span>
+                    </button>
                 </div>
+                <p class="footer-text" id="footer-text">
+                    Tạo với trọn vẹn 💖 và niềm vui mừng sinh nhật
+                </p>
+                <div class="footer-emojis" aria-hidden="true">
+                    🎂 🎈 🎉 🎁 🌟 💝 🎊 🥳 🍰 🎆
+                </div>
+                <p class="footer-subtext">
+                    Daily Websites Project © 2026. Made with Vanilla Modern Web & Web Audio API.
+                </p>
             </div>
         </footer>
     </main>
 
+    <!-- Personalize Modal Drawer -->
+    <div class="modal-overlay" id="personalizer-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-card glass-card">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <span class="modal-icon">✨</span>
+                    <h3 id="modal-title">Tạo Thiệp Sinh Nhật Tặng Bạn Bè</h3>
+                </div>
+                <button class="modal-close-btn" id="close-modal-btn" aria-label="Đóng cửa sổ">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <p class="modal-intro" id="modal-intro">
+                    Nhập thông tin người nhận để tạo link thiệp sinh nhật độc quyền và gửi tặng ngay!
+                </p>
+
+                <div class="modal-form-group">
+                    <label for="custom-recipient-name" id="label-recipient-name">Tên người nhận:</label>
+                    <input type="text" id="custom-recipient-name" placeholder="VD: Thảo Vy, Minh Khang..." maxlength="40">
+                </div>
+
+                <div class="modal-form-row">
+                    <div class="modal-form-group">
+                        <label for="custom-age" id="label-custom-age">Số tuổi (tùy chọn):</label>
+                        <input type="number" id="custom-age" placeholder="VD: 18, 20..." min="1" max="120">
+                    </div>
+                    <div class="modal-form-group">
+                        <label for="custom-sender-name" id="label-sender-name">Tên người gửi (bạn):</label>
+                        <input type="text" id="custom-sender-name" placeholder="VD: Tuấn Anh..." maxlength="40">
+                    </div>
+                </div>
+
+                <div class="modal-form-group">
+                    <label id="label-presets">Chọn mẫu lời chúc nhanh:</label>
+                    <div class="preset-wishes-pills" id="preset-wishes">
+                        <button type="button" class="preset-pill" data-preset="warm" id="preset-btn-warm">🥰 Ấm áp</button>
+                        <button type="button" class="preset-pill" data-preset="funny" id="preset-btn-funny">😂 Hài hước</button>
+                        <button type="button" class="preset-pill" data-preset="inspirational" id="preset-btn-inspire">🚀 Truyền cảm hứng</button>
+                        <button type="button" class="preset-pill" data-preset="romantic" id="preset-btn-romantic">💖 Lãng mạn</button>
+                    </div>
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="custom-wish-message" id="label-custom-message">Lời chúc riêng biệt:</label>
+                    <textarea id="custom-wish-message" rows="3" placeholder="Nhập lời chúc riêng hoặc chọn mẫu phía trên..."></textarea>
+                </div>
+
+                <!-- Generated Link Output Box -->
+                <div class="share-link-box" id="share-link-box">
+                    <label for="generated-share-link" id="label-share-link">Đường dẫn chia sẻ thiệp:</label>
+                    <div class="link-input-group">
+                        <input type="text" id="generated-share-link" readonly value="">
+                        <button class="copy-btn" id="copy-link-btn">
+                            <span id="copy-btn-icon">📋</span>
+                            <span id="copy-btn-text">Sao chép</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="action-btn action-secondary" id="preview-card-btn">
+                    <span>👁️</span>
+                    <span id="preview-btn-text">Xem trước ngay</span>
+                </button>
+                <button class="action-btn action-primary" id="copy-and-share-btn">
+                    <span>🔗</span>
+                    <span id="copy-share-btn-text">Sao chép & Gửi tặng</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Toast Notification System -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <!-- Main JavaScript Logic -->
     <script src="script.js"></script>
 </body>
 </html>
