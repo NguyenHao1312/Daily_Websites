@@ -15,8 +15,16 @@ import os
 import re
 import unittest
 import json
+import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SERVER_DIR = os.path.join(BASE_DIR, "server")
+sys.path.insert(0, SERVER_DIR)
+
+import database
+import models
+import main
+
 INDEX_HTML = os.path.join(BASE_DIR, "index.html")
 STYLE_CSS = os.path.join(BASE_DIR, "style.css")
 SCRIPT_JS = os.path.join(BASE_DIR, "script.js")
@@ -298,6 +306,143 @@ class TestHappyBirthdayWebsite(unittest.TestCase):
         self.assertIn('role="button"', self.html, "Gift box must declare role=button for screen readers")
         self.assertIn("e.key === 'Enter'", self.js, "Keyboard listener must support Enter key")
         self.assertIn("e.key === ' '", self.js, "Keyboard listener must support Space key")
+
+    # ------------------------------------------------------------------------
+    # 7. Backend REST API & Database Auto-Migration (SKILL_CUSTOM_1305 §7.2)
+    # ------------------------------------------------------------------------
+    def test_23_backend_db_schema_and_automigration(self):
+        """Verifies SQLite auto-migration, tables existence, and column schemas."""
+        database.auto_migrate()
+        inspector = database.inspect(database.engine)
+        tables = inspector.get_table_names()
+        self.assertIn("birthday_cards", tables, "Table 'birthday_cards' must exist")
+        self.assertIn("guestbook_wishes", tables, "Table 'guestbook_wishes' must exist")
+        self.assertIn("birthday_audit_logs", tables, "Table 'birthday_audit_logs' must exist")
+
+        # Verify birthday_cards columns
+        card_cols = {c["name"] for c in inspector.get_columns("birthday_cards")}
+        for col in ["card_id", "recipient_name", "sender_name", "age", "wish_message", "theme_color", "candle_count", "view_count"]:
+            self.assertIn(col, card_cols, f"Column '{col}' missing from birthday_cards")
+
+        # Verify guestbook_wishes columns
+        wish_cols = {c["name"] for c in inspector.get_columns("guestbook_wishes")}
+        for col in ["author_name", "author_emoji", "message_text", "theme_color", "like_count", "is_approved", "client_ip_hash"]:
+            self.assertIn(col, wish_cols, f"Column '{col}' missing from guestbook_wishes")
+
+    def test_24_backend_api_health_check(self):
+        """Verifies backend API health check endpoint returns 200 OK and version."""
+        health = main.health_check()
+        self.assertEqual(health.status, "ok")
+        self.assertEqual(health.version, "2.0.0")
+        self.assertEqual(health.app, "Happy Birthday Magic API")
+
+    def test_25_backend_wishes_lifecycle_and_audit(self):
+        """Verifies posting a wish, SHA-256 IP hashing (no PII leak), and audit logging."""
+        database.auto_migrate()
+        db = next(database.get_db())
+
+        class DummyReq:
+            class client:
+                host = "192.168.1.100"
+
+        wish_in = main.WishCreate(
+            author_name="Thảo Vy",
+            author_emoji="🎂",
+            message_text="Chúc bạn sinh nhật vui vẻ và luôn tỏa sáng!",
+            theme_color="rose"
+        )
+        created = main.create_wish(wish_in, DummyReq(), db)
+        self.assertIsNotNone(created.id)
+        self.assertEqual(created.author_name, "Thảo Vy")
+        self.assertNotEqual(created.client_ip_hash, "192.168.1.100", "Must hash client IP with SHA-256 per §7.2")
+        self.assertEqual(len(created.client_ip_hash), 32)
+
+        # Verify audit log was recorded
+        audit = db.query(models.BirthdayAuditLog).filter(
+            models.BirthdayAuditLog.action == "CREATE_WISH",
+            models.BirthdayAuditLog.entity_id == str(created.id)
+        ).first()
+        self.assertIsNotNone(audit, "Audit log must be recorded on wish creation")
+        self.assertEqual(audit.status_code, 201)
+
+    def test_26_backend_wish_like_endpoint(self):
+        """Verifies wish like increment and audit log recording."""
+        database.auto_migrate()
+        db = next(database.get_db())
+
+        wishes = main.get_wishes(db=db)
+        self.assertGreater(len(wishes), 0)
+        target_wish = wishes[0]
+        initial_likes = target_wish.like_count
+
+        liked = main.like_wish(target_wish.id, db)
+        self.assertEqual(liked.like_count, initial_likes + 1)
+
+    def test_27_backend_personalized_card_lifecycle(self):
+        """Verifies creating a card, retrieving by ID, view count increment, and audit logging."""
+        database.auto_migrate()
+        db = next(database.get_db())
+
+        class DummyReq:
+            class client:
+                host = "10.0.0.5"
+
+        card_in = main.CardCreate(
+            recipient_name="Minh Khang",
+            sender_name="Bảo Trâm",
+            age=20,
+            wish_message="Chúc bạn tuổi 20 bứt phá ngoạn mục!",
+            theme_color="violet",
+            candle_count=5
+        )
+        created_card = main.create_card(card_in, DummyReq(), db)
+        self.assertIsNotNone(created_card.card_id)
+        self.assertEqual(created_card.recipient_name, "Minh Khang")
+        self.assertEqual(created_card.age, 20)
+        self.assertEqual(created_card.view_count, 0)
+
+        # Retrieve card and verify view count increments
+        fetched = main.get_card(created_card.card_id, db)
+        self.assertEqual(fetched.view_count, 1)
+
+    def test_28_backend_and_frontend_xss_protection(self):
+        """Verifies malicious script injection is neutralized on both backend and client sanitization."""
+        database.auto_migrate()
+        db = next(database.get_db())
+
+        class DummyReq:
+            class client:
+                host = "127.0.0.1"
+
+        malicious_author = "<script>alert('xss')</script>"
+        malicious_msg = "Hello <img src=x onerror=alert(1)> & <iframe src=javascript:alert(2)>"
+        wish_in = main.WishCreate(
+            author_name=malicious_author,
+            author_emoji="🎂",
+            message_text=malicious_msg,
+            theme_color="rose"
+        )
+        saved = main.create_wish(wish_in, DummyReq(), db)
+        self.assertNotIn("<script>", saved.author_name)
+        self.assertNotIn("<img", saved.message_text)
+        self.assertNotIn("<iframe", saved.message_text)
+        self.assertIn("&lt;script&gt;", saved.author_name)
+
+    def test_29_photo_booth_canvas_frames_and_stickers(self):
+        """Verifies exportPhotoKeepsake handles designer frames (Gold, Neon, Vintage) and placed stickers."""
+        self.assertIn("gold-style", self.js)
+        self.assertIn("neon-style", self.js)
+        self.assertIn("vintage-style", self.js)
+        self.assertIn("placed-sticker", self.js)
+        self.assertIn("querySelectorAll('.placed-sticker')", self.js)
+        self.assertIn("ctx.fillText(stk.textContent.trim()", self.js)
+        self.assertIn('crossorigin="anonymous"', self.html, "user-photo-preview must have crossorigin=anonymous")
+
+    def test_30_candle_blowing_race_condition_protection(self):
+        """Verifies candleTimeouts tracking and cancellation to prevent async blow/relight race conditions."""
+        self.assertIn("candleTimeouts", self.js)
+        self.assertIn("clearCandleTimeouts()", self.js)
+        self.assertIn("clearCandleTimeouts();", self.js)
 
 if __name__ == "__main__":
     unittest.main()

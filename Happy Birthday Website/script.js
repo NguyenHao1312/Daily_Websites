@@ -107,7 +107,16 @@ const translations = {
     toastLinkCopied: "Đã sao chép liên kết thiệp chúc mừng! 📋",
     toastWishSent: "Lời chúc của bạn đã xuất hiện trên tường! 💌",
     toastCandlesBlown: "Tuyệt vời! Tất cả nến đã được thổi tắt! 🎉",
-    toastPhotoSaved: "Đã xuất khung ảnh kỷ niệm thành công! 📸"
+    toastPhotoSaved: "Đã xuất khung ảnh kỷ niệm thành công! 📸",
+    recipientSpecial: "✨ Dành riêng cho {name} ✨",
+    ageSuffix: "Tuổi",
+    toastCardApplied: "Đã áp dụng thiệp sinh nhật của bạn! 🎉",
+    toastCandlesRelit: "Nến đã được thắp sáng lại! ✨",
+    toastMicReady: "Micro đã sẵn sàng! Hãy thổi vào micro thiết bị! 🌬️",
+    toastMicDenied: "Không thể truy cập micro. Bạn có thể nhấn nút để thổi nến!",
+    toastSoundOn: "Âm thanh đã bật! 🔊",
+    toastSoundOff: "Đã tắt âm thanh! 🔇",
+    guestTileSubtitle: "Lời chúc sinh nhật"
   },
   en: {
     pageTitle: "🎂 Happy Birthday! 🎂",
@@ -201,7 +210,16 @@ const translations = {
     toastLinkCopied: "Birthday card link copied to clipboard! 📋",
     toastWishSent: "Your wish has been pinned to the wall! 💌",
     toastCandlesBlown: "Hooray! All candles are blown out! 🎉",
-    toastPhotoSaved: "Photo keepsake saved successfully! 📸"
+    toastPhotoSaved: "Photo keepsake saved successfully! 📸",
+    recipientSpecial: "✨ Special Day for {name} ✨",
+    ageSuffix: "Years",
+    toastCardApplied: "Personalized birthday card applied! 🎉",
+    toastCandlesRelit: "Candles relit! ✨",
+    toastMicReady: "Microphone ready! Blow into your mic! 🌬️",
+    toastMicDenied: "Microphone access denied. You can tap candles to blow!",
+    toastSoundOn: "Sound effects enabled! 🔊",
+    toastSoundOff: "Sound effects muted! 🔇",
+    guestTileSubtitle: "Birthday Wish"
   },
   th: {
     pageTitle: "🎂 สุขสันต์วันเกิด! 🎂",
@@ -295,7 +313,16 @@ const translations = {
     toastLinkCopied: "คัดลอกลิงก์การ์ดวันเกิดแล้ว! 📋",
     toastWishSent: "ส่งคำอวยพรขึ้นกำแพงเรียบร้อยแล้ว! 💌",
     toastCandlesBlown: "ยอดเยี่ยมมาก! เป่าเทียนดับหมดแล้ว! 🎉",
-    toastPhotoSaved: "บันทึกภาพถ่ายที่ระลึกสำเร็จ! 📸"
+    toastPhotoSaved: "บันทึกภาพถ่ายที่ระลึกสำเร็จ! 📸",
+    recipientSpecial: "✨ วันพิเศษสำหรับ {name} ✨",
+    ageSuffix: "ปี",
+    toastCardApplied: "ใช้การ์ดวันเกิดของคุณเรียบร้อยแล้ว! 🎉",
+    toastCandlesRelit: "จุดเทียนใหม่เรียบร้อยแล้ว! ✨",
+    toastMicReady: "ไมโครโฟนพร้อมแล้ว! เป่าใส่ไมโครโฟนได้เลย! 🌬️",
+    toastMicDenied: "ไม่สามารถเข้าถึงไมโครโฟนได้ คุณสามารถแตะเทียนเพื่อเป่าแทนได้!",
+    toastSoundOn: "เปิดเอฟเฟกต์เสียงแล้ว! 🔊",
+    toastSoundOff: "ปิดเสียงแล้ว! 🔇",
+    guestTileSubtitle: "คำอวยพรวันเกิด"
   },
   zh: {
     pageTitle: "🎂 生日快乐！ 🎂",
@@ -389,7 +416,16 @@ const translations = {
     toastLinkCopied: "生日贺卡链接已成功复制到剪贴板！ 📋",
     toastWishSent: "你的祝福已成功上墙！ 💌",
     toastCandlesBlown: "太棒了！所有蜡烛都已吹灭！ 🎉",
-    toastPhotoSaved: "纪念照片已成功导出保存！ 📸"
+    toastPhotoSaved: "纪念照片已成功导出保存！ 📸",
+    recipientSpecial: "✨ 专属于 {name} 的特别日子 ✨",
+    ageSuffix: "岁",
+    toastCardApplied: "专属生日贺卡已应用！ 🎉",
+    toastCandlesRelit: "蜡烛已重新点亮！ ✨",
+    toastMicReady: "麦克风已就绪！请朝设备麦克风吹气！ 🌬️",
+    toastMicDenied: "无法访问麦克风。您可以点击蜡烛进行吹灭！",
+    toastSoundOn: "音效已开启！ 🔊",
+    toastSoundOff: "音效已静音！ 🔇",
+    guestTileSubtitle: "生日寄语"
   },
   ja: {
     pageTitle: "🎂 お誕生日おめでとう！ 🎂",
@@ -483,7 +519,16 @@ const translations = {
     toastLinkCopied: "バースデーカードのリンクをコピーしました！ 📋",
     toastWishSent: "メッセージが掲示板に投稿されました！ 💌",
     toastCandlesBlown: "お見事！すべてのろうそくが吹き消されました！ 🎉",
-    toastPhotoSaved: "記念写真の保存が完了しました！ 📸"
+    toastPhotoSaved: "記念写真の保存が完了しました！ 📸",
+    recipientSpecial: "✨ {name} の特別な日 ✨",
+    ageSuffix: "歳",
+    toastCardApplied: "バースデーカードを適用しました！ 🎉",
+    toastCandlesRelit: "ろうそくに再び火が灯りました！ ✨",
+    toastMicReady: "マイクの準備完了！マイクに息を吹きかけてください！ 🌬️",
+    toastMicDenied: "マイクへのアクセスが拒否されました。タップして吹き消せます！",
+    toastSoundOn: "効果音をオンにしました！ 🔊",
+    toastSoundOff: "効果音をミュートしました！ 🔇",
+    guestTileSubtitle: "お祝いメッセージ"
   },
   es: {
     pageTitle: "🎂 ¡Feliz Cumpleaños! 🎂",
@@ -577,7 +622,16 @@ const translations = {
     toastLinkCopied: "¡Enlace copiado al portapapeles! 📋",
     toastWishSent: "¡Tu mensaje ha sido fijado en el muro! 💌",
     toastCandlesBlown: "¡Genial! ¡Todas las velas han sido apagadas! 🎉",
-    toastPhotoSaved: "¡Foto de recuerdo guardada con éxito! 📸"
+    toastPhotoSaved: "¡Foto de recuerdo guardada con éxito! 📸",
+    recipientSpecial: "✨ Día especial para {name} ✨",
+    ageSuffix: "Años",
+    toastCardApplied: "¡Tarjeta de cumpleaños aplicada con éxito! 🎉",
+    toastCandlesRelit: "¡Velas encendidas de nuevo! ✨",
+    toastMicReady: "¡Micrófono listo! ¡Sopla en el micrófono del dispositivo! 🌬️",
+    toastMicDenied: "Acceso al micrófono denegado. ¡Puedes tocar las velas para apagarlas!",
+    toastSoundOn: "¡Efectos de sonido activados! 🔊",
+    toastSoundOff: "¡Efectos de sonido silenciados! 🔇",
+    guestTileSubtitle: "Deseo de Cumpleaños"
   }
 };
 
@@ -655,7 +709,7 @@ function updateLanguage(lang) {
   const recipientNameDisplay = document.getElementById('recipient-name-display');
   if (recipientNameDisplay) {
     recipientNameDisplay.textContent = state.recipientName 
-      ? (lang === 'vi' ? `✨ Dành riêng cho ${state.recipientName} ✨` : `✨ Special Day for ${state.recipientName} ✨`)
+      ? t.recipientSpecial.replace('{name}', state.recipientName)
       : t.recipientDefault;
   }
   const heroSubtitle = document.getElementById('main-hero-subtitle');
@@ -664,7 +718,7 @@ function updateLanguage(lang) {
   const cakeAgeDisplay = document.getElementById('cake-age-display');
   if (cakeAgeDisplay) {
     cakeAgeDisplay.textContent = state.age 
-      ? `${state.age} ${lang === 'vi' ? 'Tuổi' : (lang === 'th' ? 'ปี' : (lang === 'zh' ? '岁' : (lang === 'ja' ? '歳' : 'Years')))}`
+      ? `${state.age} ${t.ageSuffix}`
       : t.cakeAgeDefault;
   }
 
@@ -871,6 +925,19 @@ function loadUrlPersonalization() {
     }
     if (msg) state.customMessage = msg.trim().slice(0, 500);
 
+    const cardId = params.get('card_id');
+    if (cardId) {
+      fetchServerCard(cardId).then(card => {
+        if (card) {
+          if (card.recipient_name) state.recipientName = card.recipient_name;
+          if (card.sender_name) state.senderName = card.sender_name;
+          if (card.age) state.age = card.age;
+          if (card.wish_message) state.customMessage = card.wish_message;
+          updateLanguage(state.currentLang);
+        }
+      });
+    }
+
     // Sync input fields in modal
     const inputRecipient = document.getElementById('custom-recipient-name');
     if (inputRecipient && state.recipientName) inputRecipient.value = state.recipientName;
@@ -935,7 +1002,12 @@ function applyPersonalization() {
   if (modal) modal.style.display = 'none';
 
   burstConfetti(120);
-  showToast(state.currentLang === 'vi' ? 'Đã áp dụng thiệp sinh nhật của bạn!' : 'Personalized birthday card applied!', 'success');
+  const t = translations[state.currentLang];
+  showToast(t.toastCardApplied, 'success');
+
+  if (recipient && msg) {
+    saveServerCard({ recipient, sender, age: state.age, message: msg });
+  }
 }
 
 // ============================================================================
@@ -981,18 +1053,28 @@ function blowCandle(candle, idx) {
   }
 }
 
+let candleTimeouts = [];
+
+function clearCandleTimeouts() {
+  candleTimeouts.forEach(t => clearTimeout(t));
+  candleTimeouts = [];
+}
+
 function blowAllCandles() {
+  clearCandleTimeouts();
   const candles = document.querySelectorAll('.candle');
   let delay = 0;
   candles.forEach((candle, idx) => {
-    setTimeout(() => {
+    const t = setTimeout(() => {
       blowCandle(candle, idx);
     }, delay);
+    candleTimeouts.push(t);
     delay += 120;
   });
 }
 
 function relightAllCandles() {
+  clearCandleTimeouts();
   const candles = document.querySelectorAll('.candle');
   candles.forEach(candle => {
     const flame = candle.querySelector('.flame');
@@ -1005,7 +1087,8 @@ function relightAllCandles() {
   if (popup) popup.style.display = 'none';
 
   playSfx('chimes');
-  showToast(state.currentLang === 'vi' ? 'Nến đã được thắp sáng lại! ✨' : 'Candles relit! ✨', 'gold');
+  const t = translations[state.currentLang];
+  showToast(t.toastCandlesRelit, 'gold');
 }
 
 function onAllCandlesBlown() {
@@ -1013,7 +1096,7 @@ function onAllCandlesBlown() {
     const popup = document.getElementById('wish-reveal-popup');
     if (popup) {
       popup.style.display = 'block';
-      popup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      popup.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     burstConfetti(160);
@@ -1056,7 +1139,7 @@ async function toggleMicDetection() {
 
     state.isListeningMic = true;
     if (micBtnText) micBtnText.textContent = t.btnMicListening;
-    showToast(state.currentLang === 'vi' ? 'Micro đã sẵn sàng! Hãy thổi vào micro thiết bị! 🌬️' : 'Microphone ready! Blow into the mic! 🌬️', 'info');
+    showToast(t.toastMicReady, 'info');
 
     const dataArray = new Uint8Array(micAnalyser.frequencyBinCount);
 
@@ -1086,7 +1169,7 @@ async function toggleMicDetection() {
     checkBlow();
   } catch (err) {
     console.warn('Microphone permission or error:', err);
-    showToast(state.currentLang === 'vi' ? 'Không thể truy cập micro. Bạn có thể nhấn nút để thổi nến!' : 'Microphone access denied. You can tap candles to blow!', 'gold');
+    showToast(t.toastMicDenied, 'gold');
     state.isListeningMic = false;
     if (micBtnText) micBtnText.textContent = t.btnMicBlow;
   }
@@ -1220,39 +1303,150 @@ function setupPhotoBooth() {
 function exportPhotoKeepsake() {
   const canvas = document.createElement('canvas');
   canvas.width = 800;
-  canvas.height = 700;
+  canvas.height = 760;
   const ctx = canvas.getContext('2d');
 
-  // Background card
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Determine active frame style
+  const photoFrame = document.getElementById('photo-frame');
+  const frameClass = photoFrame ? photoFrame.className : '';
+  const isGold = frameClass.includes('gold-style');
+  const isNeon = frameClass.includes('neon-style');
+  const isVintage = frameClass.includes('vintage-style');
+
+  // Background and frame styling
+  if (isGold) {
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    grad.addColorStop(0, '#ffd700');
+    grad.addColorStop(0.5, '#fff1a8');
+    grad.addColorStop(1, '#d4af37');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(20, 20, canvas.width - 40, canvas.height - 40);
+
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+  } else if (isNeon) {
+    ctx.fillStyle = '#0b091a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = '#00f0ff';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+
+    ctx.strokeStyle = '#ff6b9d';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(28, 28, canvas.width - 56, canvas.height - 56);
+  } else if (isVintage) {
+    ctx.fillStyle = '#f8f2e4';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = '#8b5a2b';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
+
+    ctx.strokeStyle = '#c49a6c';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(32, 32, canvas.width - 64, canvas.height - 64);
+  } else {
+    // Polaroid default
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#f7f7fa';
+    ctx.fillRect(16, 16, canvas.width - 32, canvas.height - 32);
+
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(16, 16, canvas.width - 32, canvas.height - 32);
+  }
+
+  // Photo rect bounds
+  const imgX = 45;
+  const imgY = 45;
+  const imgW = 710;
+  const imgH = 550;
 
   const img = document.getElementById('user-photo-preview');
   if (img && img.complete) {
     try {
-      // Draw image in frame
-      ctx.drawImage(img, 40, 40, 720, 520);
-    } catch {
-      ctx.fillStyle = '#ffd166';
-      ctx.fillRect(40, 40, 720, 520);
+      ctx.drawImage(img, imgX, imgY, imgW, imgH);
+    } catch (e) {
+      ctx.fillStyle = isNeon ? '#1a103c' : '#ffd166';
+      ctx.fillRect(imgX, imgY, imgW, imgH);
     }
+  } else {
+    ctx.fillStyle = isNeon ? '#1a103c' : '#ffd166';
+    ctx.fillRect(imgX, imgY, imgW, imgH);
   }
 
-  // Draw Caption
-  ctx.fillStyle = '#1a102f';
-  ctx.font = 'bold 36px "Dancing Script", cursive, sans-serif';
-  ctx.textAlign = 'center';
+  // Draw placed stickers on canvas
+  const placedStickers = document.querySelectorAll('.placed-sticker');
+  if (placedStickers.length > 0) {
+    ctx.font = '48px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    placedStickers.forEach(stk => {
+      const leftPercent = parseFloat(stk.style.left) || 50;
+      const topPercent = parseFloat(stk.style.top) || 50;
+
+      const sx = imgX + (imgW * (leftPercent / 100));
+      const sy = imgY + (imgH * (topPercent / 100));
+
+      ctx.fillText(stk.textContent.trim(), sx, sy);
+    });
+  }
+
+  // Draw Caption at bottom
   const name = state.recipientName || 'Best Friend';
-  ctx.fillText(`Happy Birthday ${name}! 🎉`, canvas.width / 2, 620);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+
+  if (isNeon) {
+    ctx.fillStyle = '#00f0ff';
+    ctx.font = 'bold 36px "Dancing Script", cursive, sans-serif';
+    ctx.fillText(`✨ Happy Birthday ${name}! ✨`, canvas.width / 2, 670);
+
+    ctx.fillStyle = '#a29bfe';
+    ctx.font = '500 18px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Neon Party Keepsake Edition', canvas.width / 2, 715);
+  } else if (isGold) {
+    ctx.fillStyle = '#aa771c';
+    ctx.font = 'bold 36px "Dancing Script", cursive, sans-serif';
+    ctx.fillText(`👑 Royal Birthday • ${name} 👑`, canvas.width / 2, 670);
+
+    ctx.fillStyle = '#6b4f1d';
+    ctx.font = '500 18px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Celebration Keepsake Collection', canvas.width / 2, 715);
+  } else if (isVintage) {
+    ctx.fillStyle = '#5c3a21';
+    ctx.font = 'bold 36px "Dancing Script", cursive, sans-serif';
+    ctx.fillText(`Memories of ${name} • Happy Birthday`, canvas.width / 2, 670);
+
+    ctx.fillStyle = '#8b5a2b';
+    ctx.font = 'italic 18px "Great Vibes", cursive, sans-serif';
+    ctx.fillText('Timeless Keepsake', canvas.width / 2, 715);
+  } else {
+    ctx.fillStyle = '#1a102f';
+    ctx.font = 'bold 36px "Dancing Script", cursive, sans-serif';
+    ctx.fillText(`Happy Birthday ${name}! 🎉`, canvas.width / 2, 670);
+
+    ctx.fillStyle = '#718096';
+    ctx.font = '500 16px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Special Birthday Polaroid Keepsake', canvas.width / 2, 715);
+  }
 
   // Download
   try {
     const link = document.createElement('a');
-    link.download = `Birthday-Keepsake-${name}.png`;
+    link.download = `Birthday-Keepsake-${name.replace(/\s+/g, '-')}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
     showToast(translations[state.currentLang].toastPhotoSaved, 'success');
-  } catch {
+  } catch (err) {
     showToast('Snapshot ready! Long-press image to save.', 'info');
   }
 }
@@ -1272,8 +1466,122 @@ const defaultWishes = {
     { id: 1, author: 'Emma Watson', emoji: '🎂', text: 'Happiest birthday to one of the most wonderful souls! May your year ahead be pure magic!', theme: 'rose', likes: 14 },
     { id: 2, author: 'Lucas Miller', emoji: '🌟', text: 'Wishing you health, endless laughter, and boundless adventures in this new chapter!', theme: 'violet', likes: 8 },
     { id: 3, author: 'Sophia Chen', emoji: '💖', text: 'Keep inspiring everyone with your beautiful energy. Happy Birthday!', theme: 'emerald', likes: 19 }
+  ],
+  th: [
+    { id: 1, author: 'พิมพ์มาดา', emoji: '🎂', text: 'สุขสันต์วันเกิดนะเพื่อนรัก! ขอให้ปีนี้เต็มไปด้วยรอยยิ้ม ความสุข และความสำเร็จในทุกเรื่อง!', theme: 'rose', likes: 11 },
+    { id: 2, author: 'ธนภพ', emoji: '🌟', text: 'ขอให้มีความสุขมากๆ สุขภาพแข็งแรง และได้ทำตามความฝันให้สำเร็จทุกประการ!', theme: 'violet', likes: 7 },
+    { id: 3, author: 'กานต์', emoji: '🚀', text: 'เติบโตขึ้นอีกปีอย่างงดงาม ขอให้มีแต่สิ่งดีๆ เข้ามาในชีวิตนะ!', theme: 'sunset', likes: 16 }
+  ],
+  zh: [
+    { id: 1, author: '佳慧', emoji: '🎂', text: '生日快乐！愿你的每一岁都奔走在自己的热爱里，平安喜乐，万事顺意！', theme: 'rose', likes: 15 },
+    { id: 2, author: '宇轩', emoji: '🌟', text: '新的一岁，愿你被满满的爱与好运包围，勇敢追光，前程似锦！', theme: 'violet', likes: 10 },
+    { id: 3, author: '子墨', emoji: '🚀', text: '祝你岁岁年年皆胜意，愿所有的美好期许都在这一年如愿发生！', theme: 'sunset', likes: 18 }
+  ],
+  ja: [
+    { id: 1, author: '結衣', emoji: '🎂', text: 'お誕生日おめでとう！笑顔と幸せに満ちた最高の1年になりますように！', theme: 'rose', likes: 13 },
+    { id: 2, author: '蓮', emoji: '🌟', text: '新しい年齢のスタート、思い描くすべての夢が実を結ぶ素晴らしい日々を応援しています！', theme: 'violet', likes: 9 },
+    { id: 3, author: 'さくら', emoji: '💖', text: 'いつも温かい元気をありがとう！健やかで心豊かな素晴らしい一年を！', theme: 'emerald', likes: 17 }
+  ],
+  es: [
+    { id: 1, author: 'Camila', emoji: '🎂', text: '¡Feliz cumpleaños querido amigo! ¡Que este nuevo año de vida te traiga bendiciones, sonrisas y éxitos!', theme: 'rose', likes: 14 },
+    { id: 2, author: 'Mateo', emoji: '🌟', text: '¡Que todos tus anhelos se hagan realidad y sigas brillando con esa energía contagiosa!', theme: 'violet', likes: 11 },
+    { id: 3, author: 'Valentina', emoji: '🚀', text: '¡A celebrar por todo lo alto! Deseándote salud, amor y un año repleto de aventuras increíbles.', theme: 'sunset', likes: 20 }
   ]
 };
+
+// --- Backend REST API Integration with Offline Graceful Fallback ---
+async function fetchServerWishes() {
+  try {
+    const res = await fetch('/api/wishes');
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        const mapped = data.map(w => ({
+          id: w.id,
+          author: w.author_name,
+          emoji: w.author_emoji || '🎂',
+          text: w.message_text,
+          theme: w.theme_color || 'rose',
+          likes: w.like_count || 0
+        }));
+        saveWishes(mapped);
+        renderGuestbook();
+      }
+    }
+  } catch (e) {
+    // Graceful offline fallback: localStorage remains active
+  }
+}
+
+async function postServerWish(wishData) {
+  try {
+    const res = await fetch('/api/wishes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        author_name: wishData.author,
+        author_emoji: wishData.emoji,
+        message_text: wishData.text,
+        theme_color: wishData.theme
+      })
+    });
+    if (res.ok) {
+      const saved = await res.json();
+      if (saved && saved.id) {
+        wishData.id = saved.id;
+        const wishes = getStoredWishes();
+        const idx = wishes.findIndex(w => w.text === wishData.text && w.author === wishData.author);
+        if (idx !== -1) {
+          wishes[idx].id = saved.id;
+          saveWishes(wishes);
+        }
+      }
+    }
+  } catch (e) {
+    // Offline mode: wish is safely preserved in localStorage
+  }
+}
+
+async function likeServerWish(wishId) {
+  try {
+    await fetch(`/api/wishes/${wishId}/like`, { method: 'POST' });
+  } catch (e) {
+    // Offline mode: likes are preserved in localStorage
+  }
+}
+
+async function saveServerCard(cardData) {
+  try {
+    const res = await fetch('/api/cards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipient_name: cardData.recipient,
+        sender_name: cardData.sender || 'Friend',
+        age: cardData.age,
+        wish_message: cardData.message,
+        theme_color: 'rose'
+      })
+    });
+    if (res.ok) {
+      const card = await res.json();
+      return card.card_id;
+    }
+  } catch (e) {
+    return null;
+  }
+}
+
+async function fetchServerCard(cardId) {
+  try {
+    const res = await fetch(`/api/cards/${cardId}`);
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    return null;
+  }
+}
 
 function getStoredWishes() {
   try {
@@ -1282,7 +1590,7 @@ function getStoredWishes() {
   } catch (e) {
     console.warn('LocalStorage notice:', e);
   }
-  const langKey = (state.currentLang === 'vi') ? 'vi' : 'en';
+  const langKey = state.currentLang;
   return defaultWishes[langKey] || defaultWishes.en;
 }
 
@@ -1300,6 +1608,7 @@ function renderGuestbook() {
 
   const wishes = getStoredWishes();
   grid.innerHTML = '';
+  const t = translations[state.currentLang];
 
   wishes.forEach(item => {
     const tile = document.createElement('div');
@@ -1309,12 +1618,12 @@ function renderGuestbook() {
         <div class="tile-avatar">${item.emoji || '🎂'}</div>
         <div class="tile-meta">
           <div class="tile-author">${escapeHtml(item.author)}</div>
-          <div class="tile-time">${state.currentLang === 'vi' ? 'Lời chúc sinh nhật' : 'Birthday Wish'}</div>
+          <div class="tile-time">${t.guestTileSubtitle}</div>
         </div>
       </div>
       <div class="tile-body">${escapeHtml(item.text)}</div>
       <div class="tile-footer">
-        <button class="like-btn" data-id="${item.id}" aria-label="Thả tim lời chúc">
+        <button class="like-btn" data-id="${item.id}" aria-label="Like wish">
           <span class="heart-icon">💖</span>
           <span class="like-count">${item.likes || 0}</span>
         </button>
@@ -1328,6 +1637,7 @@ function renderGuestbook() {
         likeBtn.classList.add('liked');
         likeBtn.querySelector('.like-count').textContent = item.likes;
         saveWishes(wishes);
+        likeServerWish(item.id);
         playSfx('pop');
       });
     }
@@ -1338,6 +1648,7 @@ function renderGuestbook() {
 
 function setupGuestbook() {
   renderGuestbook();
+  fetchServerWishes();
 
   const form = document.getElementById('new-wish-form');
   const msgInput = document.getElementById('guest-msg');
@@ -1393,6 +1704,7 @@ function setupGuestbook() {
       wishes.unshift(newWish);
       saveWishes(wishes);
       renderGuestbook();
+      postServerWish(newWish);
 
       form.reset();
       if (charDisplay) charDisplay.textContent = '0';
@@ -1736,7 +2048,8 @@ function setupAudioEngine() {
       state.soundFxEnabled = !state.soundFxEnabled;
       const icon = document.getElementById('sfx-icon');
       if (icon) icon.textContent = state.soundFxEnabled ? '🔊' : '🔇';
-      showToast(state.soundFxEnabled ? 'Âm thanh đã bật! 🔊' : 'Đã tắt âm thanh! 🔇', 'info');
+      const t = translations[state.currentLang];
+      showToast(state.soundFxEnabled ? t.toastSoundOn : t.toastSoundOff, 'info');
     });
   }
 

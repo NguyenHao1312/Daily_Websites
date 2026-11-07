@@ -3,7 +3,7 @@
 > A modern, interactive birthday celebration website featuring a 3D tiered celebration cake with flame-blowing and microphone breath detection, an interactive 3D surprise gift box with unwrapping physics, personalized greeting cards with safe shareable URLs, an online birthday wishes wall (guestbook), a photo memory keepsake booth, a polyphonic Web Audio API music & sound studio, and full 6-language reactive localization.
 
 [![Netlify Deploy](https://img.shields.io/badge/Hosted_on-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](./netlify.toml)
-[![QA Test Suite](https://img.shields.io/badge/QA_Tests-22%2F22_PASS-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](./test_birthday.py)
+[![QA Test Suite](https://img.shields.io/badge/QA_Tests-30%2F30_PASS-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](./test_birthday.py)
 [![Languages](https://img.shields.io/badge/Languages-VI%20%7C%20EN%20%7C%20TH%20%7C%20ZH%20%7C%20JA%20%7C%20ES-blueviolet?style=for-the-badge)](./script.js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](../LICENSE)
 
@@ -16,9 +16,9 @@
 - **Interactive Candle Flames:** Sequential candles with realistic SVG flickering flames, wicks, and smoke particle physics when blown out.
 - **Multiple Blowing Modes:**
   - **Click / Tap:** Blow out candles individually with tactile audio feedback.
-  - **Blow All:** Auto-blow all candles in a smooth animated cascade.
+  - **Blow All:** Auto-blow all candles in a smooth animated cascade with race-condition timeout cancellation.
   - **Microphone Air Detection:** Use your phone or computer's microphone to blow out the candles with real breath (`navigator.mediaDevices.getUserMedia`).
-  - **Relight:** Light up all candles again instantly.
+  - **Relight:** Light up all candles again instantly without stale timeout triggers.
 - **Cosmic Secret Wish Reveal:** Unlocks an animated congratulatory popup card with fanfare when all candles are extinguished.
 
 ### 🎁 2. Interactive 3D Surprise Gift Box
@@ -29,18 +29,18 @@
 ### 💌 3. Card Personalizer & Safe Shareable URLs (XSS Protected)
 - **Instant Customization Drawer:** Personalize Recipient Name, Custom Age, Sender Name, and Heartfelt Wishes.
 - **Quick Preset Wishes:** Warm, Funny, Inspirational, and Romantic templates.
-- **Shareable Link Generation:** Generates a clean URL parameter link (e.g., `index.html?name=Alex&from=Jordan&age=21&msg=...`) with 1-click clipboard copy and toast notifications.
-- **OWASP CWE-79 XSS Protection:** Complete HTML entity sanitization (`escapeHtml`) ensuring zero script injection vulnerabilities.
+- **Shareable Link Generation:** Generates a clean URL parameter link (e.g., `index.html?name=Alex&from=Jordan&age=21&msg=...`) and backend card ID lookup (`?card_id=...`).
+- **OWASP CWE-79 XSS Protection:** Complete HTML entity sanitization (`escapeHtml` and backend sanitization) ensuring zero script injection vulnerabilities.
 
 ### 📸 4. Photo Memory Keepsake Booth
 - **Upload & Custom Framing:** Upload personal photos to preview inside 4 distinct designer frames: **Polaroid**, **Royal Gold**, **Neon Party**, and **Vintage Film**.
 - **Interactive Sticker Palette:** Stamp party hats, sunglasses, crowns, balloons, hearts, and confetti onto photos.
-- **HTML5 Canvas Export:** Export and download the decorated keepsake as a high-resolution PNG card.
+- **HTML5 Canvas Export:** Complete canvas renderer drawing the selected designer frame, user image, all placed stickers at their exact coordinates, and personalized captions into a downloadable PNG.
 
-### 📝 5. Birthday Wishes Wall (Online Guestbook)
+### 📝 5. Birthday Wishes Wall (Online Guestbook & Full-Stack REST Backend)
 - **Interactive Masonry Grid:** Leave warm wishes with customizable avatar emojis (🎂, 🎉, 🌟, 💖, 🥳, 🎁) and 5 aesthetic color themes (Rose, Violet, Sunset, Ocean, Emerald).
 - **Heart Like Counters:** Interactive like buttons with counter increments.
-- **LocalStorage Persistence:** Retains wishes across sessions with graceful fallback.
+- **Full-Stack REST API & LocalStorage Fallback:** Powered by FastAPI, SQLAlchemy, SQLite auto-migrations, and SHA-256 IP hashing with seamless offline fallback.
 
 ### 🎵 6. Polyphonic Web Audio Synthesizer & SFX Soundboard
 - **100% Native Web Audio API:** Zero external MP3/WAV files required; 100% offline capability with zero lag.
@@ -53,7 +53,7 @@
 
 ### 🌐 7. Comprehensive 6-Language Reactive i18n
 - **Full Localization:** Instant DOM switching across **Tiếng Việt (VI)**, **English (EN)**, **ไทย (TH)**, **中文 (ZH)**, **日本語 (JA)**, and **Español (ES)**.
-- **100% Dictionary Symmetry:** All 6 languages maintain complete parity with identical key mappings and natural translations.
+- **100% Dictionary Symmetry:** All 6 languages maintain complete parity across all UI strings, toasts, and localized default wishes.
 
 ### 📱 8. Ultra-Responsive & Accessible UI/UX
 - **Modern Glassmorphism:** Subtle borders, multi-layered drop shadows, and `backdrop-filter: blur(20px)`.
@@ -84,19 +84,21 @@ The project is pre-configured for static edge deployment on **Netlify** via [`ne
 
 ## 🧪 Testing & Verification
 
-Run the full automated QA verification suite (22 tests covering DOM structure, i18n dictionary symmetry, CSS tokens, Web Audio API, XSS prevention, Netlify config, and SQL Server schema):
+Run the full automated QA verification suite (30 tests covering backend database migrations, REST endpoints, audit logs, DOM structure, i18n dictionary symmetry, CSS tokens, Web Audio API, XSS prevention, canvas frame rendering, and race-condition safety):
 
 ```bash
 python test_birthday.py
 ```
 
-*(All 22 test cases pass with 100% success rate)*
+*(All 30 test cases pass with 100% success rate)*
 
 ---
 
-## 🗄️ Database Architecture (SQL Server SSMS 22)
+## 🗄️ Database Architecture (SQL Server SSMS 22 & SQLite)
 
-For teams extending the project into a persistent enterprise cloud backend, a production T-SQL migration script adhering to **SKILL_CUSTOM_1305 §7.2** is available at [`server/sql/V001__init_birthday_schema.sql`](./server/sql/V001__init_birthday_schema.sql):
+The backend provides dual database support adhering to **SKILL_CUSTOM_1305 §7.2**:
+- **SQLite Engine (`server/database.py`, `server/models.py`, `server/main.py`)**: Local development and automated testing with auto-migrations.
+- **SQL Server SSMS 22 (`server/sql/V001__init_birthday_schema.sql`)**: Production T-SQL migration script for enterprise deployment with indexed audit logs and SHA-256 IP hashing.
 - `BirthdayCards`: Stores generated cards and view metrics.
 - `GuestbookWishes`: Stores moderated wishes with SHA-256 IP hashing (preventing PII leaks).
 - `BirthdayAuditLogs`: High-density security audit logging.
