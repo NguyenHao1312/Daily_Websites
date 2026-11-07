@@ -96,12 +96,42 @@ python test_birthday.py
 
 ## 🗄️ Database Architecture (SQL Server SSMS 22 & SQLite)
 
-The backend provides dual database support adhering to **SKILL_CUSTOM_1305 §7.2**:
+The backend provides dual database support adhering to standard enterprise architectural standards:
 - **SQLite Engine (`server/database.py`, `server/models.py`, `server/main.py`)**: Local development and automated testing with auto-migrations.
 - **SQL Server SSMS 22 (`server/sql/V001__init_birthday_schema.sql`)**: Production T-SQL migration script for enterprise deployment with indexed audit logs and SHA-256 IP hashing.
 - `BirthdayCards`: Stores generated cards and view metrics.
 - `GuestbookWishes`: Stores moderated wishes with SHA-256 IP hashing (preventing PII leaks).
 - `BirthdayAuditLogs`: High-density security audit logging.
+
+---
+
+## 📋 Tiến Trình Nâng Cấp Chi Tiết (Detailed Upgrade Milestones & Changelog)
+
+Dưới đây là chi tiết các tiến trình nâng cấp kỹ thuật đã hoàn thành cho dự án:
+
+1. **Giai đoạn 1 — Kiến trúc Backend REST API & Cơ sở dữ liệu:**
+   - Xây dựng module kết nối và tự động migrate bảng biểu bằng SQLAlchemy (`server/database.py`).
+   - Định nghĩa ORM Models (`server/models.py`) cho thiệp chúc mừng, lưu bút khách và nhật ký kiểm toán.
+   - Phát triển máy chủ FastAPI (`server/main.py`) với đầy đủ endpoints cho việc lấy/tạo lời chúc, bấm thích, lưu/mở thiệp cá nhân hóa.
+   - Tích hợp middleware bảo mật Security Headers (`nosniff`, `SAMEORIGIN`, `1; mode=block`).
+
+2. **Giai đoạn 2 — Hoàn thiện tính năng Photo Booth & Xuất ảnh Canvas Kỷ niệm:**
+   - Khắc phục lỗi bảo mật tainted canvas bằng việc thêm `crossorigin="anonymous"` cho ảnh xem trước.
+   - Nâng cấp bộ máy vẽ Canvas `exportPhotoKeepsake` trong `script.js`:
+     - Tự động áp dụng khung viền theo chủ đề (Polaroid, Royal Gold, Neon Party, Vintage Film).
+     - Duyệt qua toàn bộ sticker đã dán trên ảnh và định vị chính xác tỷ lệ phần trăm lên canvas xuất bản.
+     - Định dạng typography tiêu đề và lời chúc trang trọng trước khi tải file PNG.
+
+3. **Giai đoạn 3 — Đồng bộ hóa đối xứng Đa ngôn ngữ (i18n):**
+   - Hoàn thiện 100% đối xứng bộ từ điển cho 6 ngôn ngữ: **Tiếng Việt (`vi`)**, **Tiếng Anh (`en`)**, **Tiếng Thái (`th`)**, **Tiếng Trung (`zh`)**, **Tiếng Nhật (`ja`)**, **Tiếng Tây Ban Nha (`es`)**.
+   - Bổ sung các thông báo toast, danh xưng tuổi, badge và lời chúc mẫu mặc định được bản địa hóa riêng cho từng ngôn ngữ.
+
+4. **Giai đoạn 4 — Khắc phục bất đồng bộ và Race Conditions nến sinh nhật:**
+   - Quản lý mảng định thời `candleTimeouts` cho chuỗi hiệu ứng thổi nến.
+   - Thêm hàm `clearCandleTimeouts()` giúp triệt tiêu hoàn toàn các timer mồ côi khi người dùng bấm "Thắp lại nến" ngay sau khi chọn "Thổi tất cả nến".
+
+5. **Giai đoạn 5 — Tự động hóa kiểm thử chất lượng (QA Automation):**
+   - Mở rộng bộ kiểm thử tự động `test_birthday.py` lên **30/30 test cases** toàn diện, kiểm tra từ tầng database auto-migration, API endpoints, mã hóa ẩn danh IP đến giao diện DOM, Web Audio và chống tấn công XSS.
 
 ---
 

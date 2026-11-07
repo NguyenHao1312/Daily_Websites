@@ -4,7 +4,9 @@
 
 [![Netlify Status](https://img.shields.io/badge/Deployed_with-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://clock-time-33.netlify.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
-[![Tests](https://img.shields.io/badge/QA_Tests-24%2F24_PASS-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](./Day%20Night%20Website/test_daynight.py)
+[![Day Night Tests](https://img.shields.io/badge/Day_Night_QA-24%2F24_PASS-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](./Day%20Night%20Website/test_daynight.py)
+[![Birthday Tests](https://img.shields.io/badge/Birthday_QA-30%2F30_PASS-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](./Happy%20Birthday%20Website/test_birthday.py)
+[![Total QA Tests](https://img.shields.io/badge/Total_QA_Tests-54%2F54_PASS-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](./README.md)
 
 ---
 
@@ -134,17 +136,43 @@ This repository is a curated collection of **mini-websites** built for personal 
    - For **Happy Birthday Website**: Open `Happy Birthday Website/index.html` in your browser.
    - For **Day Night Website (Frontend)**: Open `Day Night Website/index.html` in your browser or visit [clock-time-33.netlify.app](https://clock-time-33.netlify.app/).
 
-3. Run the optional FastAPI backend (for Day Night Website task & preference sync):
-   ```bash
-   cd "Day Night Website/server"
-   pip install -r requirements.txt
-   uvicorn main:app --reload --port 8000
-   ```
+3. Run the optional FastAPI backend:
+   - For **Happy Birthday Website** (Wishes Wall & Shared Cards sync):
+     ```bash
+     cd "Happy Birthday Website/server"
+     pip install -r requirements.txt
+     uvicorn main:app --reload --port 8000
+     ```
+   - For **Day Night Website** (Task & Preference sync):
+     ```bash
+     cd "Day Night Website/server"
+     pip install -r requirements.txt
+     uvicorn main:app --reload --port 8000
+     ```
 
-4. Run the automated test verification suite:
-   ```bash
-   python "Day Night Website/test_daynight.py"
-   ```
+4. Run the automated test verification suites:
+   - **Happy Birthday Website QA Suite (30/30 tests)**:
+     ```bash
+     python "Happy Birthday Website/test_birthday.py" -v
+     ```
+   - **Day Night Website QA Suite (24/24 tests)**:
+     ```bash
+     python "Day Night Website/test_daynight.py" -v
+     ```
+
+---
+
+## 📋 Nhật Ký Tiến Trình Thực Hiện (Project Milestones & Changelog)
+
+| Giai đoạn / Mốc | Hạng mục thực hiện | Trạng thái | Chi tiết kỹ thuật |
+|-----------------|---------------------|------------|-------------------|
+| **Mốc 1: Khởi tạo & Giao diện 3D** | 3D Tiered Cake, Nến tương tác, Hộp quà bí mật 3D | ✅ Hoàn thành | CSS 3D Transforms, animation physics mở nơ/nắp hộp quà, SVG flame flickering |
+| **Mốc 2: Âm thanh Web Audio API** | Polyphonic Web Audio Synthesizer & Soundboard | ✅ Hoàn thành | 3 giai điệu chúc mừng đa âm, 4 SFX (Horn, Pop, Cheers, Chimes), 18-bar visualizer, 100% native |
+| **Mốc 3: Photo Booth & Canvas Keepsake** | Chụp/Tải ảnh, khung nghệ thuật & dán sticker | ✅ Hoàn thành | Xuất file PNG chất lượng cao, 4 kiểu khung (Polaroid, Gold, Neon, Vintage), xử lý `crossorigin` chống canvas taint |
+| **Mốc 4: Đa ngôn ngữ (i18n)** | Hệ thống chuyển đổi 6 ngôn ngữ thời gian thực | ✅ Hoàn thành | 100% đối xứng từ điển (VI, EN, TH, ZH, JA, ES), dịch toàn diện UI, toast, badge và lời chúc mẫu |
+| **Mốc 5: Full-Stack Backend Service** | FastAPI REST API, SQLite Auto-Migration & T-SQL SSMS 22 | ✅ Hoàn thành | Endpoints `/api/wishes`, `/api/cards`, kiểm tra sức khỏe `/api/health`, audit log tự động |
+| **Mốc 6: An toàn bảo mật & Tối ưu** | Chống tấn công XSS & Bảo vệ quyền riêng tư | ✅ Hoàn thành | Khử trùng input theo OWASP CWE-79, băm SHA-256 IP client (không lưu trữ PII), xử lý timeout nến chống race-condition |
+| **Mốc 7: Kiểm thử chất lượng (QA)** | Bộ Test Suite tự động hóa | ✅ Hoàn thành | 30/30 test cases đạt 100% PASS cho Birthday Website + 24/24 test cases cho Day Night Website (Tổng cộng: 54/54 PASS) |
 
 ---
 
