@@ -320,6 +320,83 @@ def test_tc020_mobile_tablet_collision_prevention():
 
 run_test("TC-020", "Mobile and Tablet layout collision prevention", test_tc020_mobile_tablet_collision_prevention)
 
+def test_tc021_mobile_tablet_landscape_support():
+    with open(CSS_PATH, "r", encoding="utf-8") as f:
+        css = f.read()
+    with open(WIDGETS_CSS_PATH, "r", encoding="utf-8") as f:
+        w_css = f.read()
+    with open(HTML_PATH, "r", encoding="utf-8") as f:
+        html_code = f.read()
+
+    # Viewport-fit=cover in HTML
+    assert "viewport-fit=cover" in html_code, "HTML meta viewport must specify viewport-fit=cover for safe-area insets"
+
+    # Landscape & short viewport media queries in style.css
+    assert "@media (orientation: landscape)" in css, "style.css must support orientation: landscape"
+    assert "env(safe-area-inset-bottom" in css, "style.css must support safe area bottom insets"
+
+    # Landscape layout in widgets.css
+    assert "@media (orientation: landscape)" in w_css, "widgets.css must support orientation: landscape"
+    assert "bottom: max(10px, env(safe-area-inset-bottom" in w_css, "Widgets must dock at bottom in landscape"
+
+run_test("TC-021", "Mobile & Tablet landscape orientation and safe area support", test_tc021_mobile_tablet_landscape_support)
+
+def test_tc022_mobile_compact_sizing_and_elevated_clock():
+    with open(CSS_PATH, "r", encoding="utf-8") as f:
+        css = f.read()
+    with open(WIDGETS_CSS_PATH, "r", encoding="utf-8") as f:
+        w_css = f.read()
+
+    # Elevated bottom clock on mobile portrait to avoid collision with gesture navigation bars
+    assert "bottom: max(26px" in css, "Mobile portrait clock panel must sit comfortably above bottom navigation bar"
+
+    # Compact mobile controls
+    assert "pomo-stepper { padding: 2px 3px" in w_css, "Mobile Pomodoro steppers must be compact to prevent overflow"
+    assert "width: 140px !important;" in w_css, "Minimized Pomodoro must be sleek and compact on mobile"
+    assert "width: 150px !important;" in w_css, "Minimized Lofi must be sleek and compact on mobile"
+
+run_test("TC-022", "Mobile compact widget sizing & elevated bottom clock clearance", test_tc022_mobile_compact_sizing_and_elevated_clock)
+
+def test_tc023_draggable_viewport_clamping_and_reset():
+    with open(DRAG_PATH, "r", encoding="utf-8") as f:
+        js = f.read()
+
+    assert "clampAllDraggables" in js, "Draggable must clamp widgets on resize and rotation"
+    assert "orientationchange" in js, "Draggable must listen to device orientationchange"
+    assert "dblclick" in js, "Draggable handle must support double click reset to docked position"
+    assert "touchend" in js, "Draggable handle must support touch events for mobile double tap reset"
+
+run_test("TC-023", "Draggable viewport clamping and double-click/double-tap reset", test_tc023_draggable_viewport_clamping_and_reset)
+
+def test_tc024_tablet_landscape_and_drag_freedom():
+    with open(CSS_PATH, "r", encoding="utf-8") as f:
+        css = f.read()
+    with open(WIDGETS_CSS_PATH, "r", encoding="utf-8") as f:
+        w_css = f.read()
+    with open(SCRIPT_PATH, "r", encoding="utf-8") as f:
+        js = f.read()
+
+    # Tablet landscape media query exists in both style.css and widgets.css
+    tablet_landscape_query = "@media (min-width: 769px) and (max-width: 1200px) and (orientation: landscape)"
+    assert tablet_landscape_query in css, "style.css must support tablet landscape orientation"
+    assert tablet_landscape_query in w_css, "widgets.css must support tablet landscape orientation"
+
+    # Drag freedom: widgets in landscape must NOT lock coordinates with !important so drag works smoothly
+    assert ".pomodoro-widget {\n        bottom: max(10px, env(safe-area-inset-bottom, 0px));" in w_css, \
+        "Pomodoro widget must not have !important locking bottom in landscape"
+    assert ".lofi-widget {\n        bottom: max(10px, env(safe-area-inset-bottom, 0px));" in w_css, \
+        "Lofi widget must not have !important locking bottom in landscape"
+
+    # Mobile landscape width proportions ensure 0 collision
+    assert "width: min(150px, 22vw);" in w_css, "Pomodoro width in landscape must be compact to prevent clock collision"
+    assert "width: min(160px, 24vw);" in w_css, "Lofi width in landscape must be compact to prevent clock collision"
+    assert "width: min(340px, 40vw);" in css, "Clock width in landscape must be calibrated to prevent widget overlap"
+
+    # script.js listens to orientationchange
+    assert "orientationchange" in js, "script.js must listen to orientationchange to resize canvas and clock auto-fit"
+
+run_test("TC-024", "Tablet landscape support, mobile clearance math & draggable freedom", test_tc024_tablet_landscape_and_drag_freedom)
+
 print("\n======================================================================")
 print(f"RESULTS: {len(passed_tests)} PASSED, {len(failed_tests)} FAILED")
 print("======================================================================")

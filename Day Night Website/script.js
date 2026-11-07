@@ -1198,6 +1198,15 @@ async function init() {
         fitClockTime();
     });
 
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            initStars();
+            initParts();
+            if (currentSeason) initSeasonParticles(currentSeason);
+            fitClockTime();
+        }, 120);
+    });
+
     // Start background sync with backend
     syncWithBackend();
 

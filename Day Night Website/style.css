@@ -588,7 +588,7 @@ html, body {
     .sun-wrap { width: 85px; height: 85px; }
 
     .clock-panel {
-        bottom: 16px;
+        bottom: max(24px, calc(18px + env(safe-area-inset-bottom, 0px)));
         top: auto;
         left: 50%;
         transform: translateX(-50%);
@@ -614,11 +614,11 @@ html, body {
     .moon-wrap { width: 62px; height: 62px; right: 8%; top: 8%; }
 
     .clock-panel {
-        bottom: 12px;
+        bottom: max(26px, calc(18px + env(safe-area-inset-bottom, 0px)));
         top: auto;
         left: 50%;
         transform: translateX(-50%);
-        width: calc(100% - 24px);
+        width: min(380px, calc(100% - 24px));
         max-width: 380px;
         padding: 12px 14px 10px;
         border-radius: 18px;
@@ -630,12 +630,67 @@ html, body {
     .tz-pill-btn { padding: 3px 8px; font-size: 0.65rem; }
 }
 
-@media (max-height: 520px) {
+/* Landscape orientation & short viewport adaptations */
+@media (orientation: landscape) and (max-height: 560px), (max-height: 520px) {
     .brand-header { display: none; }
-    .clock-panel { top: 50%; bottom: auto; transform: translate(-50%, -50%); padding: 10px 16px 8px; }
-    .clock-time { font-size: 1.8rem; margin: 0 0 2px; }
-    .clock-greeting { font-size: 0.65rem; }
-    .clock-date { font-size: 0.68rem; margin-bottom: 6px; }
+    .moon-wrap { width: 56px; height: 56px; right: 14%; top: 6%; }
+    .sun-wrap { width: 62px; height: 62px; right: 14%; top: 6%; }
+
+    .weather-widget {
+        top: max(8px, env(safe-area-inset-top, 0px));
+        left: max(12px, env(safe-area-inset-left, 0px));
+        padding: 4px 10px;
+        border-radius: 16px;
+    }
+    .weather-temp { font-size: 0.82rem; }
+    .weather-sub { font-size: 0.55rem; }
+
+    .ground-base { height: 6%; }
+    .l1 { height: 38%; }
+    .l2 { height: 31%; }
+    .l3 { height: 25%; }
+    .l4 { height: 19%; }
+    .l5 { height: 13%; }
+    .horizon-glow { height: 130px; bottom: 30%; }
+
+    .clock-panel {
+        bottom: max(12px, env(safe-area-inset-bottom, 0px));
+        top: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(340px, 40vw);
+        max-width: 360px;
+        padding: 8px 14px 8px;
+        border-radius: 18px;
+    }
+    .clock-time { font-size: clamp(1.3rem, 3.8vw, 1.9rem); margin: 0 0 2px; }
+    .clock-greeting { font-size: 0.6rem; letter-spacing: 2px; }
+    .clock-date { font-size: 0.66rem; margin-bottom: 4px; }
+    .clock-bottom-bar { padding-top: 6px; gap: 6px; }
+    .seg-btn { padding: 2px 7px; font-size: 0.6rem; }
+    .tz-pill-btn { padding: 2px 7px; font-size: 0.6rem; gap: 4px; }
+    .tz-pill-text { font-size: 0.64rem; }
+    .tz-loc-icon { width: 12px; height: 12px; }
+}
+
+/* Tablet landscape orientation adaptations */
+@media (min-width: 769px) and (max-width: 1200px) and (orientation: landscape), (min-width: 769px) and (max-width: 1100px) {
+    .clock-panel {
+        bottom: max(20px, calc(14px + env(safe-area-inset-bottom, 0px)));
+        top: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(420px, 42vw);
+        max-width: 440px;
+        padding: 14px 20px 12px;
+        border-radius: 22px;
+    }
+    .clock-time { font-size: clamp(1.8rem, 3.8vw, 2.6rem); margin: 0 0 2px; }
+    .clock-greeting { font-size: 0.7rem; letter-spacing: 2.5px; }
+    .clock-date { font-size: 0.78rem; margin-bottom: 8px; }
+    .clock-bottom-bar { padding-top: 8px; gap: 10px; }
+    .seg-btn { padding: 4px 10px; font-size: 0.68rem; }
+    .tz-pill-btn { padding: 4px 10px; font-size: 0.68rem; }
 }
 
 /* ══════════════════════════════════════════

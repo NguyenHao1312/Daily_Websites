@@ -1403,8 +1403,8 @@ body.focus-mode .lofi-widget {
 
 @media (max-width: 860px) {
     /* Avoid bottom collision with lower Clock Card on tablet */
-    .pomodoro-widget { bottom: 185px; left: 16px; width: 185px; padding: 12px; z-index: 24; }
-    .lofi-widget { bottom: 185px; right: 16px; width: 215px; padding: 12px; z-index: 24; }
+    .pomodoro-widget { bottom: 185px; left: 16px; width: 175px; padding: 10px 12px; border-radius: 18px; z-index: 24; }
+    .lofi-widget { bottom: 185px; right: 16px; width: 195px; padding: 10px 12px; border-radius: 18px; z-index: 24; }
     .drawer-panel { width: 360px; }
     .top-poem-bar {
         top: 68px;
@@ -1415,19 +1415,80 @@ body.focus-mode .lofi-widget {
 
 @media (max-width: 480px) {
     /* Mobile Layout — Floating companions sit gracefully above bottom clock */
-    .pomodoro-widget { bottom: 165px; left: 10px; width: 155px; padding: 10px 12px; border-radius: 16px; z-index: 24; }
-    .pomo-display { font-size: 1.5rem; }
-    .pomo-subtitle { font-size: 0.52rem; }
-    .pomo-val-display { font-size: 0.62rem; }
-    .pomodoro-widget.minimized { width: 175px !important; padding: 8px 12px !important; }
+    .pomodoro-widget {
+        bottom: 165px;
+        left: 10px;
+        width: min(155px, calc(50vw - 14px));
+        padding: 8px 10px;
+        border-radius: 16px;
+        z-index: 24;
+    }
+    .pomo-header { margin-bottom: 6px; }
+    .pomo-title { font-size: 0.74rem; }
+    .pomo-minimize { width: 20px; height: 20px; font-size: 0.9rem; }
+    .pomo-mode { margin-bottom: 6px; padding: 2px; border-radius: 12px; }
+    .pomo-mode-btn { font-size: 0.65rem; padding: 3px 0; border-radius: 10px; }
+    .pomo-display { font-size: 1.45rem; margin: 1px 0; }
+    .pomo-subtitle { font-size: 0.52rem; letter-spacing: 1px; margin-bottom: 6px; }
+    .pomo-time-adjust { margin-bottom: 6px; gap: 3px; }
+    .pomo-stepper { padding: 2px 3px; border-radius: 8px; }
+    .pomo-step-btn { width: 16px; height: 16px; font-size: 0.7rem; }
+    .pomo-val-display { font-size: 0.6rem; }
+    .pomo-controls { gap: 6px; }
+    .pomo-ctrl-btn.reset-btn, .pomo-ctrl-btn.skip-btn { width: 26px; height: 26px; }
+    .pomo-ctrl-btn.reset-btn svg { width: 12px; height: 12px; }
+    .pomo-ctrl-btn.play-btn, .pomo-ctrl-btn.pause-btn { width: 32px; height: 32px; }
+    .pomo-ctrl-btn.play-btn svg, .pomo-ctrl-btn.pause-btn svg { width: 13px; height: 13px; }
+    .pomo-ctrl-text { font-size: 0.62rem; }
+    .pomodoro-widget.minimized {
+        width: 140px !important;
+        padding: 6px 10px !important;
+        border-radius: 14px !important;
+    }
+    .pomo-mini-meta { gap: 6px; }
+    .pomo-mini-time { font-size: 0.78rem; letter-spacing: 0.5px; }
+    .pomo-mini-play-btn { width: 18px; height: 18px; font-size: 0.58rem; }
     
-    .lofi-widget { bottom: 165px; right: 10px; width: 170px; padding: 10px 12px; border-radius: 16px; z-index: 24; }
-    .lofi-track-name { font-size: 0.72rem; }
-    .lofi-ctrl-btn.play-circle-btn { width: 32px; height: 32px; }
-    .lofi-widget.minimized { width: 185px !important; padding: 8px 12px !important; }
+    .lofi-widget {
+        bottom: 165px;
+        right: 10px;
+        width: min(165px, calc(50vw - 14px));
+        padding: 8px 10px;
+        border-radius: 16px;
+        z-index: 24;
+    }
+    .lofi-header { margin-bottom: 6px; }
+    .lofi-title { font-size: 0.74rem; }
+    .lofi-minimize-btn { width: 20px; height: 20px; font-size: 0.95rem; }
+    .lofi-equalizer { height: 11px; }
+    .lofi-track-row { gap: 4px; margin-bottom: 1px; }
+    .lofi-track-name { font-size: 0.68rem; }
+    .lofi-ambient-tag { font-size: 0.52rem; padding: 1px 4px; }
+    .lofi-mood-quote { font-size: 0.56rem; margin-bottom: 6px; }
+    .lofi-controls { gap: 8px; margin-bottom: 6px; }
+    .lofi-ctrl-btn svg { width: 13px; height: 13px; }
+    .lofi-ctrl-btn.play-circle-btn { width: 30px; height: 30px; }
+    .lofi-ctrl-btn.play-circle-btn svg { width: 13px; height: 13px; }
+    .lofi-volume-row { gap: 6px; margin-bottom: 6px; }
+    .vol-icon { width: 12px; height: 12px; }
+    .lofi-volume-slider { height: 3px; }
+    .vol-percent { font-size: 0.58rem; width: 16px; }
+    .lofi-channel-wrap { padding: 3px 6px; border-radius: 8px; gap: 4px; }
+    .lofi-genre-icon { font-size: 0.68rem; }
+    .lofi-channel-select { font-size: 0.62rem; }
+    .lofi-widget.minimized {
+        width: 150px !important;
+        padding: 6px 10px !important;
+        border-radius: 14px !important;
+    }
+    .lofi-mini-selector-wrap { padding: 3px 6px; margin-bottom: 6px; border-radius: 8px; }
+    .lofi-mini-select { font-size: 0.62rem; }
+    .lofi-mini-play-btn { width: 18px; height: 18px; font-size: 0.58rem; }
+    .lofi-mini-visualizer { height: 16px; gap: 2px; }
+    .rhythm-bar { width: 2px; border-radius: 1px; }
     
     .top-btn-group { top: 10px; right: 10px; gap: 6px; }
-    .top-btn { width: 36px; height: 36px; }
+    .icon-btn { width: 36px; height: 36px; }
     
     .drawer-panel { width: 100vw; max-width: 100vw; }
     
@@ -1452,5 +1513,132 @@ body.focus-mode .lofi-widget {
     }
     .poem-author {
         font-size: 0.62rem;
+    }
+}
+
+/* Landscape orientation & short viewport adaptations for widgets */
+@media (orientation: landscape) and (max-height: 560px), (max-height: 520px) {
+    .pomodoro-widget {
+        bottom: max(10px, env(safe-area-inset-bottom, 0px));
+        left: max(10px, env(safe-area-inset-left, 0px));
+        top: auto;
+        right: auto;
+        width: min(150px, 22vw);
+        padding: 8px 10px;
+        border-radius: 14px;
+        z-index: 24;
+    }
+    .pomodoro-widget.minimized {
+        width: min(140px, 20vw) !important;
+        padding: 5px 8px !important;
+        border-radius: 12px !important;
+    }
+    .pomo-header { margin-bottom: 3px; }
+    .pomo-title { font-size: 0.7rem; }
+    .pomo-mode { margin-bottom: 3px; padding: 2px; }
+    .pomo-mode-btn { font-size: 0.58rem; padding: 2px 0; }
+    .pomo-display { font-size: 1.2rem; margin: 0; }
+    .pomo-subtitle { font-size: 0.46rem; letter-spacing: 1px; margin-bottom: 3px; }
+    .pomo-time-adjust { margin-bottom: 4px; gap: 3px; }
+    .pomo-stepper { padding: 1px 3px; border-radius: 6px; }
+    .pomo-step-btn { width: 14px; height: 14px; font-size: 0.62rem; }
+    .pomo-val-display { font-size: 0.52rem; }
+    .pomo-controls { gap: 6px; }
+    .pomo-ctrl-btn.reset-btn, .pomo-ctrl-btn.skip-btn { width: 22px; height: 22px; }
+    .pomo-ctrl-btn.reset-btn svg { width: 11px; height: 11px; }
+    .pomo-ctrl-btn.play-btn, .pomo-ctrl-btn.pause-btn { width: 28px; height: 28px; }
+    .pomo-ctrl-btn.play-btn svg, .pomo-ctrl-btn.pause-btn svg { width: 12px; height: 12px; }
+    .pomo-ctrl-text { font-size: 0.56rem; }
+
+    .lofi-widget {
+        bottom: max(10px, env(safe-area-inset-bottom, 0px));
+        right: max(10px, env(safe-area-inset-right, 0px));
+        top: auto;
+        left: auto;
+        width: min(160px, 24vw);
+        padding: 8px 10px;
+        border-radius: 14px;
+        z-index: 24;
+    }
+    .lofi-widget.minimized {
+        width: min(150px, 22vw) !important;
+        padding: 5px 8px !important;
+        border-radius: 12px !important;
+    }
+    .lofi-header { margin-bottom: 3px; }
+    .lofi-title { font-size: 0.7rem; }
+    .lofi-track-row { margin-bottom: 1px; }
+    .lofi-track-name { font-size: 0.65rem; }
+    .lofi-ambient-tag { font-size: 0.5rem; padding: 1px 4px; }
+    .lofi-mood-quote { font-size: 0.52rem; margin-bottom: 3px; }
+    .lofi-controls { gap: 8px; margin-bottom: 3px; }
+    .lofi-ctrl-btn svg { width: 12px; height: 12px; }
+    .lofi-ctrl-btn.play-circle-btn { width: 26px; height: 26px; }
+    .lofi-ctrl-btn.play-circle-btn svg { width: 11px; height: 11px; }
+    .lofi-volume-row { gap: 5px; margin-bottom: 3px; }
+    .vol-icon { width: 10px; height: 10px; }
+    .lofi-volume-slider { height: 2.5px; }
+    .vol-percent { font-size: 0.52rem; width: 14px; }
+    .lofi-channel-wrap { padding: 2px 6px; border-radius: 6px; gap: 4px; }
+    .lofi-genre-icon { font-size: 0.6rem; }
+    .lofi-channel-select { font-size: 0.58rem; }
+
+    .top-btn-group {
+        top: max(8px, env(safe-area-inset-top, 0px));
+        right: max(10px, env(safe-area-inset-right, 0px));
+        gap: 6px;
+    }
+    .icon-btn { width: 34px; height: 34px; }
+    .icon-btn svg { width: 16px; height: 16px; }
+
+    .top-poem-bar {
+        top: max(8px, env(safe-area-inset-top, 0px));
+        max-width: min(400px, 40vw);
+        padding: 3px 10px;
+        font-size: 0.66rem;
+        border-radius: 14px;
+    }
+    .poem-quill-icon { width: 18px; height: 18px; }
+    .poem-quill-icon svg { width: 10px; height: 10px; }
+    .poem-text { font-size: 0.62rem; }
+    .poem-author { font-size: 0.55rem; }
+
+    .drawer-panel {
+        width: min(380px, 85vw);
+        max-width: 420px;
+        padding-right: env(safe-area-inset-right, 0px);
+    }
+    .drawer-header { padding: 12px 16px 8px; }
+    .drawer-title { font-size: 1.05rem; }
+    .drawer-subtitle { font-size: 0.65rem; }
+    .todo-input-section { padding: 6px 16px; }
+    .todo-progress-card { margin: 4px 16px; padding: 6px 10px; }
+    .todo-scroll-area { padding: 4px 16px; }
+    .drawer-scroll-body { padding: 4px 16px; }
+    .settings-group { margin-bottom: 10px; }
+    .drawer-footer { padding: 8px 16px; }
+}
+
+/* Tablet landscape orientation adaptations for widgets */
+@media (min-width: 769px) and (max-width: 1200px) and (orientation: landscape), (min-width: 769px) and (max-width: 1100px) {
+    .pomodoro-widget {
+        bottom: max(20px, calc(14px + env(safe-area-inset-bottom, 0px)));
+        left: max(16px, env(safe-area-inset-left, 0px));
+        top: auto;
+        right: auto;
+        width: min(185px, 22vw);
+        padding: 10px 12px;
+        border-radius: 18px;
+        z-index: 24;
+    }
+    .lofi-widget {
+        bottom: max(20px, calc(14px + env(safe-area-inset-bottom, 0px)));
+        right: max(16px, env(safe-area-inset-right, 0px));
+        top: auto;
+        left: auto;
+        width: min(205px, 24vw);
+        padding: 10px 12px;
+        border-radius: 18px;
+        z-index: 24;
     }
 }
