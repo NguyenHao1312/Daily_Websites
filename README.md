@@ -66,10 +66,13 @@ This repository is a curated collection of **mini-websites** built for personal 
 - **Full Multilingual Architecture (i18n):**
   - Instant reactive DOM language switching for **English (EN)**, **Tiếng Việt (VI)**, and **ไทย (TH)**.
   - Seamless persistence synchronized with backend user preferences.
-- **Deep Mobile & Tablet Landscape UX:**
+- **Deep Mobile & Tablet Responsive Architecture:**
+  - **Differentiated Clock Placement:** Desktop retains classic bottom clock placement (`bottom: 26px`); Mobile Portrait (`max-width: 480px`) and Tablet Portrait (`max-width: 860px`) transform Clock Card into a **vertically centered Hero Clock** (`top: 48% / 50%`, `transform: translate(-50%, -50%)`).
+  - **Ultra-Compact Companion Widgets:** Pomodoro narrowed to `min(136px)` (minimized `130px`) and Lofi Radio narrowed to `min(144px)` (minimized `138px`) with ellipsis title truncation, docked gracefully in bottom corners with safe-area bottom support.
+  - **Centered Focus Mode:** Smooth blur and fade-out animation anchored from center (`calc(-50% + 15px)`).
+  - **Dynamic Padding Fit:** `fitClockTime()` calculates real-time container horizontal padding via `window.getComputedStyle()` for pixel-perfect clock font scaling without artificial downscaling.
+  - **Landscape Orientation Support:** Dedicated phone and tablet landscape layouts with calibrated width proportions (22vw / 40vw / 24vw) guaranteeing 0px horizontal collision and unlocked 60–120fps drag movement.
   - Complete safe-area insets (`env(safe-area-inset-*)`) support via `viewport-fit=cover`.
-  - Dedicated landscape layouts for phones and tablets with calibrated width proportions (22vw / 40vw / 24vw) guaranteeing 0px horizontal collision.
-  - Clock Card elevated comfortably above mobile navigation gesture bars.
 - **Backend & Database Infrastructure:**
   - High-performance **Python FastAPI** REST API with SQLite automated self-migration.
   - Full production SQL Server (SSMS 22) T-SQL migration script.
